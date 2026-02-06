@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="third-party">
+      <UniqueIdentifier>{5fe9b13c-7444-4670-a0a3-bf2e119d075d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\mimalloc">
+      <UniqueIdentifier>{63e38acf-d6e3-4fbe-acc8-2e1c116dc29c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internal">
+      <UniqueIdentifier>{da7dfe52-9ba7-4116-ba92-a1ae2ca313e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\ankerl">
+      <UniqueIdentifier>{a56c21c2-627c-466b-bede-9182049f3d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\tsl">
+      <UniqueIdentifier>{87621557-9426-4663-b369-5c9d501a8c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\Google Benchmark">
+      <UniqueIdentifier>{81db1137-0169-4b8f-9f0d-02fd34b84df2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\cereal">
+      <UniqueIdentifier>{bb823569-1242-4706-9567-d54e66c6f047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\absl">
+      <UniqueIdentifier>{486919e9-6da4-46e2-8619-094b62d827fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\type_safe">
+      <UniqueIdentifier>{f5aef86e-2cfc-4884-96fe-20a39dec349d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="serialization">
+      <UniqueIdentifier>{58a83108-b403-45ec-a2d4-7270b6c88cdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data_components">
+      <UniqueIdentifier>{f192d7a4-27e6-4189-b1d2-6e0a34d89c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\boost">
+      <UniqueIdentifier>{3451eaa5-8c45-4437-ab25-469c96072d55}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aol\aol.h" />
+    <ClInclude Include="aol\serialization\serialization.h">
+      <Filter>serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\algorithm.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\allocators.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\config.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\containers.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\dynamic_types.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\exceptions.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\hashes.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\macros.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\math.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\strings.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\traits.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\typedefs.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\types.h">
+      <Filter>internal</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\data_components\managers.h">
+      <Filter>data_components</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\data_components\profiles.h">
+      <Filter>data_components</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\absl\container\btree_map.h">
+      <Filter>third-party\absl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\absl\container\btree_set.h">
+      <Filter>third-party\absl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\access.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\archives\adapters.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\archives\binary.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\archives\json.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\archives\portable_binary.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\archives\xml.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\cereal.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\helpers.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\polymorphic_impl.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\polymorphic_impl_fwd.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\static_object.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\traits.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\details\util.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\base64.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\allocators.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\cursorstreamwrapper.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\document.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\encodedstream.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\encodings.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\error\en.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\error\error.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\filereadstream.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\filewritestream.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\fwd.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\biginteger.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\diyfp.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\dtoa.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\ieee754.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\itoa.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\meta.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\pow10.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\regex.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\stack.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strfunc.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strtod.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\swap.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\istreamwrapper.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\memorybuffer.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\memorystream.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\inttypes.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\stdint.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\ostreamwrapper.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\pointer.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\prettywriter.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\rapidjson.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\reader.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\schema.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\stream.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\stringbuffer.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidjson\writer.h">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_iterators.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_print.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_utils.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\macros.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\specialize.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\array.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\atomic.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\base_class.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\bitset.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\boost_variant.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\chrono.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\common.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\complex.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\concepts\pair_associative_container.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\deque.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\forward_list.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\functional.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\list.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\map.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\memory.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\optional.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\polymorphic.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\queue.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\set.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\stack.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\string.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\tuple.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\unordered_map.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\unordered_set.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\utility.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\valarray.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\variant.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\types\vector.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\cereal\version.hpp">
+      <Filter>third-party\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\boost\container\map.hpp">
+      <Filter>third-party\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\tsl\ordered_hash.h">
+      <Filter>third-party\tsl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\tsl\ordered_map.h">
+      <Filter>third-party\tsl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\tsl\ordered_set.h">
+      <Filter>third-party\tsl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\arithmetic_policy.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\boolean.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\bounded_type.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\compact_optional.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\config.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\constrained_type.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\deferred_construction.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\aligned_union.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\all_of.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\assert.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\assign_or_construct.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\constant_parser.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\copy_move_control.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\debug_assert.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\force_inline.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\is_nothrow_swappable.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\map_invoke.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\detail\variant_impl.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\downcast.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\flag.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\flag_set.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\floating_point.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\index.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\integer.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\narrow_cast.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\optional.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\optional_ref.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\output_parameter.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\reference.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\strong_typedef.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\tagged_union.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\types.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\variant.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\type_safe\visitor.hpp">
+      <Filter>third-party\type_safe</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\unordered_dense\stl.h">
+      <Filter>third-party\ankerl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\unordered_dense\unordered_dense.h">
+      <Filter>third-party\ankerl</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\atomic.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\bits.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\internal.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\prim.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\track.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\types.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-new-delete.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-override.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-stats.h">
+      <Filter>third-party\mimalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\google_benchmark\include\benchmark.h">
+      <Filter>third-party\Google Benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="third-party\google_benchmark\include\export.h">
+      <Filter>third-party\Google Benchmark</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aol\aol.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="third-party\cereal\external\rapidxml\manual.html">
+      <Filter>third-party\cereal</Filter>
+    </None>
+  </ItemGroup>
+</Project>

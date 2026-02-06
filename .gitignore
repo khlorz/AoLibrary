@@ -416,3 +416,12 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+#AoLibrary static libs
+AoLibrary/lib/*
+
+#AoLibrary third-party files
+
+AoLibrary/third-party/**
+!AoLibrary/third-party/**/
+!AoLibrary/third-party/**/.gitkeep
