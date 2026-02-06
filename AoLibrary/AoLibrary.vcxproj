@@ -99,16 +99,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">
-    <OutDir>$(ProjectDir)lib\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)lib\$(Configuration)\objs\</IntDir>
+    <OutDir>$(ProjectDir)lib\benchmarking\</OutDir>
+    <IntDir>$(ProjectDir)lib\benchmarking\objs\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)lib\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)lib\$(Configuration)\objs\</IntDir>
+    <OutDir>$(ProjectDir)lib\debug\</OutDir>
+    <IntDir>$(ProjectDir)lib\debug\objs\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)lib\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)lib\$(Configuration)\objs\</IntDir>
+    <OutDir>$(ProjectDir)lib\release\</OutDir>
+    <IntDir>$(ProjectDir)lib\release\objs\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
