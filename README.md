@@ -22,25 +22,31 @@ AoLibrary is a simple library and needs only a simple process of dropping AoLibr
 
 2.) Add these folders to your project’s Include Directories:
 
- * `[Your project path]/AoLibrary`  
+ * `[Your project path]/include`  
 
- * `[Your project path]/AoLibrary/third-party`
+ * `[Your project path]/include/third-party`
+
+3.a.) Compile `include/aol/aol.cpp` file along with your project
+
+**OR**
+
+3.b) Compile the library to a static lib **[do not link third-party static libs *yet*]** then link to your executable **[link third-party static libs now]**
 
 That’s it. All done!
 
 ### Visual Studio Setup
 
-1.) Copy and paste `AoLibrary` folder
+1.) Copy and paste `include` folder
 
-2.) Add the `AoLibrary` visual studio project files to your solution
+2.) Add the `include` visual studio project files to your solution
 
 3.) Add these folders to your project’s Include Directories:
 
- * `[Your project path]/AoLibrary`  
+ * `[Your project path]/include`  
 
- * `[Your project path]/AoLibrary/third-party`
+ * `[Your project path]/include/third-party`
 	
-4.) The static library it builds is created on `[Your project path]/AoLibrary/lib/[build configuration]`
+4.) The static library it builds is created on `[Your project path]/include/lib/[build configuration]`
 
 You can now use the library in your code:
 
