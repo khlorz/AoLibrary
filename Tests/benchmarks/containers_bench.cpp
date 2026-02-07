@@ -1,3 +1,5 @@
+#ifdef BENCHMARK_CONFIG_ON
+
 #include "all_benchmarks.h"
 
 #include "aol/aol.h"
@@ -204,3 +206,5 @@ BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMapFind);
 ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMapFind);
 ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_BoostMapFind);
+
+#endif
