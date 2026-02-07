@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Benchmarking|Win32">
+      <Configuration>Benchmarking</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Benchmarking|x64">
+      <Configuration>Benchmarking</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a0f818d9-ac03-4e53-9eba-868afc976240}</ProjectGuid>
+    <RootNamespace>RottenLibrary</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">
+    <OutDir>$(ProjectDir)lib\benchmarking\</OutDir>
+    <IntDir>$(ProjectDir)lib\benchmarking\objs\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)lib\debug\</OutDir>
+    <IntDir>$(ProjectDir)lib\debug\objs\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)lib\release\</OutDir>
+    <IntDir>$(ProjectDir)lib\release\objs\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="aol\aol.h" />
+    <ClInclude Include="aol\data_components\managers.h" />
+    <ClInclude Include="aol\data_components\profiles.h" />
+    <ClInclude Include="aol\internal\algorithm.h" />
+    <ClInclude Include="aol\internal\allocators.h" />
+    <ClInclude Include="aol\internal\config.h" />
+    <ClInclude Include="aol\internal\containers.h" />
+    <ClInclude Include="aol\internal\dynamic_types.h" />
+    <ClInclude Include="aol\internal\exceptions.h" />
+    <ClInclude Include="aol\internal\hashes.h" />
+    <ClInclude Include="aol\internal\macros.h" />
+    <ClInclude Include="aol\internal\math.h" />
+    <ClInclude Include="aol\internal\strings.h" />
+    <ClInclude Include="aol\internal\traits.h" />
+    <ClInclude Include="aol\internal\typedefs.h" />
+    <ClInclude Include="aol\internal\types.h" />
+    <ClInclude Include="aol\serialization\serialization.h" />
+    <ClInclude Include="third-party\absl\container\btree_map.h" />
+    <ClInclude Include="third-party\absl\container\btree_set.h" />
+    <ClInclude Include="third-party\boost\container\map.hpp" />
+    <ClInclude Include="third-party\cereal\access.hpp" />
+    <ClInclude Include="third-party\cereal\archives\adapters.hpp" />
+    <ClInclude Include="third-party\cereal\archives\binary.hpp" />
+    <ClInclude Include="third-party\cereal\archives\json.hpp" />
+    <ClInclude Include="third-party\cereal\archives\portable_binary.hpp" />
+    <ClInclude Include="third-party\cereal\archives\xml.hpp" />
+    <ClInclude Include="third-party\cereal\cereal.hpp" />
+    <ClInclude Include="third-party\cereal\details\helpers.hpp" />
+    <ClInclude Include="third-party\cereal\details\polymorphic_impl.hpp" />
+    <ClInclude Include="third-party\cereal\details\polymorphic_impl_fwd.hpp" />
+    <ClInclude Include="third-party\cereal\details\static_object.hpp" />
+    <ClInclude Include="third-party\cereal\details\traits.hpp" />
+    <ClInclude Include="third-party\cereal\details\util.hpp" />
+    <ClInclude Include="third-party\cereal\external\base64.hpp" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\allocators.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\document.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\encodedstream.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\encodings.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\error\en.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\error\error.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\filereadstream.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\filewritestream.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\fwd.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\itoa.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\meta.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\pow10.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\regex.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\stack.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strtod.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\internal\swap.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\memorybuffer.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\memorystream.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\pointer.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\prettywriter.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\rapidjson.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\reader.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\schema.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\stream.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\stringbuffer.h" />
+    <ClInclude Include="third-party\cereal\external\rapidjson\writer.h" />
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="third-party\cereal\macros.hpp" />
+    <ClInclude Include="third-party\cereal\specialize.hpp" />
+    <ClInclude Include="third-party\cereal\types\array.hpp" />
+    <ClInclude Include="third-party\cereal\types\atomic.hpp" />
+    <ClInclude Include="third-party\cereal\types\base_class.hpp" />
+    <ClInclude Include="third-party\cereal\types\bitset.hpp" />
+    <ClInclude Include="third-party\cereal\types\boost_variant.hpp" />
+    <ClInclude Include="third-party\cereal\types\chrono.hpp" />
+    <ClInclude Include="third-party\cereal\types\common.hpp" />
+    <ClInclude Include="third-party\cereal\types\complex.hpp" />
+    <ClInclude Include="third-party\cereal\types\concepts\pair_associative_container.hpp" />
+    <ClInclude Include="third-party\cereal\types\deque.hpp" />
+    <ClInclude Include="third-party\cereal\types\forward_list.hpp" />
+    <ClInclude Include="third-party\cereal\types\functional.hpp" />
+    <ClInclude Include="third-party\cereal\types\list.hpp" />
+    <ClInclude Include="third-party\cereal\types\map.hpp" />
+    <ClInclude Include="third-party\cereal\types\memory.hpp" />
+    <ClInclude Include="third-party\cereal\types\optional.hpp" />
+    <ClInclude Include="third-party\cereal\types\polymorphic.hpp" />
+    <ClInclude Include="third-party\cereal\types\queue.hpp" />
+    <ClInclude Include="third-party\cereal\types\set.hpp" />
+    <ClInclude Include="third-party\cereal\types\stack.hpp" />
+    <ClInclude Include="third-party\cereal\types\string.hpp" />
+    <ClInclude Include="third-party\cereal\types\tuple.hpp" />
+    <ClInclude Include="third-party\cereal\types\unordered_map.hpp" />
+    <ClInclude Include="third-party\cereal\types\unordered_set.hpp" />
+    <ClInclude Include="third-party\cereal\types\utility.hpp" />
+    <ClInclude Include="third-party\cereal\types\valarray.hpp" />
+    <ClInclude Include="third-party\cereal\types\variant.hpp" />
+    <ClInclude Include="third-party\cereal\types\vector.hpp" />
+    <ClInclude Include="third-party\cereal\version.hpp" />
+    <ClInclude Include="third-party\google_benchmark\include\benchmark.h" />
+    <ClInclude Include="third-party\google_benchmark\include\export.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-new-delete.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-override.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc-stats.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\atomic.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\bits.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\internal.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\prim.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\track.h" />
+    <ClInclude Include="third-party\mimalloc\include\mimalloc\types.h" />
+    <ClInclude Include="third-party\tsl\ordered_hash.h" />
+    <ClInclude Include="third-party\tsl\ordered_map.h" />
+    <ClInclude Include="third-party\tsl\ordered_set.h" />
+    <ClInclude Include="third-party\type_safe\arithmetic_policy.hpp" />
+    <ClInclude Include="third-party\type_safe\boolean.hpp" />
+    <ClInclude Include="third-party\type_safe\bounded_type.hpp" />
+    <ClInclude Include="third-party\type_safe\compact_optional.hpp" />
+    <ClInclude Include="third-party\type_safe\config.hpp" />
+    <ClInclude Include="third-party\type_safe\constrained_type.hpp" />
+    <ClInclude Include="third-party\type_safe\deferred_construction.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\aligned_union.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\all_of.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\assert.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\assign_or_construct.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\constant_parser.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\copy_move_control.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\debug_assert.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\force_inline.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\is_nothrow_swappable.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\map_invoke.hpp" />
+    <ClInclude Include="third-party\type_safe\detail\variant_impl.hpp" />
+    <ClInclude Include="third-party\type_safe\downcast.hpp" />
+    <ClInclude Include="third-party\type_safe\flag.hpp" />
+    <ClInclude Include="third-party\type_safe\flag_set.hpp" />
+    <ClInclude Include="third-party\type_safe\floating_point.hpp" />
+    <ClInclude Include="third-party\type_safe\index.hpp" />
+    <ClInclude Include="third-party\type_safe\integer.hpp" />
+    <ClInclude Include="third-party\type_safe\narrow_cast.hpp" />
+    <ClInclude Include="third-party\type_safe\optional.hpp" />
+    <ClInclude Include="third-party\type_safe\optional_ref.hpp" />
+    <ClInclude Include="third-party\type_safe\output_parameter.hpp" />
+    <ClInclude Include="third-party\type_safe\reference.hpp" />
+    <ClInclude Include="third-party\type_safe\strong_typedef.hpp" />
+    <ClInclude Include="third-party\type_safe\tagged_union.hpp" />
+    <ClInclude Include="third-party\type_safe\types.hpp" />
+    <ClInclude Include="third-party\type_safe\variant.hpp" />
+    <ClInclude Include="third-party\type_safe\visitor.hpp" />
+    <ClInclude Include="third-party\unordered_dense\stl.h" />
+    <ClInclude Include="third-party\unordered_dense\unordered_dense.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aol\aol.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="third-party\cereal\external\rapidxml\manual.html" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
