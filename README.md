@@ -14,7 +14,7 @@ There is no deep technical meaning behind the name. I just really like the color
 
 ## Installation
 
-AoLibrary is a simple library and needs only a simple process of dropping AoLibrary folder into your project folder and that's it.
+AoLibrary is a simple library and needs only a minimal setup.
 
 #### Basic Setup
 

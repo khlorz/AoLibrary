@@ -422,6 +422,6 @@ AoLibrary/lib/*
 
 #AoLibrary third-party files
 
-include/third-party/**
-!include/third-party/**/
-!include/third-party/**/.gitkeep
+include/aol/third-party/**
+!include/aol/third-party/**/
+!include/aol/third-party/**/.gitkeep
