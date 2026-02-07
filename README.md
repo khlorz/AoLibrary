@@ -26,7 +26,7 @@ AoLibrary is a simple library and needs only a simple process of dropping AoLibr
 
  * `[Your project path]/AoLibrary/third-party`
 
-That’s all. All done!
+That’s it. All done!
 
 ### Visual Studio Setup
 
