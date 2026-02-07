@@ -1,5 +1,14 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary library
+****************************************************************************************
+* - The library's main allocator
+* - The default allocator used by the library whenever no custom allocator is provided
+* - Do be careful when integrating types from the library that uses a different
+*	allocator as it might be a problem when moving or copying objects
+***************************************************************************************/
+
 #include "config.h"
 
 #if defined(AOL_USE_MIMALLOCATOR_ALLOCATOR) || defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR)

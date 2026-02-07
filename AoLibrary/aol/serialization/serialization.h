@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary serialization
+****************************************************************************************
+* - Serialization of the library types require the cereal library
+* - To serialize the type, just include this header and that's it
+***************************************************************************************/
+
 #include "cereal/cereal.hpp"										/* main serialization include */
 #include "cereal/types/base_class.hpp"								/* for inheritance types*/
 #include "cereal/types/string.hpp"									/* std::string and the likes */

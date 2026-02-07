@@ -1,5 +1,13 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary dynamic_types
+****************************************************************************************
+* - Library's runtime-types
+* - Use this for types where you need any runtime-related things you can't do on
+*	compile time
+***************************************************************************************/
+
 #include <optional>
 #include <variant>
 #include <any>

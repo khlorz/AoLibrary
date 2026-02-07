@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary strings
+****************************************************************************************
+* - The main string type used by the library
+* - This string is different from std::string due to custom allocators
+***************************************************************************************/
+
 #include "config.h"
 
 #include "types.h"

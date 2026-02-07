@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary hashes
+****************************************************************************************
+* - The main hash functions/objects used by the library
+* - These are the hashes used for several containers like map and unordered_set
+***************************************************************************************/
+
 #include "config.h"
 
 #ifdef AOL_USE_UNORDERED_DENSE_HASH

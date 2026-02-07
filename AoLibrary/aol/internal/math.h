@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary math
+****************************************************************************************
+* - Some math functions used by the library
+* - Currently small, but will be adding more as I do more project
+***************************************************************************************/
+
 #include "config.h"
 
 #include "types.h"

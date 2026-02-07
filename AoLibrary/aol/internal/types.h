@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary types
+****************************************************************************************
+* - These fundamental types typedef for ease of library use
+* - If using the library, better to use this types
+***************************************************************************************/
+
 #include <cstddef>
 
 namespace AoL

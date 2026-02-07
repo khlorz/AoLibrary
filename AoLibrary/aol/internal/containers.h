@@ -1,5 +1,14 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary containers
+****************************************************************************************
+* - The library's main container types
+* - It is better to use these if you include the library for better ease of use
+* - Some custom containers and functions are provided as well
+* - Additional containers/functions will be added in the future as the library grows
+***************************************************************************************/
+
 #include "config.h"
 
 #include "allocators.h"

@@ -1,5 +1,12 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary traits
+****************************************************************************************
+* - Additional traits and concepts used by the library
+* - Additionally includes <type_traits> and <concepts>
+***************************************************************************************/
+
 #include "config.h"
 
 #include <type_traits>

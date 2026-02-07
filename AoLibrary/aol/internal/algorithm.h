@@ -1,5 +1,13 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary algorithms
+****************************************************************************************
+* - Algorithms used by the library
+* - Some algorithms as well that are improved from the generic ones for specific use
+*   cases like LowerBound()
+***************************************************************************************/
+
 #include "config.h"
 
 #include "types.h"
