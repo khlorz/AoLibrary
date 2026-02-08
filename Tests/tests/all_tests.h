@@ -1,5 +1,7 @@
 #pragma once
 
+#ifndef BENCHMARK_CONFIG_ON
+
 namespace AoL
 {
 
@@ -9,3 +11,5 @@ void GenericManagerTests() noexcept;
 void RunTests();
 
 }
+
+#endif

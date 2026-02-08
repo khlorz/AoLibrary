@@ -27,15 +27,37 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="benchmarks\containers_bench.cpp" />
+    <ClCompile Include="benchmarks\containers_bench.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="tests\all_tests.cpp" />
-    <ClCompile Include="tests\basic_data_test.cpp" />
-    <ClCompile Include="tests\general_mngr_tests.cpp" />
+    <ClCompile Include="tests\all_tests.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\basic_data_test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\general_mngr_tests.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="benchmarks\all_benchmarks.h" />
-    <ClInclude Include="tests\all_tests.h" />
+    <ClInclude Include="benchmarks\all_benchmarks.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\all_tests.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\include\AoLibrary.vcxproj">
