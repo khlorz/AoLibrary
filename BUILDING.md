@@ -13,7 +13,7 @@ cd AoLibrary
 
 ## Install Third-Party Libraries
 
-Inside the `include/third_party/` folder, clone or download the following:
+Inside the `include/aol/third_party/` folder, clone or download the following:
 
 ### Google Benchmark
 
@@ -22,9 +22,9 @@ cd [Your chosen folder]
 git clone https://github.com/google/benchmark [Your chosen folder]
 ```
 
-Copy and paste the `include/benchmark` contents inside `include/third-party/google_benchmark/include/`
+Copy and paste the `include/benchmark` contents inside `google_benchmark/`
 
-The built static-libraries should be put in `include/third-party/google_benchmark/lib/`
+The built static library recommended to put in `include/lib/[Platform]/[Configuration]/` for ease of use
 
 Google benchmark is only needed for the developer that tests and benchmarks the library, otherwise, this library can be skipped
 
@@ -34,14 +34,14 @@ Google benchmark is only needed for the developer that tests and benchmarks the 
 git clone https://github.com/abseil/abseil-cpp [Your chosen folder]
 ```
 
-Copy and paste the contents of `absl` to `include/third-party/absl/`
+Copy and paste the contents of `absl` to `absl/`
 
 ### Boost
 
 Download Boost from:
 https://www.boost.org/
 
-Copy and paste the contents of `boost` to `include/third-party/boost/`
+Copy and paste the contents of `boost` to `boost/`
 
 **NOTE#1:** This library can be skipped by default unless you edit `aol/internal/config.h` to use boost library
 
@@ -53,10 +53,9 @@ Copy and paste the contents of `boost` to `include/third-party/boost/`
 git clone https://github.com/microsoft/mimalloc [Your chosen folder]
 ```
 
-Copy and paste the contents of `include` (from mimalloc) to `include/third-party/mimalloc/include/`
+Copy and paste the contents of `include` (from mimalloc) to `mimalloc/`
 
-The built static-libraries should be put in `include/third-party/mimalloc/lib/` to its respective build type of either `debug` or `release`
-
+The built static library recommended to put in `include/lib/[Platform]/[Configuration]/` for ease of use
 
 ### tsl (Tessil libraries)
 
@@ -64,7 +63,7 @@ The built static-libraries should be put in `include/third-party/mimalloc/lib/` 
 git clone https://github.com/Tessil/ordered-map [Your chosen folder]
 ```
 
-Copy and paste the contents of `include/tsl` to `include/third-party/tsl/`
+Copy and paste the contents of `include/tsl` to `tsl/`
 
 
 ### type_safe
@@ -74,9 +73,9 @@ git clone https://github.com/foonathan/type_safe [Your chosen folder]
 git clone https://github.com/foonathan/debug_assert [Your chosen folder]
 ```
 
-Copy and paste the contents of `include/type_safe` to `include/third-party/type_safe/`
+Copy and paste the contents of `include/type_safe` to `type_safe/`
 
-Copy and paste `debug_assert.hpp` to `include/third-party/type_safe/detail`
+Copy and paste `debug_assert.hpp` to `type_safe/detail`
 
 **NOTE:** To minimize additional library includes, you might have to modify `detail/assert.hpp` and `detail/force_inline.hpp` #include's of `debug_assert.hpp`
 
@@ -87,4 +86,4 @@ Copy and paste `debug_assert.hpp` to `include/third-party/type_safe/detail`
 git clone https://github.com/martinus/unordered_dense [Your chosen folder]
 ```
 
-Copy and paste the contents of `include/ankerl` to `include/third-party/unordered_dense/`
+Copy and paste the contents of `include/ankerl` to `unordered_dense/`
