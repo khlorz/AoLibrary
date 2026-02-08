@@ -3,6 +3,8 @@
 * - Tests all DataBasic properties and whatnots
 ********************************************************************/
 
+#ifndef BENCHMARK_CONFIG_ON
+
 #include "all_tests.h"
 
 #include "aol/aol.h"
@@ -45,3 +47,4 @@ void BasicDataTests() noexcept
 
 } // namespace AoL
 
+#endif

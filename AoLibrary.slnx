@@ -6,8 +6,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="AoLibrary/AoLibrary.vcxproj" Id="a0f818d9-ac03-4e53-9eba-868afc976240" />
-  <Project Path="Tests/Tests.vcxproj" Id="60f1656d-5089-4513-aa8b-c27dd4151bd9">
-    <BuildDependency Project="AoLibrary/AoLibrary.vcxproj" />
-  </Project>
+  <Project Path="include/AoLibrary.vcxproj" Id="a0f818d9-ac03-4e53-9eba-868afc976240" />
+  <Project Path="Tests/Tests.vcxproj" Id="60f1656d-5089-4513-aa8b-c27dd4151bd9" />
 </Solution>

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "google_benchmark/include/benchmark.h"
+#ifdef BENCHMARK_CONFIG_ON
+
+#include "google_benchmark/benchmark.h"
 
 namespace AoL::Benchmark
 {
@@ -21,3 +23,4 @@ void BM_BoostMapFind(benchmark::State& state);
 
 }
 
+#endif

@@ -12,7 +12,7 @@
 #include "config.h"
 
 #if defined(AOL_USE_MIMALLOCATOR_ALLOCATOR) || defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR)
-#include "mimalloc/include/mimalloc.h"
+#include "mimalloc/mimalloc.h"
 #endif
 
 #ifdef AOL_USE_BOOST_POOL_ALLOCATOR

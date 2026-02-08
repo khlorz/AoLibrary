@@ -3,6 +3,8 @@
 * - Tests for GeneralManager for properties and whatnots
 ********************************************************************/
 
+#ifndef BENCHMARK_CONFIG_ON
+
 #include "all_tests.h"
 
 #include "aol/aol.h"
@@ -89,3 +91,4 @@ void GenericManagerTests() noexcept
 
 } // namespace AoL
 
+#endif
