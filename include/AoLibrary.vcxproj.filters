@@ -37,6 +37,9 @@
     <Filter Include="third-party\boost">
       <UniqueIdentifier>{3451eaa5-8c45-4437-ab25-469c96072d55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third-party\stb">
+      <UniqueIdentifier>{6e3515a3-637a-4fc8-b711-4b3afa056654}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
@@ -504,6 +507,9 @@
     </ClInclude>
     <ClInclude Include="third-party\google_benchmark\include\export.h">
       <Filter>third-party\Google Benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\stb\stb_sprintf.h">
+      <Filter>third-party\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

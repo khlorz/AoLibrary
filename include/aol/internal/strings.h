@@ -12,6 +12,8 @@
 #include "types.h"
 #include "allocators.h"
 
+#include "stb/stb_sprintf.h"
+
 #include <string>
 
 namespace AoL
