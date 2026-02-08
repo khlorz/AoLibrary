@@ -3,7 +3,6 @@
 #include "all_benchmarks.h"
 
 #include "aol/aol.h"
-#include "boost/container/map.hpp"
 
 #include <map>
 #include <vector>
@@ -65,9 +64,10 @@ void BM_RotLibString(benchmark::State& state)
     for (auto _ : state)
     {
         AoL::String v;
-        //v.reserve(N); // remove reallocation noise if you want
+		for (size_t i = 0; i < N; ++i)
+            v.push_back(static_cast<char>(i % 256));
 
-        v.reserve(N);
+		benchmark::DoNotOptimize(v.data());
     }
 }
 
@@ -78,9 +78,10 @@ void BM_STDString(benchmark::State& state)
     for (auto _ : state)
     {
         std::string v;
-        //v.reserve(N); // remove reallocation noise if you want
+        for (size_t i = 0; i < N; ++i)
+            v.push_back(static_cast<char>(i % 256));
 
-        v.reserve(N);
+        benchmark::DoNotOptimize(v.data());
     }
 }
 
@@ -110,24 +111,6 @@ void BM_STDMap(benchmark::State& state)
     for (auto _ : state) {
         state.PauseTiming();
         std::map<int, int> m;
-        state.ResumeTiming();
-
-        for (int i = 0; i < keys.size(); ++i) {
-            m[keys[i]] = i;
-        }
-
-        benchmark::DoNotOptimize(m);
-    }
-}
-
-void BM_BoostMap(benchmark::State& state)
-{
-    const int N = state.range(0);
-    auto keys = BMHelper_GenerateRandomKeys(N); // generate random keys
-
-    for (auto _ : state) {
-        state.PauseTiming();
-        boost::container::map<int, int> m;
         state.ResumeTiming();
 
         for (int i = 0; i < keys.size(); ++i) {
@@ -178,33 +161,16 @@ void BM_STDMapFind(benchmark::State& state)
     }
 }
 
-void BM_BoostMapFind(benchmark::State& state)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    const int N = state.range(0);
-    auto keys = BMHelper_GenerateRandomKeys(N); // generate random keys
-    boost::container::map<int, int> m;
-    for (int i = 0; i < keys.size(); ++i) {
-        m[keys[i]] = i;
-    }
-
-    for (auto _ : state) {
-        state.PauseTiming();
-        std::uniform_int_distribution<> dis(0, keys.size() - 1);
-        state.ResumeTiming();
-
-        benchmark::DoNotOptimize(m[keys[dis(gen)]]);
-    }
-}
-
 }
 
 #define ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(function) \
 BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMapFind);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMapFind);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_BoostMapFind);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDVector);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibVector);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDString);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibString);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
+ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
 
 #endif

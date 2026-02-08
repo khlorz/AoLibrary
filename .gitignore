@@ -425,3 +425,6 @@ AoLibrary/lib/*
 include/aol/third-party/**
 !include/aol/third-party/**/
 !include/aol/third-party/**/.gitkeep
+
+#benchmark builds
+[Bb]enchmarking/

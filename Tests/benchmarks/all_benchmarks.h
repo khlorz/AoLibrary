@@ -1,6 +1,6 @@
 #pragma once
 
-#include "google_benchmark/include/benchmark.h"
+#include "google_benchmark/benchmark.h"
 
 namespace AoL::Benchmark
 {
