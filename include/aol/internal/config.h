@@ -68,12 +68,10 @@
 
 /**
 * This makes the whole AoLibrary use mimalloc library for string allocators
-*
-* - This works especially well with char-based allocations
-*
-* - Because of this behavior, a dedicated allocator define was introduced
+* 
+* - By default, we use the default allocator, std::allocator<char>
 */
-#define AOL_USE_MIMALLOCATOR_STRING_ALLOCATOR
+//#define AOL_USE_MIMALLOCATOR_STRING_ALLOCATOR
 
 
 /***************************************
