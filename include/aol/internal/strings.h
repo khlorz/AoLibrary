@@ -14,6 +14,7 @@
 #include "traits.h"
 
 #include "stb/stb_sprintf.h"
+#include "fmt/format.h"
 
 #include <string>
 #include <cstring>
@@ -84,12 +85,12 @@ using StringPool = std::basic_string<char, std::char_traits<char>, Internal::Def
 * 
 * - For safe operations, use StrFormat... functions
 * 
-* @param buf - char buffer
-* @param fmt - print format
-* @param ts... - format arguments
+* @param buf - Char buffer
+* @param fmt - Print format
+* @param ts - Format arguments
+* @tparam Ts - Format types
+* @returns int: End of buffer position
 */
-//constexpr auto StrPrintF = stbsp_sprintf;
-
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 {
@@ -98,7 +99,7 @@ constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 }
 
 /*
-* @details Aol snprintf_s
+* @details AoL snprintf_s
 *
 * - This is a wrapper for stb's snprintf implementation
 *
@@ -108,10 +109,12 @@ constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 *
 * - For safe operations, use StrFormat... functions
 *
-* @param buf - char buffer
-* @param size - char size, this includes the '\0' or NULL terminator
-* @param fmt - print format
-* @param ... - format arguments
+* @param buf Char buffer
+* @param size Char size, this includes the '\0' or NULL terminator
+* @param fmt Print format
+* @param ts Format arguments
+* @tparam Ts Format types
+* @returns int: End of buffer position
 */
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts) noexcept -> int
@@ -119,5 +122,24 @@ constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts)
 	static_assert(Internal::IsValidFormatArgument<Ts...>, "Invalid format type!");
 	return stbsp_snprintf(buf, capacity, fmt, std::forward<Ts>(ts)...);
 }
+
+/*
+* @details AoL format
+* 
+* - This is a wrapper for fmt's format
+* 
+* - This can be quicker and safer than StrPrintF if dealing with std::strings rather than c strings
+* 
+* @param fmt - Print format
+* @param ts - Format arguments
+* @tparam Ts - Format types
+* @returns std::string: Formatted string
+*/
+template<typename... Ts>
+constexpr auto StrFormat(const char* fmt, Ts&&... ts)
+{
+	return fmt::format(fmt, std::forward<Ts>(ts)...);
+}
+
 
 }
