@@ -11,30 +11,113 @@
 
 #include "types.h"
 #include "allocators.h"
+#include "traits.h"
+
+#include "stb/stb_sprintf.h"
 
 #include <string>
+#include <cstring>
+#include <string_view>
 
 namespace AoL
 {
 
+namespace Internal
+{
+
+template<typename T>
+struct ValidFormatArgument : std::false_type {};
+template<>
+struct ValidFormatArgument<int> : std::true_type {};
+template<>
+struct ValidFormatArgument<unsigned> : std::true_type {};
+template<>
+struct ValidFormatArgument<long> : std::true_type {};
+template<>
+struct ValidFormatArgument<unsigned long> : std::true_type {};
+template<>
+struct ValidFormatArgument<long long> : std::true_type {};
+template<>
+struct ValidFormatArgument<unsigned long long> : std::true_type {};
+template<>
+struct ValidFormatArgument<double> : std::true_type {};
+template<>
+struct ValidFormatArgument<const char*> : std::true_type {};
+template<>
+struct ValidFormatArgument<char*> : std::true_type {};
+template<>
+struct ValidFormatArgument<void*> : std::true_type {};
+template<>
+struct ValidFormatArgument<const void*> : std::true_type {};
+
+template<typename T>
+inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T>>::value;
+
+}
+
 /**
-* Basic string of the library
-* 
+* @details Basic string of the library
+*
 * - It's also just a 'using' wrapper for std::basic_string<T, Traits, Allocator>
-* 
+
 * - For this string, the allocator can be changed depending on use case
-* 
+*
 * @tparam A allocator type (default = Internal::DefaultStringAllocator)
 */
 using String = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringAllocator>;
 
 /**
-* String but for pool allocators
+* @Details String but for pool allocators
 *
 * - Specialize string used with pool/memory resources
 *
 * @tparam A allocator type (default = Internal::DefaultStringPoolAllocator)
 */
 using StringPool = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringPoolAllocator>;
+
+/*
+* @details AoL sprintf
+* 
+* - This is a wrapper for stb's sprintf implementation
+* 
+* - Unsafe but faster
+* 
+* - For safe operations, use StrFormat... functions
+* 
+* @param buf - char buffer
+* @param fmt - print format
+* @param ts... - format arguments
+*/
+//constexpr auto StrPrintF = stbsp_sprintf;
+
+template<typename... Ts>
+constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
+{
+	static_assert(Internal::IsValidFormatArgument<Ts...>, "Invalid format type!");
+	return stbsp_sprintf(buf, fmt, std::forward<Ts>(ts)...);
+}
+
+/*
+* @details Aol snprintf_s
+*
+* - This is a wrapper for stb's snprintf implementation
+*
+* - Safe in the sense that it wouldn't write beyond the buffer capacity
+*
+* - Still unsafe for mismatch format arguments
+*
+* - For safe operations, use StrFormat... functions
+*
+* @param buf - char buffer
+* @param size - char size, this includes the '\0' or NULL terminator
+* @param fmt - print format
+* @param ... - format arguments
+*/
+template<typename... Ts>
+constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts) noexcept -> int
+{
+	static_assert(Internal::IsValidFormatArgument<Ts...>, "Invalid format type!");
+	return stbsp_snprintf(buf, capacity, fmt, std::forward<Ts>(ts)...);
+}
 
 }

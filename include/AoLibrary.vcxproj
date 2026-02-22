@@ -233,6 +233,7 @@
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
     <ClInclude Include="aol\serialization\serialization.h" />
+    <ClInclude Include="aol\third-party\stb\stb_sprintf.h" />
     <ClInclude Include="third-party\absl\container\btree_map.h" />
     <ClInclude Include="third-party\absl\container\btree_set.h" />
     <ClInclude Include="third-party\boost\container\map.hpp" />
