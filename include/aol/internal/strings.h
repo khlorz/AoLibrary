@@ -60,6 +60,11 @@ inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T
 
 }
 
+
+/***************************************
+* Declarations / usings
+***************************************/
+
 /**
 * @details Basic string of the library
 *
@@ -88,6 +93,18 @@ using StringPool = std::basic_string<char, std::char_traits<char>, Internal::Def
 * - Usable on std::strings, c-strings, and custom types that abides by std::string standard
 */
 using StringView = std::string_view;
+
+
+/***************************************
+* Definitions
+***************************************/
+
+inline constexpr auto StrNoPos = AoL::String::npos;
+
+
+/***************************************
+* Definitions
+***************************************/
 
 /*
 * @details AoL sprintf
@@ -345,6 +362,10 @@ constexpr auto StrContains(AoL::StringView haystack, const char* const needle, S
 * - This is a wrapper for Abseil's StrCat
 * 
 * - From my benchmarks, Abseil's StrCat and fmt's to_string are just the same except for double, where Abseil is 2x faster
+* 
+* @param value to be converted value
+* @tparam T value type (int, short, char, float, double, boolean)
+* @returns AoL::String: resulting string
 */
 template<typename T>
 constexpr auto ToString(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
