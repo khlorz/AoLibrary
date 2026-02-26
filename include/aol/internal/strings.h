@@ -18,6 +18,7 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "absl/strings/match.h"
+#include "absl/strings/str_split.h"
 
 #include <string>
 #include <cstring>
@@ -336,6 +337,19 @@ constexpr auto StrContains(AoL::StringView haystack, char needle, SizeT offset =
 constexpr auto StrContains(AoL::StringView haystack, const char* const needle, SizeT offset, SizeT count) noexcept -> bool
 {
 	return haystack.find(needle, offset, count) != haystack.npos;
+}
+
+/**
+* @details AoL to_string conversion
+* 
+* - This is a wrapper for Abseil's StrCat
+* 
+* - From my benchmarks, Abseil's StrCat and fmt's to_string are just the same except for double, where Abseil is 2x faster
+*/
+template<typename T>
+constexpr auto ToString(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
+{
+	return absl::StrCat(value);
 }
 
 
