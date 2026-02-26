@@ -15,6 +15,7 @@
 
 #include "stb/stb_sprintf.h"
 #include "fmt/format.h"
+#include "absl/strings/str_cat.h"
 
 #include <string>
 #include <cstring>
@@ -130,15 +131,32 @@ constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts)
 * 
 * - This can be quicker and safer than StrPrintF if dealing with std::strings rather than c strings
 * 
-* @param fmt - Print format
-* @param ts - Format arguments
-* @tparam Ts - Format types
-* @returns std::string: Formatted string
+* @param fmt Print format
+* @param ts Format arguments
+* @tparam Ts Format types
+* @returns AoL::String: Formatted string
 */
 template<typename... Ts>
-constexpr auto StrFormat(const char* fmt, Ts&&... ts)
+constexpr auto StrFormat(const char* fmt, Ts&&... ts) -> AoL::String
 {
 	return fmt::format(fmt, std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string concatenation
+* 
+* - This is a wrapper for Abseil's StrCat
+* 
+* - This can be quicker than StrFormat in some cases
+* 
+* @param ts Format arguments
+* @tparam Ts Fromat types
+* @returns AoL::String: Resulting concatenated values
+*/
+template<typename... Ts>
+constexpr auto StrConcat(Ts&&... ts) -> AoL::String
+{
+	return absl::StrCat(std::forward<Ts>(ts)...);
 }
 
 

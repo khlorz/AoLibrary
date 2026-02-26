@@ -21,6 +21,11 @@ void BM_RotLibMapFind(benchmark::State& state);
 void BM_STDMapFind(benchmark::State& state);
 void BM_BoostMapFind(benchmark::State& state);
 
+void BM_STDCONCAT(benchmark::State& state);
+void BM_ABSLCONCAT(benchmark::State& state);
+void BM_FMTCONCAT(benchmark::State& state);
+void BM_STBCONCAT(benchmark::State& state);
+
 }
 
 #endif

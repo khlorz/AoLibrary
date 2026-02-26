@@ -204,7 +204,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc-debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc-debug.lib</AdditionalDependencies>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -227,7 +227,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.lib</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.lib</AdditionalDependencies>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -250,7 +250,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmt.lib;Shlwapi.lib;benchmark.lib;mimalloc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;Shlwapi.lib;benchmark.lib;mimalloc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

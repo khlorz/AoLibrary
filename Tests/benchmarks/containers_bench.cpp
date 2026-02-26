@@ -4,6 +4,8 @@
 
 #include "aol/aol.h"
 
+#include "absl/strings/str_cat.h"
+
 #include <map>
 #include <vector>
 #include <unordered_set>
@@ -23,6 +25,47 @@ static std::vector<int> BMHelper_GenerateRandomKeys(int N)
     keys.insert(keys.end(), std::make_move_iterator(unique_keys.begin()), std::make_move_iterator(unique_keys.end()));
 
     return keys;
+}
+
+void BM_STDCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str;
+        str += "asdasdasd";
+        str += std::to_string(123456);
+        str += std::to_string(1.41231241245f);
+        str += "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12";
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+void BM_ABSLCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrCat("asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+void BM_FMTCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::format("{}{}{}{}","asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+void BM_STBCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        char str[512];
+        stbsp_sprintf(str, "%s%d%0.10f%s", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
 }
 
 void BM_RotLibVector(benchmark::State& state)
@@ -166,11 +209,16 @@ void BM_STDMapFind(benchmark::State& state)
 #define ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(function) \
 BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDVector);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibVector);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDString);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibString);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDVector);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibVector);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDString);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibString);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
+
+BENCHMARK(AoL::Benchmark::BM_STDCONCAT);
+BENCHMARK(AoL::Benchmark::BM_ABSLCONCAT);
+BENCHMARK(AoL::Benchmark::BM_FMTCONCAT);
+BENCHMARK(AoL::Benchmark::BM_STBCONCAT);
 
 #endif
