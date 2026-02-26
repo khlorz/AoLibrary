@@ -5,6 +5,7 @@
 #include "aol/aol.h"
 
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
 
 #include <map>
 #include <vector>
@@ -64,6 +65,24 @@ void BM_STBCONCAT(benchmark::State& state)
     {
         char str[512];
         stbsp_sprintf(str, "%s%d%0.10f%s", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+void BM_FMTFORMAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::format("{}{}{}{}", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+void BM_ABSLFORMAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrFormat("%s%d%0.10f%s", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
         benchmark::DoNotOptimize(str);
     }
 }
@@ -216,9 +235,7 @@ BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 //ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
 //ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
 
-BENCHMARK(AoL::Benchmark::BM_STDCONCAT);
-BENCHMARK(AoL::Benchmark::BM_ABSLCONCAT);
-BENCHMARK(AoL::Benchmark::BM_FMTCONCAT);
-BENCHMARK(AoL::Benchmark::BM_STBCONCAT);
+BENCHMARK(AoL::Benchmark::BM_FMTFORMAT);
+BENCHMARK(AoL::Benchmark::BM_ABSLFORMAT);
 
 #endif
