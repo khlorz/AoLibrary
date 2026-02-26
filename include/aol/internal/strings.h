@@ -23,6 +23,7 @@
 #include <string>
 #include <cstring>
 #include <string_view>
+#include <charconv>
 
 namespace AoL
 {
@@ -371,6 +372,62 @@ template<typename T>
 constexpr auto ToString(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
 {
 	return absl::StrCat(value);
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for Abseil's Atoxxx
+*
+* @param str to be converted string
+* @param out_val output value ref
+* @tparam T output type (int, short, char, float, double, boolean)
+* @returns bool: success flag
+*/
+template<typename T>
+constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
+{
+	if (std::is_integral_v<T>)
+	{
+		return absl::SimpleAtoi(str, &out_val);
+	}
+	else if (std::is_floating_point_v<T>)
+	{
+		if (std::is_same_v<double, T>)
+		{
+			return absl::SimpleAtod(str, &out_val);
+		}
+		else
+		{
+			return absl::SimpleAtof(str, *out_val);
+		}
+	}
+	else if (std::is_same_v<bool, T>)
+	{
+		return absl::SimpleAtob(str, &out_val);
+	}
+	else
+	{
+		static_assert(Traits::AssertFalse<T>, "Invalid type!");
+	}
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for std::from_chars
+*
+* @param start string start ptr
+* @param end string end ptr
+* @param out_val output value ref
+* @param fmt format for conversion
+* @tparam T output type (int, short, char, float, double, boolean)
+* @returns std::from_chars_results: operation result and safe to discard
+*/
+template<typename T>
+constexpr auto StrToValue(const char* start, const char* end, T& out_val, std::chars_format fmt = std::chars_format::general) noexcept -> std::from_chars_result
+{
+	return std::from_chars(start, end, out_val, fmt);
 }
 
 
