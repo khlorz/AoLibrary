@@ -151,6 +151,8 @@ constexpr auto StrFormat(const char* fmt, Ts&&... ts) -> AoL::String
 * 
 * - This is a wrapper for Abseil's StrCat
 * 
+* - Create a string from an abritrary number of values (e.g. c-strings, std::string, int, double, etc.)
+* 
 * - For things that need fast string output, use this
 * 
 * - If you want readability, use StrFormat instead
@@ -165,6 +167,44 @@ template<typename... Ts>
 constexpr auto StrConcat(Ts&&... ts) -> AoL::String
 {
 	return absl::StrCat(std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string appending
+* 
+* - This is a wrapper for Abseil's StrAppend
+* 
+* - Append the given string an abritrary number of values (e.g. c-strings, std::string, int, double, etc.)
+* 
+* - Use this to append the strings effectively
+* 
+* @param str The output string to be appended
+* @param ts The values to be appended to the output string
+*/
+template<typename... Ts>
+constexpr auto StrAppend(AoL::String& str, Ts&&... ts) -> void
+{
+	return absl::StrAppend(&str, std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string appending
+*
+* - This is a wrapper for Abseil's StrAppendFormat
+*
+* - Append the given string an abritrary number of values with a given format
+*
+* - Use this to append the strings effectively
+*
+* @param str The output string to be appended
+* @param fmt The format of the appending string
+* @param ts The values to be appended to the output string
+* @returns AoL::String: The resulting string. Used for chain appending purposes.
+*/
+template<typename... Ts>
+constexpr auto StrAppendF(AoL::String& str, const char* fmt, Ts&&... ts) -> AoL::String&
+{
+	return absl::StrAppendFormat(&str, fmt, std::forward<Ts>(ts)...);
 }
 
 
