@@ -129,6 +129,10 @@ constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts)
 * 
 * - This is a wrapper for fmt's format
 * 
+* - If you want/need readability, use this function
+*
+* - However, for things that need fast string output, use StrConcat
+* 
 * - This can be quicker and safer than StrPrintF if dealing with std::strings rather than c strings
 * 
 * @param fmt Print format
@@ -146,6 +150,10 @@ constexpr auto StrFormat(const char* fmt, Ts&&... ts) -> AoL::String
 * @details AoL string concatenation
 * 
 * - This is a wrapper for Abseil's StrCat
+* 
+* - For things that need fast string output, use this
+* 
+* - If you want readability, use StrFormat instead
 * 
 * - This can be quicker than StrFormat in some cases
 * 
