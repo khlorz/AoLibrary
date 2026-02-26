@@ -16,6 +16,8 @@
 #include "stb/stb_sprintf.h"
 #include "fmt/format.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "absl/strings/match.h"
 
 #include <string>
 #include <cstring>
@@ -69,7 +71,7 @@ inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T
 using String = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringAllocator>;
 
 /**
-* @Details String but for pool allocators
+* @details String but for pool allocators
 *
 * - Specialize string used with pool/memory resources
 *
@@ -77,10 +79,21 @@ using String = std::basic_string<char, std::char_traits<char>, Internal::Default
 */
 using StringPool = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringPoolAllocator>;
 
+/**
+* @details View object for string values
+* 
+* - This is a wrapper for std::string
+* 
+* - Usable on std::strings, c-strings, and custom types that abides by std::string standard
+*/
+using StringView = std::string_view;
+
 /*
 * @details AoL sprintf
 * 
 * - This is a wrapper for stb's sprintf implementation
+* 
+* - Best used with c-strings
 * 
 * - Unsafe but faster
 * 
@@ -104,6 +117,8 @@ constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 *
 * - This is a wrapper for stb's snprintf implementation
 *
+* - Best used with c-strings
+* 
 * - Safe in the sense that it wouldn't write beyond the buffer capacity
 *
 * - Still unsafe for mismatch format arguments
@@ -207,5 +222,121 @@ constexpr auto StrAppendF(AoL::String& str, const char* fmt, Ts&&... ts) -> AoL:
 	return absl::StrAppendFormat(&str, fmt, std::forward<Ts>(ts)...);
 }
 
-
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, AoL::StringView needle, SizeT offset = 0) noexcept -> SizeT
+{
+	return haystack.find(needle, offset);
 }
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, char needle, SizeT offset = 0) noexcept -> SizeT
+{
+	return haystack.find(needle, offset);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @param count needle size
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, const char* const needle, SizeT offset, SizeT count) noexcept -> SizeT
+{
+	return haystack.find(needle, offset, count);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns bool: true = found, false = not found 
+*/
+constexpr auto StrContains(AoL::StringView haystack, AoL::StringView needle, SizeT offset = 0) noexcept -> bool
+{
+	return haystack.find(needle, offset) != haystack.npos;
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns bool: true = found, false = not found
+*/
+constexpr auto StrContains(AoL::StringView haystack, char needle, SizeT offset = 0) noexcept -> bool
+{
+	return haystack.find(needle, offset) != haystack.npos;
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @param count needle size
+* @returns bool: true = found, false = not found
+*/
+constexpr auto StrContains(AoL::StringView haystack, const char* const needle, SizeT offset, SizeT count) noexcept -> bool
+{
+	return haystack.find(needle, offset, count) != haystack.npos;
+}
+
+
+} // AoL namespace
