@@ -4,6 +4,9 @@
 
 #include "aol/aol.h"
 
+#include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+
 #include <map>
 #include <vector>
 #include <unordered_set>
@@ -25,7 +28,120 @@ static std::vector<int> BMHelper_GenerateRandomKeys(int N)
     return keys;
 }
 
-void BM_RotLibVector(benchmark::State& state)
+static void BM_STDCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str;
+        str += "asdasdasd";
+        str += std::to_string(123456);
+        str += std::to_string(1.41231241245f);
+        str += "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12";
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_ABSLCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrCat("asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_FMTCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::format("{}{}{}{}","asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_STBCONCAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        char str[512];
+        stbsp_sprintf(str, "%s%d%0.10f%s", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_FMTFORMAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::format("{}{}{}{}", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_ABSLFORMAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrFormat("%s%d%0.10f%s", "asdasdasd", 123456, 1.41231241245f, "askdljaslkdn214e1293uiondlasndkjasnd9u12-dk21jkd12");
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_FMT_TO_STRING_INT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::to_string(std::numeric_limits<int>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_ABSL_TO_STRING_INT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrCat(std::numeric_limits<int>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_FMT_TO_STRING_DOUBLE(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::to_string(std::numeric_limits<double>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_ABSL_TO_STRING_DOUBLE(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrCat(std::numeric_limits<double>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_FMT_TO_STRING_FLOAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = fmt::to_string(std::numeric_limits<float>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_ABSL_TO_STRING_FLOAT(benchmark::State& state)
+{
+    for (auto _ : state)
+    {
+        std::string str = absl::StrCat(std::numeric_limits<float>::max());
+        benchmark::DoNotOptimize(str);
+    }
+}
+
+static void BM_RotLibVector(benchmark::State& state)
 {
     const size_t N = state.range(0);
 
@@ -41,7 +157,7 @@ void BM_RotLibVector(benchmark::State& state)
     }
 }
 
-void BM_STDVector(benchmark::State& state)
+static void BM_STDVector(benchmark::State& state)
 {
     const size_t N = state.range(0);
 
@@ -57,7 +173,7 @@ void BM_STDVector(benchmark::State& state)
     }
 }
 
-void BM_RotLibString(benchmark::State& state)
+static void BM_RotLibString(benchmark::State& state)
 {
     const size_t N = state.range(0);
 
@@ -71,7 +187,7 @@ void BM_RotLibString(benchmark::State& state)
     }
 }
 
-void BM_STDString(benchmark::State& state)
+static void BM_STDString(benchmark::State& state)
 {
     const size_t N = state.range(0);
 
@@ -85,7 +201,7 @@ void BM_STDString(benchmark::State& state)
     }
 }
 
-void BM_RotLibMap(benchmark::State& state)
+static void BM_RotLibMap(benchmark::State& state)
 {
     const int N = state.range(0);
     auto keys = BMHelper_GenerateRandomKeys(N); // generate random keys
@@ -103,7 +219,7 @@ void BM_RotLibMap(benchmark::State& state)
     }
 }
 
-void BM_STDMap(benchmark::State& state)
+static void BM_STDMap(benchmark::State& state)
 {
     const int N = state.range(0);
     auto keys = BMHelper_GenerateRandomKeys(N); // generate random keys
@@ -121,7 +237,7 @@ void BM_STDMap(benchmark::State& state)
     }
 }
 
-void BM_RotLibMapFind(benchmark::State& state)
+static void BM_RotLibMapFind(benchmark::State& state)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -141,7 +257,7 @@ void BM_RotLibMapFind(benchmark::State& state)
     }
 }
 
-void BM_STDMapFind(benchmark::State& state)
+static void BM_STDMapFind(benchmark::State& state)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -166,11 +282,18 @@ void BM_STDMapFind(benchmark::State& state)
 #define ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(function) \
 BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDVector);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibVector);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDString);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibString);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
-ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDVector);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibVector);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDString);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibString);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
+//ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
+
+BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_INT);
+BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_DOUBLE);
+BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_FLOAT);
+BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_INT);
+BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_DOUBLE);
+BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_FLOAT);
 
 #endif

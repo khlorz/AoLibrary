@@ -198,12 +198,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\aol\third-party</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc-debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_str_format_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc-debug.lib</AdditionalDependencies>
+      <AdditionalOptions>/utf-8 /verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -218,12 +220,15 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\aol\third-party</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Ob3 /utf-8 /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.lib</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_str_format_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.lib</AdditionalDependencies>
+      <AdditionalOptions>/utf-8 /verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">
@@ -238,12 +243,15 @@
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\aol\third-party</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Ob3 /utf-8 /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)include\lib\third-party\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Shlwapi.lib;benchmark.lib;mimalloc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmt.lib;absl_strings.lib;absl_strings_internal.lib;absl_str_format_internal.lib;absl_base.lib;absl_log_severity.lib;absl_raw_logging_internal.lib;absl_spinlock_wait.lib;absl_throw_delegate.lib;absl_int128.lib;Shlwapi.lib;benchmark.lib;mimalloc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/utf-8 /verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

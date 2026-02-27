@@ -14,10 +14,16 @@
 #include "traits.h"
 
 #include "stb/stb_sprintf.h"
+#include "fmt/format.h"
+#include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "absl/strings/match.h"
+#include "absl/strings/str_split.h"
 
 #include <string>
 #include <cstring>
 #include <string_view>
+#include <charconv>
 
 namespace AoL
 {
@@ -55,6 +61,11 @@ inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T
 
 }
 
+
+/***************************************
+* Declarations / usings
+***************************************/
+
 /**
 * @details Basic string of the library
 *
@@ -67,7 +78,7 @@ inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T
 using String = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringAllocator>;
 
 /**
-* @Details String but for pool allocators
+* @details String but for pool allocators
 *
 * - Specialize string used with pool/memory resources
 *
@@ -75,21 +86,44 @@ using String = std::basic_string<char, std::char_traits<char>, Internal::Default
 */
 using StringPool = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringPoolAllocator>;
 
+/**
+* @details View object for string values
+* 
+* - This is a wrapper for std::string
+* 
+* - Usable on std::strings, c-strings, and custom types that abides by std::string standard
+*/
+using StringView = std::string_view;
+
+
+/***************************************
+* Constants
+***************************************/
+
+inline constexpr auto StrNoPos = AoL::String::npos;
+
+
+/***************************************
+* Definitions
+***************************************/
+
 /*
 * @details AoL sprintf
 * 
 * - This is a wrapper for stb's sprintf implementation
 * 
+* - Best used with c-strings
+* 
 * - Unsafe but faster
 * 
 * - For safe operations, use StrFormat... functions
 * 
-* @param buf - char buffer
-* @param fmt - print format
-* @param ts... - format arguments
+* @param buf - Char buffer
+* @param fmt - Print format
+* @param ts - Format arguments
+* @tparam Ts - Format types
+* @returns int: End of buffer position
 */
-//constexpr auto StrPrintF = stbsp_sprintf;
-
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 {
@@ -98,20 +132,24 @@ constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 }
 
 /*
-* @details Aol snprintf_s
+* @details AoL snprintf_s
 *
 * - This is a wrapper for stb's snprintf implementation
 *
+* - Best used with c-strings
+* 
 * - Safe in the sense that it wouldn't write beyond the buffer capacity
 *
 * - Still unsafe for mismatch format arguments
 *
 * - For safe operations, use StrFormat... functions
 *
-* @param buf - char buffer
-* @param size - char size, this includes the '\0' or NULL terminator
-* @param fmt - print format
-* @param ... - format arguments
+* @param buf Char buffer
+* @param size Char size, this includes the '\0' or NULL terminator
+* @param fmt Print format
+* @param ts Format arguments
+* @tparam Ts Format types
+* @returns int: End of buffer position
 */
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts) noexcept -> int
@@ -120,4 +158,404 @@ constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts)
 	return stbsp_snprintf(buf, capacity, fmt, std::forward<Ts>(ts)...);
 }
 
+/*
+* @details AoL format
+* 
+* - This is a wrapper for fmt's format
+* 
+* - If you want/need readability, use this function
+*
+* - However, for things that need fast string output, use StrConcat
+* 
+* - This can be quicker and safer than StrPrintF if dealing with std::strings rather than c strings
+* 
+* @param fmt Print format
+* @param ts Format arguments
+* @tparam Ts Format types
+* @returns AoL::String: Formatted string
+*/
+template<typename... Ts>
+constexpr auto StrFormat(const char* fmt, Ts&&... ts) -> AoL::String
+{
+	return fmt::format(fmt, std::forward<Ts>(ts)...);
 }
+
+/**
+* @details AoL string concatenation
+* 
+* - This is a wrapper for Abseil's StrCat
+* 
+* - Create a string from an abritrary number of values (e.g. c-strings, std::string, int, double, etc.)
+* 
+* - For things that need fast string output, use this
+* 
+* - If you want readability, use StrFormat instead
+* 
+* - This can be quicker than StrFormat in some cases
+* 
+* @param ts Format arguments
+* @tparam Ts Fromat types
+* @returns AoL::String: Resulting concatenated values
+*/
+template<typename... Ts>
+constexpr auto StrConcat(Ts&&... ts) -> AoL::String
+{
+	return absl::StrCat(std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string appending
+* 
+* - This is a wrapper for Abseil's StrAppend
+* 
+* - Append the given string an abritrary number of values (e.g. c-strings, std::string, int, double, etc.)
+* 
+* - Use this to append the strings effectively
+* 
+* @param str The output string to be appended
+* @param ts The values to be appended to the output string
+*/
+template<typename... Ts>
+constexpr auto StrAppend(AoL::String& str, Ts&&... ts) -> void
+{
+	return absl::StrAppend(&str, std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string appending
+*
+* - This is a wrapper for Abseil's StrAppendFormat
+*
+* - Append the given string an abritrary number of values with a given format
+*
+* - Use this to append the strings effectively
+*
+* @param str The output string to be appended
+* @param fmt The format of the appending string
+* @param ts The values to be appended to the output string
+* @returns AoL::String: The resulting string. Used for chain appending purposes.
+*/
+template<typename... Ts>
+constexpr auto StrAppendF(AoL::String& str, const char* fmt, Ts&&... ts) -> AoL::String&
+{
+	return absl::StrAppendFormat(&str, fmt, std::forward<Ts>(ts)...);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, AoL::StringView needle, SizeT offset = 0) noexcept -> SizeT
+{
+	return haystack.find(needle, offset);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, char needle, SizeT offset = 0) noexcept -> SizeT
+{
+	return haystack.find(needle, offset);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Finds the given value from the given string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @param count needle size
+* @returns SizeT: found position
+*/
+constexpr auto StrFind(AoL::StringView haystack, const char* const needle, SizeT offset, SizeT count) noexcept -> SizeT
+{
+	return haystack.find(needle, offset, count);
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns bool: true = found, false = not found 
+*/
+constexpr auto StrContains(AoL::StringView haystack, AoL::StringView needle, SizeT offset = 0) noexcept -> bool
+{
+	return haystack.find(needle, offset) != haystack.npos;
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack  source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @returns bool: true = found, false = not found
+*/
+constexpr auto StrContains(AoL::StringView haystack, char needle, SizeT offset = 0) noexcept -> bool
+{
+	return haystack.find(needle, offset) != haystack.npos;
+}
+
+/**
+* @details AoL string searching
+*
+* - This is a wrapper for Abseil's StrContain
+*
+* - Query on whether the value exists on the string
+*
+* -- Depending on the implementation, absl StrContains can be faster than the given find() of std::string
+*
+* @param haystack source string
+* @param needle find value
+* @param offset starting offset for the haystack
+* @param count needle size
+* @returns bool: true = found, false = not found
+*/
+constexpr auto StrContains(AoL::StringView haystack, const char* const needle, SizeT offset, SizeT count) noexcept -> bool
+{
+	return haystack.find(needle, offset, count) != haystack.npos;
+}
+
+/**
+* @details AoL to_string conversion
+* 
+* - This is a wrapper for Abseil's StrCat
+* 
+* - This is a flexible value->string conversion with the downside of possible allocation
+* 
+* - From my benchmarks, Abseil's StrCat and fmt's to_string are just the same except for double, where Abseil is 2x faster
+* 
+* @param value to be converted value
+* @tparam T value type (int, short, char, float, double, boolean)
+* @returns AoL::String: resulting string
+*/
+template<typename T>
+constexpr auto StrFromValue(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
+{
+	return absl::StrCat(value);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value integer to be converted
+* @param base number system base (2 >= base <= 32)
+* @tparam T integer type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::integral T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, Int base = 10) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, base);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @param fmt floating point formatting
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, std::chars_format fmt) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, fmt);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @param fmt floating point formatting
+* @param precision precision of the floating point value
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, std::chars_format fmt, Int precision) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, fmt, precision);
+}
+
+/**
+* @details Invalid StrFromValue overload function
+* 
+* - This serves as an assert for using invalid input value types for better template errors
+*/
+template<typename T, typename... Args>
+constexpr auto StrFromValue(char* const start, char* const end, T value, Args&&... args) noexcept -> std::to_chars_result
+{
+	static_assert(Traits::AssertFalse<T, Args...>, "Invalid value type! Acceptable values are integral types and floating point types only!");
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for Abseil's Atoxxx
+* 
+* - All around string conversion to a value type, may not be as fast as its overloads but flexible to accept any valid type
+*
+* @param str to be converted string
+* @param out_val output value ref
+* @tparam T output type (int, short, char, float, double, boolean)
+* @returns bool: success flag
+*/
+template<typename T>
+constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
+{  
+	if (std::is_integral_v<T>)
+	{
+		return absl::SimpleAtoi(str, &out_val);
+	}
+	else if (std::is_floating_point_v<T>)
+	{
+		if (std::is_same_v<double, T>)
+		{
+			return absl::SimpleAtod(str, &out_val);
+		}
+		else
+		{
+			return absl::SimpleAtof(str, *out_val);
+		}
+	}
+	else if (std::is_same_v<bool, T>)
+	{
+		return absl::SimpleAtob(str, &out_val);
+	}
+	else
+	{
+		static_assert(Traits::AssertFalse<T>, "Invalid value type! Acceptable values are integral types and floating point types only!");
+	}
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for std::from_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start string start ptr
+* @param end string end ptr
+* @param out_val output value ref
+* @param base numbering system base (2 >= base <= 32)
+* @tparam T integral type
+* @returns std::from_chars_results: operation result and safe to discards
+*/
+template<std::integral T>
+constexpr auto StrToValue(const char* start, const char* end, T& out_val, Int base = 10) noexcept -> std::from_chars_result
+{
+	return std::from_chars(start, end, out_val, base);
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for std::from_chars
+* 
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start string start ptr
+* @param end string end ptr
+* @param out_val output value ref
+* @param fmt format for conversion
+* @tparam T floating type
+* @returns std::from_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrToValue(const char* start, const char* end, T& out_val, std::chars_format fmt = std::chars_format::general) noexcept -> std::from_chars_result
+{
+	return std::from_chars(start, end, out_val, fmt);
+}
+
+/**
+* @details Invalid StrToValue overload function
+*
+* - This serves as an assert for using invalid input value types for better template errors
+*/
+template<typename T, typename... Args>
+constexpr auto StrToValue(char* const start, char* const end, T& out_val, Args&&... args) noexcept -> std::from_chars_result
+{
+	static_assert(Traits::AssertFalse<T, Args...>, "Invalid value type! Acceptable values are integral types and floating point types only!");
+}
+
+} // AoL namespace

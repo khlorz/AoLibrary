@@ -334,7 +334,7 @@ using VectorPool = Vector<T, A>;
 *************************************************/
 
 /**
-* Key–value pair type used by KeyOrderMap
+* Key-value pair type used by KeyOrderMap
 * 
 * - This will be the main pair type used for KeyOrderMap type
 * 
@@ -373,7 +373,7 @@ using KeyOrderMapPair
 *
 * @tparam K Key type
 * @tparam V Mapped value type
-* @tparam P Key–value pair type (default: KeyOrderMapPair<K,V>)
+* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
 * @tparam A Allocator type (default: Internal::DefaultAllocator<P>)
 */
 template<
@@ -414,7 +414,7 @@ template<
 using KeyOrderMapPool = KeyOrderMap<K, V, P, A>;
 
 /**
-* Insert–value pair type used by InsertOrderedMap
+* Insert-value pair type used by InsertOrderedMap
 *
 * - This will be the main pair type used for InsertOrderMap type
 *
@@ -452,7 +452,7 @@ using InsertOrderMapPair
 * @tparam K Key type
 * @tparam V Mapped value type
 * @tparam H Hash class/function (default: ankerl::unordered_dense::hash<K>)
-* @tparam P Key–value pair type (default: InsertOrderMapPair<K,V>)
+* @tparam P Key-value pair type (default: InsertOrderMapPair<K,V>)
 * @tparam A Allocator type (default: Internal::DefaultAllocator<P>)
 */
 template<
@@ -497,7 +497,7 @@ using InsertOrderMapPool = InsertOrderMap<K, V, H, P, A>;
 *************************************************/
 
 /**
-* Insert–value pair type used by InsertOrderedMap
+* Insert-value pair type used by InsertOrderedMap
 *
 * - This will be the main pair type used for InsertOrderMap type
 *
