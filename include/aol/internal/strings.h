@@ -469,6 +469,8 @@ constexpr auto StrFromValue(char* const start, char* const end, T value, Args&&.
 * @details AoL from_string conversion
 *
 * - This is a wrapper for Abseil's Atoxxx
+* 
+* - All around string conversion to a value type, may not be as fast as its overloads but flexible to accept any valid type
 *
 * @param str to be converted string
 * @param out_val output value ref
@@ -477,7 +479,7 @@ constexpr auto StrFromValue(char* const start, char* const end, T value, Args&&.
 */
 template<typename T>
 constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
-{
+{  
 	if (std::is_integral_v<T>)
 	{
 		return absl::SimpleAtoi(str, &out_val);
@@ -499,8 +501,28 @@ constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
 	}
 	else
 	{
-		static_assert(Traits::AssertFalse<T>, "Invalid type!");
+		static_assert(Traits::AssertFalse<T>, "Invalid value type! Acceptable values are integral types and floating point types only!");
 	}
+}
+
+/**
+* @details AoL from_string conversion
+*
+* - This is a wrapper for std::from_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start string start ptr
+* @param end string end ptr
+* @param out_val output value ref
+* @param base numbering system base (2 >= base <= 32)
+* @tparam T integral type
+* @returns std::from_chars_results: operation result and safe to discards
+*/
+template<std::integral T>
+constexpr auto StrToValue(const char* start, const char* end, T& out_val, Int base = 10) noexcept -> std::from_chars_result
+{
+	return std::from_chars(start, end, out_val, base);
 }
 
 /**
@@ -514,14 +536,24 @@ constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
 * @param end string end ptr
 * @param out_val output value ref
 * @param fmt format for conversion
-* @tparam T output type (int, short, char, float, double, boolean)
+* @tparam T floating type
 * @returns std::from_chars_results: operation result and safe to discard
 */
-template<typename T>
+template<std::floating_point T>
 constexpr auto StrToValue(const char* start, const char* end, T& out_val, std::chars_format fmt = std::chars_format::general) noexcept -> std::from_chars_result
 {
 	return std::from_chars(start, end, out_val, fmt);
 }
 
+/**
+* @details Invalid StrToValue overload function
+*
+* - This serves as an assert for using invalid input value types for better template errors
+*/
+template<typename T, typename... Args>
+constexpr auto StrToValue(char* const start, char* const end, T& out_val, Args&&... args) noexcept -> std::from_chars_result
+{
+	static_assert(Traits::AssertFalse<T, Args...>, "Invalid value type! Acceptable values are integral types and floating point types only!");
+}
 
 } // AoL namespace
