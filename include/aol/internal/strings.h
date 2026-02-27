@@ -369,9 +369,100 @@ constexpr auto StrContains(AoL::StringView haystack, const char* const needle, S
 * @returns AoL::String: resulting string
 */
 template<typename T>
-constexpr auto ToString(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
+constexpr auto StrFromValue(Traits::ConstRefOrCopyType<T> value) noexcept -> AoL::String
 {
 	return absl::StrCat(value);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value integer to be converted
+* @param base number system base (2 >= base <= 32)
+* @tparam T integer type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::integral T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, Int base = 10) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, base);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @param fmt floating point formatting
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, std::chars_format fmt) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, fmt);
+}
+
+/**
+* @details AoL to_string conversion
+*
+* - This is a wrapper for std::to_chars
+*
+* - For a fast and performance based conversion, this is the best overload to use
+*
+* @param start output string start ptr
+* @param end output string end ptr
+* @param value floating point to be converted
+* @param fmt floating point formatting
+* @param precision precision of the floating point value
+* @tparam T floating point type
+* @returns std::to_chars_results: operation result and safe to discard
+*/
+template<std::floating_point T>
+constexpr auto StrFromValue(char* const start, char* const end, T value, std::chars_format fmt, Int precision) noexcept -> std::to_chars_result
+{
+	return std::to_chars(start, end, value, fmt, precision);
+}
+
+/**
+* @details Invalid StrFromValue overload function
+* 
+* - This serves as an assert for using invalid input value types for better template errors
+*/
+template<typename T, typename... Args>
+constexpr auto StrFromValue(char* const start, char* const end, T value, Args&&... args) noexcept -> std::to_chars_result
+{
+	static_assert(Traits::AssertFalse<T, Args...>, "Invalid value type! Acceptable values are integral types and floating point types only!");
 }
 
 /**
@@ -416,6 +507,8 @@ constexpr auto StrToValue(AoL::StringView str, T& out_val) noexcept -> bool
 * @details AoL from_string conversion
 *
 * - This is a wrapper for std::from_chars
+* 
+* - For a fast and performance based conversion, this is the best overload to use
 *
 * @param start string start ptr
 * @param end string end ptr
