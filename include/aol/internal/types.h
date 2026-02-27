@@ -21,10 +21,11 @@ using I32	= int;
 using U64	= unsigned long long;
 using I64	= long long;
 
+using Void		= void;
 using Char		= char;
 using Int		= int;
 using SizeT		= std::size_t;
-using PtrSize	= decltype(sizeof(void*));
+using PtrSize	= decltype(sizeof(Void*));
 using PtrDiff	= std::ptrdiff_t;
 
 }
