@@ -43,6 +43,9 @@
     <Filter Include="third-party\stb">
       <UniqueIdentifier>{6e3515a3-637a-4fc8-b711-4b3afa056654}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third-party\spdlog">
+      <UniqueIdentifier>{118800bf-d4f3-4bb6-b3af-42523547af3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
@@ -555,6 +558,255 @@
     </ClInclude>
     <ClInclude Include="aol\third-party\fmt\xchar.h">
       <Filter>third-party\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\async.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\async_logger-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\async_logger.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\cfg\argv.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\cfg\env.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\cfg\helpers-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\cfg\helpers.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\common-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\common.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\backtracer-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\backtracer.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\circular_q.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\console_globals.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\file_helper-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\file_helper.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\fmt_helper.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\log_msg-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\log_msg.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\log_msg_buffer-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\log_msg_buffer.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\mpmc_blocking_q.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\null_mutex.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\os-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\os.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\periodic_worker-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\periodic_worker.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\registry-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\registry.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\synchronous_factory.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\tcp_client-windows.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\tcp_client.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\thread_pool-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\thread_pool.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\udp_client-windows.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\udp_client.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\details\windows_include.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\formatter.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\fwd.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\logger-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\logger.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\mdc.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\pattern_formatter-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\pattern_formatter.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\android_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\ansicolor_sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\ansicolor_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\base_sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\base_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\basic_file_sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\basic_file_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\callback_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\daily_file_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\dist_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\dup_filter_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\hourly_file_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\kafka_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\mongo_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\msvc_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\null_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\ostream_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\qt_sinks.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\ringbuffer_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\rotating_file_sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\rotating_file_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_color_sinks-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_color_sinks.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_sinks-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_sinks.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\syslog_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\systemd_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\tcp_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\udp_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\wincolor_sink-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\wincolor_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\sinks\win_eventlog_sink.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\spdlog-inl.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\spdlog.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\stopwatch.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\tweakme.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\third-party\spdlog\version.h">
+      <Filter>third-party\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\logging.h">
+      <Filter>internal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
