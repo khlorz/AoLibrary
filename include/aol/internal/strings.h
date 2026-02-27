@@ -97,7 +97,7 @@ using StringView = std::string_view;
 
 
 /***************************************
-* Definitions
+* Constants
 ***************************************/
 
 inline constexpr auto StrNoPos = AoL::String::npos;
@@ -361,6 +361,8 @@ constexpr auto StrContains(AoL::StringView haystack, const char* const needle, S
 * @details AoL to_string conversion
 * 
 * - This is a wrapper for Abseil's StrCat
+* 
+* - This is a flexible value->string conversion with the downside of possible allocation
 * 
 * - From my benchmarks, Abseil's StrCat and fmt's to_string are just the same except for double, where Abseil is 2x faster
 * 
