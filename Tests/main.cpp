@@ -14,7 +14,7 @@ int main()
 {
 	AoL::RunTests();
 
-	return 0;
+    return 0;
 }
 
 #endif
