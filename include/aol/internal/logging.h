@@ -1,5 +1,16 @@
 #pragma once
 
+/***************************************************************************************
+* AoLibrary logging
+****************************************************************************************
+* - Logging used for AoLibrary
+* - All logging functions/objects/values will be here and can only be found here
+***************************************************************************************/
+
+/*******************************************************
+* spdlog tweakme.h configurations
+*******************************************************/
+
 #include "spdlog/tweakme.h"
 
 // For the most part, the author uses this on Windows
@@ -27,6 +38,17 @@
 #endif
 
 
+/*******************************************************
+* Includes
+*******************************************************/
 
+#include "spdlog/spdlog.h"
+
+namespace AoL
+{
+
+
+
+} // AoL namespace
 
 // EOF
