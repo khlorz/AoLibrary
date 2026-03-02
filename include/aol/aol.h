@@ -48,3 +48,10 @@
 
 #include "internal/exceptions.h"
 
+
+/**********************************************
+* Logging includes
+**********************************************/
+
+#include "internal/logging.h"
+
