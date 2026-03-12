@@ -18,4 +18,12 @@
 #define AOL_EMPTY_BASE_OPTIMIZATION
 #endif
 
+/**
+* Attributes used throughout the library
+*/
+#define AOL_NO_DISCARD [[nodiscard]]
+#define AOL_BRANCH_UNLIKELY [[unlikely]]
+#define AOL_BRANCH_LIKELY [[likely]]
 
+
+// macros.h EOF

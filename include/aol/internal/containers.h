@@ -11,6 +11,7 @@
 
 #include "config.h"
 
+#include "macros.h"
 #include "allocators.h"
 #include "hashes.h"
 #include "types.h"
@@ -147,6 +148,21 @@ template<
 	SizeT S
 >
 using Array = std::array<T, S>;
+
+template<
+	typename T
+>
+struct NamedArray2;
+
+template<
+	typename T
+>
+struct NamedArray3;
+
+template<
+	typename T
+>
+struct NamedArray4;
 
 
 /*************************************************
