@@ -808,6 +808,9 @@
     <ClInclude Include="aol\internal\logging.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\containers-vector-impl.h">
+      <Filter>internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

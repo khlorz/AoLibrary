@@ -230,6 +230,7 @@
     <ClInclude Include="aol\internal\algorithm.h" />
     <ClInclude Include="aol\internal\allocators.h" />
     <ClInclude Include="aol\internal\config.h" />
+    <ClInclude Include="aol\internal\containers-vector-impl.h" />
     <ClInclude Include="aol\internal\containers.h" />
     <ClInclude Include="aol\internal\dynamic_types.h" />
     <ClInclude Include="aol\internal\exceptions.h" />

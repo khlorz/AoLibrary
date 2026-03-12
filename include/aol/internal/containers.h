@@ -91,6 +91,7 @@ namespace AoL
 enum class ContainerTypeTag
 {
 	None,
+	Vector,
 	KeyOrderMap,
 	KeyOrderSet
 };
@@ -98,6 +99,12 @@ enum class ContainerTypeTag
 
 namespace Internal
 {
+
+template<
+	typename T,
+	typename A
+>
+struct VectorCircular;
 
 template<
 	typename K,
@@ -328,6 +335,13 @@ template<
 >
 using VectorPool = Vector<T, A>;
 
+/**
+*/
+template<
+	typename T,
+	typename A = Internal::DefaultAllocator<T>
+>
+using VectorCircular = Internal::VectorCircular<T, A>;
 
 /*************************************************
 * Ordered maps
@@ -1374,3 +1388,11 @@ public:
 } // namespace Internal
 
 } // namespace AoL
+
+/*************************************************
+* Implementation includes
+*************************************************/
+
+#include "containers-vector-impl.h"
+
+// containers.h EOF
