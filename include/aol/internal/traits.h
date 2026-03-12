@@ -26,7 +26,7 @@ namespace Internal
 template<typename T>
 concept HasContainerTypeTag = requires(T t)
 {
-	t.internal_type_tag;
+	T::container_tag;
 };
 
 } // namespace Internal

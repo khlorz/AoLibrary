@@ -89,19 +89,15 @@ namespace AoL
 * Forward declarations
 *************************************************/
 
-enum class ContainerTypeTag
-{
-	None,
-	Vector,
-	KeyOrderMap,
-	KeyOrderSet
-};
-
-
 namespace Internal
 {
 
-template<ContainerTypeTag CT, typename T, typename C>
+template<
+	typename D,
+	typename T,
+	typename C,
+	typename Tag
+>
 struct ContainerBase;
 
 template<

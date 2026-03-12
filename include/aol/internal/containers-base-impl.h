@@ -7,26 +7,37 @@
 namespace AoL::Internal
 {
 
-template<ContainerTypeTag CT, typename T>
+struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_None {};
+struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_KeyOrderMap {};
+struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_KeyOrderSet {};
+struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_Vector {};
+
+template<typename T, typename Tag>
 struct ContainerKeyType
 {
 	using type = SizeT;
 };
 
 template<typename T>
-struct ContainerKeyType<ContainerTypeTag::KeyOrderMap, T>
-{
-	using type = typename T::first_type;
-};
-
-template<ContainerTypeTag CT, typename T>
-struct ContainerValueType
+struct ContainerKeyType<T, ContainerTag_KeyOrderSet>
 {
 	using type = T;
 };
 
 template<typename T>
-struct ContainerValueType<ContainerTypeTag::KeyOrderMap, T>
+struct ContainerKeyType<T, ContainerTag_KeyOrderMap>
+{
+	using type = typename T::first_type;
+};
+
+template<typename T, typename Tag>
+struct ContainerMappedType
+{
+	using type = void;
+};
+
+template<typename T>
+struct ContainerMappedType<T, ContainerTag_KeyOrderMap>
 {
 	using type = typename T::second_type;
 };
@@ -34,12 +45,18 @@ struct ContainerValueType<ContainerTypeTag::KeyOrderMap, T>
 template<typename C>
 using ContainerAllocatorType = std::conditional_t<Traits::IsSTLContainer<C> || Traits::IsRotContainer<C>, typename C::allocator_type, void>;
 
-template<ContainerTypeTag CT, typename T, typename C>
+template<typename D, typename T, typename C>
+struct ContainerBase<D, T, C, ContainerTag_None>
+{
+	static_assert(Traits::AssertFalse<ContainerTag_None>, "Invalid container tag!");
+};
+
+template<typename D, typename T, typename C, typename Tag>
 struct ContainerBase
 {
-	static constexpr ContainerTypeTag internal_type_tag = CT;
+	using container_tag = Tag;
+	using container_type = C;
 
-	using container_type = typename C;
 	using iterator = typename container_type::iterator;
 	using const_iterator = typename container_type::const_iterator;
 	using reverse_iterator = typename container_type::reverse_iterator;

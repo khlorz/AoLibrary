@@ -17,10 +17,10 @@ template<
 	typename T,
 	typename A
 >
-struct VectorCircularEx : ContainerBase<ContainerTypeTag::Vector, T, Vector<T,A>>
+struct VectorCircularEx : ContainerBase<VectorCircularEx<T,A>, T, Vector<T,A>, ContainerTag_Vector>
 {
 private:
-	using Base = ContainerBase<ContainerTypeTag::Vector, T, Vector<T, A>>;
+	using Base = ContainerBase<VectorCircularEx<T, A>, T, Vector<T, A>, ContainerTag_Vector>;
 
 	using Base::container_obj;
 

@@ -48,20 +48,20 @@ struct KeyValuePairEx
 * @tparam C map container type
 */
 template<typename K, typename V, typename P, typename A, typename C>
-struct KeyOrderMapEx : public Internal::ContainerBase<ContainerTypeTag::KeyOrderMap, P, C>
+struct KeyOrderMapEx : public Internal::ContainerBase<KeyOrderMapEx<K,V,P,A,C>, P, C, ContainerTag_KeyOrderMap>
 {
 public:
-	using Base = typename Internal::ContainerBase<ContainerTypeTag::KeyOrderMap, P, C>;
+	using Base = Internal::ContainerBase<KeyOrderMapEx<K, V, P, A, C>, P, C, ContainerTag_KeyOrderMap>;
 
 private:
+	using typename Base::container_tag;
+
 	using Base::container_obj;
 
 public:
-	using Base::internal_type_tag;
-
-	using key_type = typename ContainerKeyType<internal_type_tag, P>::type;
-	using mapped_type = typename ContainerValueType<internal_type_tag, P>::type;
-	using value_type = typename P;
+	using value_type = P;
+	using key_type = typename ContainerKeyType<P, container_tag>::type;
+	using mapped_type = typename ContainerMappedType<P, container_tag>::type;
 
 #ifndef NDEBUG
 	bool build_flag;
