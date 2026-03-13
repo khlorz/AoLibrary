@@ -55,7 +55,7 @@ struct VectorCircularExIterator
 
     AOL_NO_DISCARD constexpr pointer operator->() const noexcept
     {
-        return &this->operator*();
+        return std::addressof(this->operator*());
     }
 
     constexpr VectorCircularExIterator& operator++() noexcept
