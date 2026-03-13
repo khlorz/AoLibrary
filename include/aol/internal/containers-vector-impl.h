@@ -435,22 +435,22 @@ private:
 
     AOL_NO_DISCARD constexpr auto rbegin_impl() noexcept
     {
-        return reverse_iterator(this, 0);
+        return reverse_iterator(this->end_impl());
     }
 
     AOL_NO_DISCARD constexpr auto crbegin_impl() const noexcept
     {
-        return const_reverse_iterator(this, 0);
+        return const_reverse_iterator(this->cend_impl());
     }
 
     AOL_NO_DISCARD constexpr auto rend_impl() noexcept
     {
-        return reverse_iterator(this, item_count);
+        return reverse_iterator(this->begin_impl());
     }
 
     AOL_NO_DISCARD constexpr auto crend_impl() const noexcept
     {
-        return const_reverse_iterator(this, item_count);
+        return const_reverse_iterator(this->cbegin_impl());
     }
 
     AOL_NO_DISCARD constexpr bool empty_impl() const noexcept
