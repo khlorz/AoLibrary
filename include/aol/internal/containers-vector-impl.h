@@ -359,6 +359,17 @@ public:
     }
 
     /**
+    * @details Clears the container
+    * 
+    * - Like the description says, clears the container and its containing elements
+    */
+    constexpr void clear() noexcept
+    {
+        container_obj.clear();
+        head = item_count = 0;
+    }
+
+    /**
     * @details Access element
     * 
     * - Asserts if idx is greater than or equal to item count of the vector
