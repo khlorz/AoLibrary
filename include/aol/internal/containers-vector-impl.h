@@ -8,6 +8,177 @@ namespace AoL::Internal
 {
 
 /**
+* @details VectorCircularEx iterator
+*
+* - Iterate made solely for VectorCircular
+*/
+template<
+	typename C
+>
+struct VectorCircularExIterator
+{
+	using container_type = std::remove_const_t<C>;
+    using container_ptr = C*;
+
+	using value_type = typename container_type::value_type;
+	using allocator_type = typename container_type::allocator_type;
+	using difference_type = PtrDiff;
+
+	using iterator_concept = std::random_access_iterator_tag;
+	using iterator_category = std::random_access_iterator_tag;
+
+	using pointer = std::conditional_t<std::is_const_v<C>, typename container_type::const_pointer, typename container_type::pointer>;
+	using reference = std::conditional_t<std::is_const_v<C>, typename container_type::const_reference, typename container_type::reference>;
+
+    container_ptr container; // beginning of array
+    size_t idx; // offset into array
+
+    constexpr VectorCircularExIterator() noexcept :
+        container{ nullptr },
+        idx{ 0 }
+    {
+    }
+
+    constexpr explicit VectorCircularExIterator(C* c_ptr, size_t offset = 0) noexcept :
+        container(c_ptr),
+        idx(offset)
+    {
+        assert(idx <= container->size() && "Invalid offset! Offset is way beyond the array size!");
+    }
+
+    AOL_NO_DISCARD constexpr reference operator*() const noexcept
+    {
+        assert(container && "Invalid operation! Cannot dereference nullptr array iterator!");
+        assert(idx < container->size() && "Invalid operation! Cannot dereference out of range array iterator!");
+        return (*container)[idx];
+    }
+
+    AOL_NO_DISCARD constexpr pointer operator->() const noexcept
+    {
+        return &this->operator*();
+    }
+
+    constexpr VectorCircularExIterator& operator++() noexcept
+    {
+        assert(container && "Invalid operation! cannot increment nullptr array iterator!");
+        assert(idx < container->size() && "Invalid operation! Cannot increment array iterator past end!");
+        ++idx;
+        return *this;
+    }
+
+    constexpr VectorCircularExIterator operator++(int) noexcept
+    {
+        VectorCircularExIterator tmp = *this;
+        ++*this;
+        return tmp;
+    }
+
+    constexpr VectorCircularExIterator& operator--() noexcept
+    {
+        assert(container && "Invalid operation! Cannot decrement nullptr array iterator!");
+        assert(idx != 0 && "Invalid operation! Cannot decrement array iterator before begin!");
+        --idx;
+        return *this;
+    }
+
+    constexpr VectorCircularExIterator operator--(int) noexcept
+    {
+        VectorCircularExIterator tmp = *this;
+        --*this;
+        return tmp;
+    }
+
+    constexpr VectorCircularExIterator& operator+=(const difference_type offset) noexcept
+    {
+        AssertValidOffset(offset);
+        idx += static_cast<size_t>(offset);
+        return *this;
+    }
+
+    constexpr VectorCircularExIterator& operator-=(const difference_type offset) noexcept
+    {
+        return *this += -offset;
+    }
+
+    AOL_NO_DISCARD constexpr difference_type operator-(const VectorCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return static_cast<difference_type>(idx - other.idx);
+    }
+
+    AOL_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
+    {
+        return *(*this + offset);
+    }
+
+    AOL_NO_DISCARD constexpr bool operator==(const VectorCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return idx == other.idx;
+    }
+
+    AOL_NO_DISCARD constexpr std::strong_ordering operator<=>(const VectorCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return idx <=> other.idx;
+    }
+
+private:
+#ifndef NDEBUG
+    constexpr void AssertValidOffset(const difference_type offset) const noexcept
+    {
+        if (offset != 0) {
+            assert(container && "Invalid operation! Cannot seek nullptr array iterator!");
+        }
+
+        if (offset < 0) {
+            assert(idx >= size_t{ 0 } - static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
+        }
+
+        if (offset > 0) {
+            assert(container->size() - idx >= static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator after end!");
+        }
+    }
+
+    constexpr void AssertCompatibility(const VectorCircularExIterator& other) const noexcept
+    {
+        assert(container == other.container && "Invalid operation! Array iterators incompatible!");
+    }
+#else
+    constexpr void AssertValidOffset(const difference_type offset) const noexcept
+    {
+        // empty function
+    }
+
+    constexpr void AssertCompatibility(const VectorCircularExIterator& other) const noexcept
+    {
+        // empty function
+    }
+#endif
+
+public:
+    AOL_NO_DISCARD constexpr VectorCircularExIterator operator+(const difference_type offset) const noexcept
+    {
+        VectorCircularExIterator tmp = *this;
+        tmp += offset;
+        return tmp;
+    }
+
+    AOL_NO_DISCARD constexpr VectorCircularExIterator operator-(const difference_type offset) const noexcept
+    {
+        VectorCircularExIterator tmp = *this;
+        tmp -= offset;
+        return tmp;
+    }
+
+    AOL_NO_DISCARD friend constexpr VectorCircularExIterator operator+(const difference_type offset, VectorCircularExIterator next) noexcept
+    {
+        next += offset;
+        return next;
+    }
+};
+
+/**
 * @details Circular vector for circular purposes like overwriting the oldest and such
 * 
 * @tparam T element type
@@ -34,6 +205,11 @@ public:
 	using const_pointer = container_type::const_pointer;
 	using reference = container_type::reference;
 	using const_reference = container_type::const_reference;
+
+    using iterator = VectorCircularExIterator<VectorCircularEx<T, A>>;
+    using const_iterator = VectorCircularExIterator<const VectorCircularEx<T, A>>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 	SizeT mask;
 	SizeT head;
@@ -135,6 +311,26 @@ public:
 		assert(item_count > 0);
 		return container_obj[(head + item_count - 1) & mask];
 	}
+
+    AOL_NO_DISCARD constexpr iterator begin() noexcept
+    {
+        return iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr iterator end() noexcept
+    {
+        return iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+    {
+        return const_iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+    {
+        return const_iterator(this, item_count);
+    }
 };
 
 } // AoL::Internal namespace
