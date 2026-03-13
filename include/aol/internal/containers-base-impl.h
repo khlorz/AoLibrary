@@ -168,29 +168,28 @@ protected:
 	~ContainerBase() noexcept = default;
 
 	explicit ContainerBase(SizeT initial_capacity) noexcept :
-		container_obj{ }
+		container_obj( initial_capacity )
 	{
-		container_obj.reserve(initial_capacity);
 	}
 
 	explicit ContainerBase(const ContainerAllocatorType<C>& allocator) noexcept :
-		container_obj{ allocator }
+		container_obj( allocator )
 	{
 	}
 
 	explicit ContainerBase(const container_type& other_data) noexcept :
-		container_obj{ other_data }
+		container_obj( other_data )
 	{
 	}
 
 	explicit ContainerBase(container_type&& other_data) noexcept :
-		container_obj{ std::move(other_data) }
+		container_obj( std::move(other_data) )
 	{
 	}
 
 	template<typename It> requires std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>
 	explicit ContainerBase(It it_start, It it_end) noexcept :
-		container_obj{ it_start, it_end }
+		container_obj( it_start, it_end )
 	{
 	}
 

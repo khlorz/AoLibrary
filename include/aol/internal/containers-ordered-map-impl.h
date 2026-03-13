@@ -76,11 +76,12 @@ public:
 	}
 
 	KeyOrderMapEx(SizeT initial_capacity) noexcept :
-		Base{ initial_capacity }
+		Base{ }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
 	{
+		container_obj.reserve(initial_capacity);
 	}
 
 	KeyOrderMapEx(const A& allocator) noexcept :
