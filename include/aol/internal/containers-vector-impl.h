@@ -312,24 +312,44 @@ public:
 		return container_obj[(head + item_count - 1) & mask];
 	}
 
-    AOL_NO_DISCARD constexpr iterator begin() noexcept
+    AOL_NO_DISCARD constexpr auto begin_impl() noexcept
     {
         return iterator(this, 0);
     }
 
-    AOL_NO_DISCARD constexpr iterator end() noexcept
-    {
-        return iterator(this, item_count);
-    }
-
-    AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+    AOL_NO_DISCARD constexpr auto cbegin_impl() const noexcept
     {
         return const_iterator(this, 0);
     }
 
-    AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+    AOL_NO_DISCARD constexpr auto end_impl() noexcept
+    {
+        return iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto cend_impl() const noexcept
     {
         return const_iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto rbegin_impl() noexcept
+    {
+        return reverse_iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr auto crbegin_impl() const noexcept
+    {
+        return const_reverse_iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr auto rend_impl() noexcept
+    {
+        return reverse_iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto crend_impl() const noexcept
+    {
+        return const_reverse_iterator(this, item_count);
     }
 };
 

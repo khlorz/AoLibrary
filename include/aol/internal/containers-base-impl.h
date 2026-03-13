@@ -14,67 +14,59 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_Vector {};
 
 /*************************************************
 * Iterators for the ContainerBase
-* - HasDerivedIteratorImpl checks if the Derived
-*   has its own iterator implementation
-* - IteratorSelector is used for lazy type
-*   instantation for ContainerBase iterator
+* - HasXXXImpl regarding iterators
+* - XXX_impl methods are needed to use the derived
+*   methods, otherwise, it will default to the
+*   begin(), end(), etc. of the underlying
+*	container
 *************************************************/
 
 template<typename D>
-concept HasDerivedIteratorImpl = requires
+concept HasBeginImpl = requires(D d)
 {
-	D::iterator_impl;
-	D::const_iterator_impl;
-	D::reverse_iterator_impl;
-	D::const_reverse_iterator_impl;
+	d.begin_impl();
 };
 
-template<typename D, typename C, bool UseDerived>
-struct IteratorSelector
+template<typename D>
+concept HasCBeginImpl = requires(D d)
 {
-	using type = typename C::iterator;
+	d.cbegin_impl();
 };
 
-template<typename D, typename C>
-struct IteratorSelector<D, C, true>
+template<typename D>
+concept HasRBeginImpl = requires(D d)
 {
-	using type = typename D::iterator_impl;
+	d.rbegin_impl();
 };
 
-template<typename D, typename C, bool UseDerived>
-struct ConstIteratorSelector
+template<typename D>
+concept HasCRBeginImpl = requires(D d)
 {
-	using type = typename C::const_iterator;
+	d.crbegin_impl();
 };
 
-template<typename D, typename C>
-struct ConstIteratorSelector<D, C, true>
+template<typename D>
+concept HasEndImpl = requires(D d)
 {
-	using type = typename D::const_iterator_impl;
+	d.end_impl();
 };
 
-template<typename D, typename C, bool UseDerived>
-struct ReverseIteratorSelector
+template<typename D>
+concept HasCEndImpl = requires(D d)
 {
-	using type = typename C::reverse_iterator;
+	d.cend_impl();
 };
 
-template<typename D, typename C>
-struct ReverseIteratorSelector<D, C, true>
+template<typename D>
+concept HasREndImpl = requires(D d)
 {
-	using type = typename D::reverse_iterator_impl;
+	d.rend_impl();
 };
 
-template<typename D, typename C, bool UseDerived>
-struct ConstReverseIteratorSelector
+template<typename D>
+concept HasCREndImpl = requires(D d)
 {
-	using type = typename C::const_reverse_iterator;
-};
-
-template<typename D, typename C>
-struct ConstReverseIteratorSelector<D, C, true>
-{
-	using type = typename D::const_reverse_iterator_impl;
+	d.crend_impl();
 };
 
 
@@ -151,11 +143,6 @@ public:
 	using container_tag = Tag;
 	using container_type = C;
 
-	using iterator = IteratorSelector<D, C, HasDerivedIteratorImpl<D>>::type;
-	using const_iterator = ConstIteratorSelector<D, C, HasDerivedIteratorImpl<D>>::type;
-	using reverse_iterator = ReverseIteratorSelector<D, C, HasDerivedIteratorImpl<D>>::type;
-	using const_reverse_iterator = ConstReverseIteratorSelector<D, C, HasDerivedIteratorImpl<D>>::type;
-
 protected:
 	// We use protected ctors and dtor to prevent any creation of this class manually
 	// This way, the derived classes can still use them and still not visible to the user
@@ -203,10 +190,10 @@ public:
 	{
 		container_obj.reserve(new_capacity);
 	}
-
-	constexpr iterator begin() noexcept
+	
+	AOL_NO_DISCARD constexpr auto begin() noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasBeginImpl<D>)
 		{
 			return static_cast<D*>(this)->begin_impl();
 		}
@@ -216,11 +203,11 @@ public:
 		}
 	}
 
-	constexpr const_iterator begin() const noexcept
+	AOL_NO_DISCARD constexpr auto begin() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCBeginImpl<D>)
 		{
-			return static_cast<D*>(this)->cbegin_impl();
+			return static_cast<const D*>(this)->cbegin_impl();
 		}
 		else
 		{
@@ -228,9 +215,9 @@ public:
 		}
 	}
 
-	constexpr iterator end() noexcept
+	AOL_NO_DISCARD constexpr auto end() noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasEndImpl<D>)
 		{
 			return static_cast<D*>(this)->end_impl();
 		}
@@ -240,35 +227,11 @@ public:
 		}
 	}
 
-	constexpr const_iterator end() const noexcept
+	AOL_NO_DISCARD constexpr auto end() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCEndImpl<D>)
 		{
-			return static_cast<D*>(this)->cend_impl();
-		}
-		else
-		{
-			return container_obj.cend_impl();
-		}
-	}
-
-	constexpr const_iterator cbegin() const noexcept
-	{
-		if constexpr (HasDerivedIteratorImpl<D>)
-		{
-			return static_cast<D*>(this)->cbegin_impl();
-		}
-		else
-		{
-			return container_obj.cbegin();
-		}
-	}
-
-	constexpr const_iterator cend() const noexcept
-	{
-		if constexpr (HasDerivedIteratorImpl<D>)
-		{
-			return static_cast<D*>(this)->cend_impl();
+			return static_cast<const D*>(this)->cend_impl();
 		}
 		else
 		{
@@ -276,9 +239,33 @@ public:
 		}
 	}
 
-	constexpr reverse_iterator rbegin() noexcept
+	AOL_NO_DISCARD constexpr auto cbegin() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCBeginImpl<D>)
+		{
+			return static_cast<const D*>(this)->cbegin_impl();
+		}
+		else
+		{
+			return container_obj.cbegin();
+		}
+	}
+
+	AOL_NO_DISCARD constexpr auto cend() const noexcept
+	{
+		if constexpr (HasCEndImpl<D>)
+		{
+			return static_cast<const D*>(this)->cend_impl();
+		}
+		else
+		{
+			return container_obj.cend();
+		}
+	}
+
+	AOL_NO_DISCARD constexpr auto rbegin() noexcept
+	{
+		if constexpr (HasRBeginImpl<D>)
 		{
 			return static_cast<D*>(this)->rbegin_impl();
 		}
@@ -288,9 +275,9 @@ public:
 		}
 	}
 
-	constexpr reverse_iterator rend() noexcept
+	AOL_NO_DISCARD constexpr auto rend() noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasREndImpl<D>)
 		{
 			return static_cast<D*>(this)->rend_impl();
 		}
@@ -300,11 +287,11 @@ public:
 		}
 	}
 
-	constexpr const_reverse_iterator rbegin() const noexcept
+	AOL_NO_DISCARD constexpr auto rbegin() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCRBeginImpl<D>)
 		{
-			return static_cast<D*>(this)->crbegin_impl();
+			return static_cast<const D*>(this)->crbegin_impl();
 		}
 		else
 		{
@@ -312,23 +299,23 @@ public:
 		}
 	}
 
-	constexpr const_reverse_iterator rend() const noexcept
+	AOL_NO_DISCARD constexpr auto rend() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCREndImpl<D>)
 		{
-			return static_cast<D*>(this)->crend_impl();
+			return static_cast<const D*>(this)->crend_impl();
 		}
 		else
 		{
-			return container_obj.crend_impl();
+			return container_obj.crend();
 		}
 	}
 
-	constexpr const_reverse_iterator crbegin() const noexcept
+	AOL_NO_DISCARD constexpr auto crbegin() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCRBeginImpl<D>)
 		{
-			return static_cast<D*>(this)->crbegin_impl();
+			return static_cast<const D*>(this)->crbegin_impl();
 		}
 		else
 		{
@@ -336,34 +323,34 @@ public:
 		}
 	}
 
-	constexpr const_reverse_iterator crend() const noexcept
+	AOL_NO_DISCARD constexpr auto crend() const noexcept
 	{
-		if constexpr (HasDerivedIteratorImpl<D>)
+		if constexpr (HasCREndImpl<D>)
 		{
-			return static_cast<D*>(this)->crend_impl();
+			return static_cast<const D*>(this)->crend_impl();
 		}
 		else
 		{
-			return container_obj.crend_impl();
+			return container_obj.crend();
 		}
 	}
 
-	constexpr auto size() const noexcept
+	AOL_NO_DISCARD constexpr auto size() const noexcept
 	{
 		return container_obj.size();
 	}
 
-	constexpr auto empty() const noexcept
+	AOL_NO_DISCARD constexpr auto empty() const noexcept
 	{
 		return container_obj.empty();
 	}
 
-	constexpr auto data() noexcept
+	AOL_NO_DISCARD constexpr auto data() noexcept
 	{
 		return container_obj.data();
 	}
 
-	constexpr auto data() const noexcept
+	AOL_NO_DISCARD constexpr auto data() const noexcept
 	{
 		return container_obj.data();
 	}
