@@ -295,7 +295,7 @@ public:
     * 
     * @param new_item item to be added
     */
-    template<typename U = T>
+    template<typename U>
 	constexpr void push_back(U&& new_item) noexcept
 	{
 		assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
@@ -310,6 +310,29 @@ public:
 			item_count++;
 		}
 	}
+
+    /**
+    * @details Add an element to the back
+    * 
+    * - If the size is already at capacity, the new item will overwrite the oldest element
+    * 
+    * @param args type construction arguments
+    */
+    template<typename...Args>
+    constexpr reference emplace_back(Args&&...args) noexcept
+    {
+        assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
+
+        container_obj[(head + item_count) & mask] = T(std::forward<Args>(args)...);
+        if (item_count == this->capacity())
+        {
+            head = (head + 1) & mask;
+        }
+        else
+        {
+            item_count++;
+        }
+    }
 
     /**
     * @details Increase the current capacity of the vector
