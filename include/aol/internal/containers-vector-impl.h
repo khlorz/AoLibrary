@@ -375,7 +375,6 @@ public:
     */
     constexpr void clear() noexcept
     {
-        container_obj.clear();
         head = item_count = 0;
     }
 
