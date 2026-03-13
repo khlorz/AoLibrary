@@ -206,62 +206,146 @@ public:
 
 	constexpr iterator begin() noexcept
 	{
-		return container_obj.begin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->begin_impl();
+		}
+		else
+		{
+			return container_obj.begin();
+		}
 	}
 
 	constexpr const_iterator begin() const noexcept
 	{
-		return container_obj.cbegin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->cbegin_impl();
+		}
+		else
+		{
+			return container_obj.cbegin();
+		}
 	}
 
 	constexpr iterator end() noexcept
 	{
-		return container_obj.end();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->end_impl();
+		}
+		else
+		{
+			return container_obj.end();
+		}
 	}
 
 	constexpr const_iterator end() const noexcept
 	{
-		return container_obj.cend();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->cend_impl();
+		}
+		else
+		{
+			return container_obj.cend_impl();
+		}
 	}
 
 	constexpr const_iterator cbegin() const noexcept
 	{
-		return container_obj.cbegin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->cbegin_impl();
+		}
+		else
+		{
+			return container_obj.cbegin();
+		}
 	}
 
 	constexpr const_iterator cend() const noexcept
 	{
-		return container_obj.cend();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->cend_impl();
+		}
+		else
+		{
+			return container_obj.cend();
+		}
 	}
 
 	constexpr reverse_iterator rbegin() noexcept
 	{
-		return container_obj.rbegin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->rbegin_impl();
+		}
+		else
+		{
+			return container_obj.rbegin();
+		}
 	}
 
 	constexpr reverse_iterator rend() noexcept
 	{
-		return container_obj.rend();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->rend_impl();
+		}
+		else
+		{
+			return container_obj.rend();
+		}
 	}
 
 	constexpr const_reverse_iterator rbegin() const noexcept
 	{
-		return container_obj.rbegin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->crbegin_impl();
+		}
+		else
+		{
+			return container_obj.crbegin();
+		}
 	}
 
 	constexpr const_reverse_iterator rend() const noexcept
 	{
-		return container_obj.rend();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->crend_impl();
+		}
+		else
+		{
+			return container_obj.crend_impl();
+		}
 	}
 
 	constexpr const_reverse_iterator crbegin() const noexcept
 	{
-		return container_obj.crbegin();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->crbegin_impl();
+		}
+		else
+		{
+			return container_obj.crbegin();
+		}
 	}
 
 	constexpr const_reverse_iterator crend() const noexcept
 	{
-		return container_obj.crend();
+		if constexpr (HasDerivedIteratorImpl<D>)
+		{
+			return static_cast<D*>(this)->crend_impl();
+		}
+		else
+		{
+			return container_obj.crend_impl();
+		}
 	}
 
 	constexpr auto size() const noexcept
