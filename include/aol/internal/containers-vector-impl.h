@@ -277,28 +277,6 @@ public:
 	}
 
     /**
-    * @details Checks if the container is empty
-    * 
-    * @returns bool true if empty
-    */
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
-	{
-		return item_count == 0;
-	}
-
-    /**
-    * @details Query for the current size of the vector
-    * 
-    * - If full, it will always return the capacity value
-    * 
-    * @returns SizeT number of items
-    */
-	AOL_NO_DISCARD constexpr auto size() const noexcept
-	{
-		return item_count;
-	}
-
-    /**
     * @details Query for the maximum of items the vector can have
     * 
     * - As a circular buffer, the capacity does not increase
@@ -442,6 +420,16 @@ private:
     AOL_NO_DISCARD constexpr auto crend_impl() const noexcept
     {
         return const_reverse_iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr bool empty_impl() const noexcept
+    {
+        return item_count == 0;
+    }
+
+    AOL_NO_DISCARD constexpr auto size_impl() const noexcept
+    {
+        return item_count;
     }
 };
 

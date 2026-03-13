@@ -69,6 +69,17 @@ concept HasCREndImpl = requires(D d)
 	d.crend_impl();
 };
 
+template<typename D>
+concept HasSizeImpl = requires(D d)
+{
+	d.size();
+};
+
+template<typename D>
+concept HasEmptyImpl = requires(D d)
+{
+	d.empty();
+};
 
 /*************************************************
 * ContainerBase key and mapped type
@@ -337,12 +348,26 @@ public:
 
 	AOL_NO_DISCARD constexpr auto size() const noexcept
 	{
-		return container_obj.size();
+		if constexpr (HasSizeImpl<D>)
+		{
+			return static_cast<const D*>(this)->size_impl();
+		}
+		else
+		{
+			return container_obj.size();
+		}
 	}
 
 	AOL_NO_DISCARD constexpr auto empty() const noexcept
 	{
-		return container_obj.empty();
+		if constexpr (HasEmptyImpl<D>)
+		{
+			return static_cast<const D*>(this)->empty_impl();
+		}
+		else
+		{
+			return container_obj.empty();
+		}
 	}
 
 	AOL_NO_DISCARD constexpr auto data() noexcept
