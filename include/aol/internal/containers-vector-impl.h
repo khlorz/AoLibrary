@@ -195,6 +195,8 @@ private:
 
 	using Base::container_obj;
 
+    friend Base;
+
 public:
 	using container_type = Vector<T,A>;
 
@@ -244,6 +246,15 @@ public:
 		return *this;
 	}
 
+    /**
+    * @details Construct the circular vector
+    * 
+    * - Note that item_limit must be a power of 2
+    * 
+    * - This is done to optimize the random element access by using AND-bit instead of module
+    * 
+    * @param item_limit maximum capacity of the vector in power of 2
+    */
 	explicit VectorCircularEx(SizeT item_limit) noexcept :
 		Base{ item_limit },
 		mask{ item_limit - 1 },
@@ -253,26 +264,59 @@ public:
 		assert(std::has_single_bit(item_limit) && "Invalid limit! Must be power of 2!");
 	}
 
+    /**
+    * @details Checks if the container is already full
+    * 
+    * - Note that it will always be full if head > 0
+    * 
+    * @returns bool true if full
+    */
 	AOL_NO_DISCARD constexpr bool full() const noexcept
 	{
 		return item_count == this->capacity();
 	}
 
+    /**
+    * @details Checks if the container is empty
+    * 
+    * @returns bool true if empty
+    */
 	AOL_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return item_count == 0;
 	}
 
+    /**
+    * @details Query for the current size of the vector
+    * 
+    * - If full, it will always return the capacity value
+    * 
+    * @returns SizeT number of items
+    */
 	AOL_NO_DISCARD constexpr auto size() const noexcept
 	{
 		return item_count;
 	}
 
+    /**
+    * @details Query for the maximum of items the vector can have
+    * 
+    * - As a circular buffer, the capacity does not increase
+    * 
+    * @returns SizeT maximum allowable items
+    */
 	AOL_NO_DISCARD constexpr auto capacity() const noexcept
 	{
 		return container_obj.size();
 	}
 
+    /**
+    * @details Add an element to the back
+    * 
+    * - If the size is already at capacity, the new item will overwrite the oldest element
+    * 
+    * @param new_item item to be added
+    */
 	constexpr void push_back(T&& new_item) noexcept
 	{
 		assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
@@ -288,6 +332,15 @@ public:
 		}
 	}
 
+    /**
+    * @details Increase the current capacity of the vector
+    *
+    * - If the vector has already circled, or overwritten at least one element
+    *   The head will be reset at 0, otherwise, resizing only happens
+    * - The new item limit must be value of power of 2 and not less than the current capacity
+    * 
+    * @param new_item_limit new limit of the circular vector
+    */
     constexpr void increase_capacity(SizeT new_item_limit) noexcept
     {
         assert(new_item_limit > 0 && std::has_single_bit(new_item_limit) && new_item_limit > this->capacity() && "Invalid new limit! Must be power of 2 and larger than current capacity!");
@@ -305,12 +358,22 @@ public:
         head = 0;
     }
 
+    /**
+    * @details Access element
+    * 
+    * - Asserts if idx is greater than or equal to item count of the vector
+    */
     AOL_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
 	{
 		assert(idx < item_count && "Invalid operation! Input idx out of range!");
 		return container_obj[(head + idx) & mask];
 	}
 
+    /**
+    * @details Access element
+    *
+    * - Asserts if idx is greater than or equal item to count of the vector
+    */
     AOL_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
 	{
 		assert(idx < item_count && "Invalid operation! Input idx out of range!");
@@ -329,6 +392,7 @@ public:
 		return container_obj[(head + item_count - 1) & mask];
 	}
 
+private:
     AOL_NO_DISCARD constexpr auto begin_impl() noexcept
     {
         return iterator(this, 0);
