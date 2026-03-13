@@ -12,74 +12,6 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_KeyOrderMap {};
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_KeyOrderSet {};
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag_Vector {};
 
-/*************************************************
-* Iterators for the ContainerBase
-* - HasXXXImpl regarding iterators
-* - XXX_impl methods are needed to use the derived
-*   methods, otherwise, it will default to the
-*   begin(), end(), etc. of the underlying
-*	container
-*************************************************/
-
-template<typename D>
-concept HasBeginImpl = requires(D d)
-{
-	d.begin_impl();
-};
-
-template<typename D>
-concept HasCBeginImpl = requires(D d)
-{
-	d.cbegin_impl();
-};
-
-template<typename D>
-concept HasRBeginImpl = requires(D d)
-{
-	d.rbegin_impl();
-};
-
-template<typename D>
-concept HasCRBeginImpl = requires(D d)
-{
-	d.crbegin_impl();
-};
-
-template<typename D>
-concept HasEndImpl = requires(D d)
-{
-	d.end_impl();
-};
-
-template<typename D>
-concept HasCEndImpl = requires(D d)
-{
-	d.cend_impl();
-};
-
-template<typename D>
-concept HasREndImpl = requires(D d)
-{
-	d.rend_impl();
-};
-
-template<typename D>
-concept HasCREndImpl = requires(D d)
-{
-	d.crend_impl();
-};
-
-template<typename D>
-concept HasSizeImpl = requires(D d)
-{
-	d.size();
-};
-
-template<typename D>
-concept HasEmptyImpl = requires(D d)
-{
-	d.empty();
-};
 
 /*************************************************
 * ContainerBase key and mapped type
@@ -204,7 +136,7 @@ public:
 	
 	AOL_NO_DISCARD constexpr auto begin() noexcept
 	{
-		if constexpr (HasBeginImpl<D>)
+		if constexpr (requires (D* d) { d->begin_impl(); })
 		{
 			return static_cast<D*>(this)->begin_impl();
 		}
@@ -216,7 +148,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto begin() const noexcept
 	{
-		if constexpr (HasCBeginImpl<D>)
+		if constexpr (requires (const D* d) { d->cbegin_impl(); })
 		{
 			return static_cast<const D*>(this)->cbegin_impl();
 		}
@@ -228,7 +160,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto end() noexcept
 	{
-		if constexpr (HasEndImpl<D>)
+		if constexpr (requires (D* d) { d->end_impl(); })
 		{
 			return static_cast<D*>(this)->end_impl();
 		}
@@ -240,7 +172,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto end() const noexcept
 	{
-		if constexpr (HasCEndImpl<D>)
+		if constexpr (requires (const D* d) { d->cend_impl(); })
 		{
 			return static_cast<const D*>(this)->cend_impl();
 		}
@@ -252,7 +184,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto cbegin() const noexcept
 	{
-		if constexpr (HasCBeginImpl<D>)
+		if constexpr (requires (const D* d) { d->cbegin_impl(); })
 		{
 			return static_cast<const D*>(this)->cbegin_impl();
 		}
@@ -264,7 +196,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto cend() const noexcept
 	{
-		if constexpr (HasCEndImpl<D>)
+		if constexpr (requires (const D* d) { d->cend_impl(); })
 		{
 			return static_cast<const D*>(this)->cend_impl();
 		}
@@ -276,7 +208,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto rbegin() noexcept
 	{
-		if constexpr (HasRBeginImpl<D>)
+		if constexpr (requires (D* d) { d->rbegin_impl(); })
 		{
 			return static_cast<D*>(this)->rbegin_impl();
 		}
@@ -288,7 +220,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto rend() noexcept
 	{
-		if constexpr (HasREndImpl<D>)
+		if constexpr (requires (D* d) { d->rend_impl(); })
 		{
 			return static_cast<D*>(this)->rend_impl();
 		}
@@ -300,7 +232,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto rbegin() const noexcept
 	{
-		if constexpr (HasCRBeginImpl<D>)
+		if constexpr (requires (const D* d) { d->crbegin_impl(); })
 		{
 			return static_cast<const D*>(this)->crbegin_impl();
 		}
@@ -312,7 +244,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto rend() const noexcept
 	{
-		if constexpr (HasCREndImpl<D>)
+		if constexpr (requires (const D* d) { d->crend_impl(); })
 		{
 			return static_cast<const D*>(this)->crend_impl();
 		}
@@ -324,7 +256,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto crbegin() const noexcept
 	{
-		if constexpr (HasCRBeginImpl<D>)
+		if constexpr (requires (const D* d) { d->crbegin_impl(); })
 		{
 			return static_cast<const D*>(this)->crbegin_impl();
 		}
@@ -336,7 +268,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto crend() const noexcept
 	{
-		if constexpr (HasCREndImpl<D>)
+		if constexpr (requires (const D* d) { d->crend_impl(); })
 		{
 			return static_cast<const D*>(this)->crend_impl();
 		}
@@ -348,7 +280,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto size() const noexcept
 	{
-		if constexpr (HasSizeImpl<D>)
+		if constexpr (requires (const D* d) { d->size_impl(); })
 		{
 			return static_cast<const D*>(this)->size_impl();
 		}
@@ -360,7 +292,7 @@ public:
 
 	AOL_NO_DISCARD constexpr auto empty() const noexcept
 	{
-		if constexpr (HasEmptyImpl<D>)
+		if constexpr (requires (const D* d) { d->empty_impl(); })
 		{
 			return static_cast<const D*>(this)->empty_impl();
 		}

@@ -295,11 +295,12 @@ public:
     * 
     * @param new_item item to be added
     */
-	constexpr void push_back(T&& new_item) noexcept
+    template<typename U = T>
+	constexpr void push_back(U&& new_item) noexcept
 	{
 		assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
 		
-		container_obj[(head + item_count) & mask] = std::forward<T>(new_item);
+		container_obj[(head + item_count) & mask] = std::forward<U>(new_item);
 		if (item_count == this->capacity())
 		{
 			head = (head + 1) & mask;
@@ -315,6 +316,7 @@ public:
     *
     * - If the vector has already circled, or overwritten at least one element
     *   The head will be reset at 0, otherwise, resizing only happens
+    * 
     * - The new item limit must be value of power of 2 and not less than the current capacity
     * 
     * @param new_item_limit new limit of the circular vector
@@ -325,11 +327,41 @@ public:
 
         if (head > 0)
         {
-            SizeT tail_count = std::min(item_count, this->capacity() - head);
+            SizeT tail_count = this->capacity() - head;
             for (SizeT i = 0; i < tail_count; ++i)
             {
                 std::swap(container_obj[i], container_obj[head + i]);
             }
+        }
+        container_obj.resize(new_item_limit);
+        mask = new_item_limit - 1;
+        head = 0;
+    }
+
+    /**
+    * @details Decrease the current capacity of the vector
+    * 
+    * - Like increase_capacity but it decreases
+    * 
+    * - This will only retain the earliest elements up to the new limit
+    * 
+    * @param new_item_limit new limit of the circular vector
+    */
+    constexpr void decrease_capacity(SizeT new_item_limit) noexcept
+    {
+        assert(new_item_limit > 0 && std::has_single_bit(new_item_limit) && new_item_limit < this->capacity() && "Invalid new limit! Must be power of 2 and larger than current capacity!");
+
+        if (head > 0)
+        {
+            SizeT tail_count = std::min(new_item_limit, this->capacity() - head);
+            for (SizeT i = 0; i < tail_count; ++i)
+            {
+                std::swap(container_obj[i], container_obj[head + i]);
+            }
+        }
+        if (new_item_limit < item_count)
+        {
+            item_count = new_item_limit;
         }
         container_obj.resize(new_item_limit);
         mask = new_item_limit - 1;
