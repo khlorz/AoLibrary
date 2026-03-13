@@ -273,7 +273,7 @@ public:
 		return container_obj.size();
 	}
 
-	void push_back(T&& new_item) noexcept
+	constexpr void push_back(T&& new_item) noexcept
 	{
 		assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
 		
@@ -288,25 +288,25 @@ public:
 		}
 	}
 
-	T& operator[](size_t idx) noexcept
+    AOL_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
 	{
 		assert(idx < item_count && "Invalid operation! Input idx out of range!");
 		return container_obj[(head + idx) & mask];
 	}
 
-	Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
+    AOL_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
 	{
 		assert(idx < item_count && "Invalid operation! Input idx out of range!");
 		return container_obj[(head + idx) & mask];
 	}
 
-	T& front()
+    AOL_NO_DISCARD constexpr T& front()
 	{
 		assert(item_count > 0);
 		return container_obj[head];
 	}
 
-	T& back()
+    AOL_NO_DISCARD constexpr T& back()
 	{
 		assert(item_count > 0);
 		return container_obj[(head + item_count - 1) & mask];
