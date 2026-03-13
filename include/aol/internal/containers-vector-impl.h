@@ -288,6 +288,23 @@ public:
 		}
 	}
 
+    constexpr void increase_capacity(SizeT new_item_limit) noexcept
+    {
+        assert(new_item_limit > 0 && std::has_single_bit(new_item_limit) && new_item_limit > this->capacity() && "Invalid new limit! Must be power of 2 and larger than current capacity!");
+
+        if (head > 0)
+        {
+            SizeT tail_count = std::min(item_count, this->capacity() - head);
+            for (SizeT i = 0; i < tail_count; ++i)
+            {
+                std::swap(container_obj[i], container_obj[head + i]);
+            }
+        }
+        container_obj.resize(new_item_limit);
+        mask = new_item_limit - 1;
+        head = 0;
+    }
+
     AOL_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
 	{
 		assert(idx < item_count && "Invalid operation! Input idx out of range!");
