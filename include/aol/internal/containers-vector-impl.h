@@ -391,6 +391,21 @@ public:
         head = 0;
     }
 
+    constexpr void pop_front() noexcept
+    {
+        assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
+
+        head = (head + 1) & mask;
+        item_count--;
+    }
+
+    constexpr void pop_back() noexcept
+    {
+        assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
+
+        item_count--;
+    }
+
     /**
     * @details Clears the container
     * 
