@@ -350,11 +350,7 @@ public:
 
         if (head > 0)
         {
-            SizeT tail_count = this->capacity() - head;
-            for (SizeT i = 0; i < tail_count; ++i)
-            {
-                std::swap(container_obj[i], container_obj[head + i]);
-            }
+            std::rotate(container_obj.begin(), container_obj.begin() + head, container_obj.end());
         }
         container_obj.resize(new_item_limit);
         mask = new_item_limit - 1;
