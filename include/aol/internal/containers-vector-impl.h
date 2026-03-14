@@ -366,17 +366,13 @@ public:
     * 
     * @param new_item_limit new limit of the circular vector
     */
-    constexpr void decrease_capacity(SizeT new_item_limit) noexcept
+    constexpr void decrease_capacity2(SizeT new_item_limit) noexcept
     {
         assert(new_item_limit > 0 && std::has_single_bit(new_item_limit) && new_item_limit < this->capacity() && "Invalid new limit! Must be power of 2 and larger than current capacity!");
 
         if (head > 0)
         {
-            SizeT tail_count = std::min(new_item_limit, this->capacity() - head);
-            for (SizeT i = 0; i < tail_count; ++i)
-            {
-                std::swap(container_obj[i], container_obj[head + i]);
-            }
+            std::rotate(container_obj.begin(), container_obj.begin() + head, container_obj.end());
         }
         if (new_item_limit < item_count)
         {
