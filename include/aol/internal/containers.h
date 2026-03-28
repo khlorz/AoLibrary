@@ -28,7 +28,7 @@
 * Array includes
 *************************************************/
 
-#ifdef AOL_USE_STD_ARRAY
+#if defined(AOL_USE_STD_ARRAY)
 #include <array>
 #endif
 
@@ -37,7 +37,7 @@
 * Vector includes
 *************************************************/
 
-#ifdef AOL_USE_STD_VECTOR
+#if defined(AOL_USE_STD_VECTOR)
 #include <vector>
 #endif
 
@@ -75,7 +75,7 @@
 /*************************************************
 * Insert-ordered map includes
 *************************************************/
-#ifdef AOL_USE_TSL_INSERTORDERED_MAP
+#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 #include "tsl/ordered_map.h"
 #endif
 
@@ -95,7 +95,7 @@
 * Insert-ordered Map includes
 *************************************************/
 
-#ifdef AOL_USE_TSL_INSERTORDERED_SET
+#if defined(AOL_USE_TSL_INSERTORDERED_SET)
 #include "tsl/ordered_set.h"
 #endif
 
