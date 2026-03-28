@@ -19,12 +19,32 @@
 #include "math.h"
 #include "algorithm.h"
 
-#include <array>		// std::array
-#include <vector>		// std::vector
 #include <iterator>		// iterator/const_iterators
 #include <compare>		// <=> operator
 #include <cassert>		// assert macro
 #include <utility>		// std::pair
+
+/*************************************************
+* Array includes
+*************************************************/
+
+#ifdef AOL_USE_CUSTOM_ARRAY
+#error "No custom array yet!"
+#else
+#include <array>
+#endif
+
+
+/*************************************************
+* Vector includes
+*************************************************/
+
+#ifdef AOL_USE_CUSTOM_VECTOR
+#error "No custom vector yet!"
+#else
+#include <vector>
+#endif
+
 
 /*************************************************
 * Hash/Unordered map/set includes
@@ -143,7 +163,12 @@ template<
 	typename T,
 	SizeT S
 >
-using Array = std::array<T, S>;
+using Array
+#ifdef AOL_USE_CUSTOM_ARRAY
+#error "No custom array yet!"
+#else
+= std::array<T, S>;
+#endif
 
 template<
 	typename T
@@ -182,7 +207,7 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using Vector
-#ifdef AOL_USE_CUSTOM_VECTOR_TYPE
+#ifdef AOL_USE_CUSTOM_VECTOR
 #error "No RottenLibrary custom vector type yet!"
 #else
 = std::vector<T, A>;

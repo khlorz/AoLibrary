@@ -79,11 +79,22 @@
 ****************************************/
 
 /**
+* This makes all AoLibrary containers using Array use a custom vector type
+*
+* - By default, the library uses std::array
+*/
+//#define AOL_USE_CUSTOM_ARRAY
+
+/***************************************
+* Custom Vector Types
+****************************************/
+
+/**
 * This makes all AoLibrary containers using Vector use a custom vector type
 *
 * - By default, the library uses std::vector
 */
-//#define AOL_USE_CUSTOM_VECTOR_TYPE
+//#define AOL_USE_CUSTOM_VECTOR
 
 
 /***************************************
