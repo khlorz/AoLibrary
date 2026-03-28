@@ -366,7 +366,7 @@ public:
     * 
     * @param new_item_limit new limit of the circular vector
     */
-    constexpr void decrease_capacity2(SizeT new_item_limit) noexcept
+    constexpr void decrease_capacity(SizeT new_item_limit) noexcept
     {
         assert(new_item_limit > 0 && std::has_single_bit(new_item_limit) && new_item_limit < this->capacity() && "Invalid new limit! Must be power of 2 and larger than current capacity!");
 
@@ -442,12 +442,22 @@ public:
 		return container_obj[(head + idx) & mask];
 	}
 
+    /**
+    * @details Access the front element
+    * 
+    * - The same as data[0]
+    */
     AOL_NO_DISCARD constexpr T& front()
 	{
 		assert(item_count > 0);
 		return container_obj[head];
 	}
 
+    /**
+    * @details Access the front element
+    * 
+    * - The same as data[item_count - 1]
+    */
     AOL_NO_DISCARD constexpr T& back()
 	{
 		assert(item_count > 0);
