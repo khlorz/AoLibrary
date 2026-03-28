@@ -234,7 +234,9 @@ using VectorPool = Vector<T, A>;
 * 
 * - As a circular buffer, this will overwrite the oldest element after passing the threshold size
 * 
-* - NOTE: Immediately constructs empty values to the container for the max item amount
+* - NOTE 1: Immediately constructs empty values to the container with the max item size
+* 
+* - NOTE 2: Even if there is a max item size, it can be increased. See ArrayCircular for fixed size
 * 
 * @tparam T element type
 * @tparam A allocator type (default: Internal::DefaultAllocator<T>)
