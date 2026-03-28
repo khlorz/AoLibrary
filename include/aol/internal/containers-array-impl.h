@@ -671,7 +671,57 @@ template<
 >
 struct ArrayCircularEx
 {
+    static_assert(std::has_single_bit(S), "Invalid size! Must be a power of two!");
 
+    using container_type = std::array<T, S>;
+
+    using value_type = container_type::value_type;
+    using allocator_type = container_type::allocator_type;
+
+    using pointer = container_type::pointer;
+    using const_pointer = container_type::const_pointer;
+    using reference = container_type::reference;
+    using const_reference = container_type::const_reference;
+
+    using iterator = Internal::ArrayCircularExIterator<ArrayCircularEx<T, A>>;
+    using const_iterator = ArrayCircularExIterator<const ArrayCircularEx<T, A>>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    container_type array_data;
+    SizeT mask;
+    SizeT head;
+    SizeT item_count;
+
+    ArrayCircularEx() noexcept :
+        array_data{ },
+        mask{ S - 1 },
+        head{ 0 },
+        item_count{ 0 }
+    {
+    }
+
+    ArrayCircularEx(const ArrayCircularEx& other) noexcept = default;
+    ArrayCircularEx& operator = (const ArrayCircularEx& other) noexcept = default;
+
+    ArrayCircularEx(ArrayCircularEx&& other) noexcept :
+        array_data{ std::move(other.array_data) },
+        mask{ other.mask },
+        head{ other.head },
+        item_count{ other.item_count }
+    {
+        other.head = other.item_count = other.mask = static_cast<SizeT>(0);
+    }
+
+    ArrayCircularEx& operator = (ArrayCircularEx&& other) noexcept
+    {
+        array_data = std::move(other.array_data);
+        mask = other.mask;
+        head = other.head;
+        item_count = other.item_count;
+        other.head = other.item_count = other.mask = static_cast<SizeT>(0);
+        return *this;
+    }
 };
 
 } // Internal namespace
