@@ -30,8 +30,6 @@
 
 #ifdef AOL_USE_STD_ARRAY
 #include <array>
-#else
-#error "No custom array yet!"
 #endif
 
 
@@ -41,8 +39,6 @@
 
 #ifdef AOL_USE_STD_VECTOR
 #include <vector>
-#else
-#error "No custom vector yet!"
 #endif
 
 
@@ -54,16 +50,12 @@
 #include <unordered_map>
 #elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
 #include "unordered_dense/unordered_dense.h"
-#else
-#error "No custom unordered_map yet!"
 #endif
 
 #if defined(AOL_USE_STD_UNORDERED_SET)
 #include <unordered_set>
 #elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET)
 #include "unordered_dense/unordered_dense.h"
-#else
-#error "No custom unordered_set yet!"
 #endif
 
 
