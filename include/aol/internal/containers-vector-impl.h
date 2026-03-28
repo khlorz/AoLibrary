@@ -23,6 +23,7 @@ struct VectorCircularExIterator
 	using value_type = typename container_type::value_type;
 	using allocator_type = typename container_type::allocator_type;
 	using difference_type = PtrDiff;
+    using size_type = SizeT;
 
 	using iterator_concept = std::random_access_iterator_tag;
 	using iterator_category = std::random_access_iterator_tag;
@@ -31,7 +32,7 @@ struct VectorCircularExIterator
 	using reference = std::conditional_t<std::is_const_v<C>, typename container_type::const_reference, typename container_type::reference>;
 
     container_ptr container; // beginning of array
-    size_t idx; // offset into array
+    size_type idx; // offset into array
 
     constexpr VectorCircularExIterator() noexcept :
         container{ nullptr },
@@ -39,7 +40,7 @@ struct VectorCircularExIterator
     {
     }
 
-    constexpr explicit VectorCircularExIterator(C* c_ptr, size_t offset = 0) noexcept :
+    constexpr explicit VectorCircularExIterator(C* c_ptr, size_type offset = 0) noexcept :
         container(c_ptr),
         idx(offset)
     {
@@ -91,7 +92,7 @@ struct VectorCircularExIterator
     constexpr VectorCircularExIterator& operator+=(const difference_type offset) noexcept
     {
         AssertValidOffset(offset);
-        idx += static_cast<size_t>(offset);
+        idx += static_cast<size_type>(offset);
         return *this;
     }
 
@@ -132,11 +133,11 @@ private:
         }
 
         if (offset < 0) {
-            assert(idx >= size_t{ 0 } - static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
+            assert(idx >= size_type{ 0 } - static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
         }
 
         if (offset > 0) {
-            assert(container->size() - idx >= static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator after end!");
+            assert(container->size() - idx >= static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator after end!");
         }
     }
 
