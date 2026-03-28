@@ -61,8 +61,8 @@
 */
 //#define AOL_USE_BOOST_POOL_ALLOCATOR
 
-#if defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR) && defined(AOL_USE_BOOST_POOL_ALLOCATOR)
-#error "Only define one pool allocator type!"
+#if defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR) == defined(AOL_USE_BOOST_POOL_ALLOCATOR)
+#error "You must define one pool allocator type!"
 #endif
 
 
