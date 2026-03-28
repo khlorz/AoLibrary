@@ -50,14 +50,20 @@
 * Hash/Unordered map/set includes
 *************************************************/
 
-#ifndef AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP
+#if defined(AOL_USE_STD_UNORDERED_MAP)
 #include <unordered_map>
-#endif
-#ifndef AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET
-#include <unordered_set>
-#endif
-#if defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP) || defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET)
+#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
 #include "unordered_dense/unordered_dense.h"
+#else
+#error "No custom unordered_map yet!"
+#endif
+
+#if defined(AOL_USE_STD_UNORDERED_SET)
+#include <unordered_set>
+#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET)
+#include "unordered_dense/unordered_dense.h"
+#else
+#error "No custom unordered_set yet!"
 #endif
 
 

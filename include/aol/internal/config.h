@@ -102,7 +102,14 @@
 ****************************************/
 
 /**
-* This makes all AoLibrary containers using HashMap use a custom hash map
+* This makes all AoLibrary containers using HashMap use a std::unordered_map
+*
+* - By default, the library already uses ankerl::unordered_dense::map
+*/
+//#define AOL_USE_STD_UNORDERED_MAP
+
+/**
+* This makes all AoLibrary containers using HashMap use a ankerl::unordered_dense::map
 *
 * - By default, the library already uses ankerl::unordered_dense::map
 */
