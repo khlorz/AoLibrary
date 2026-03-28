@@ -207,6 +207,14 @@ template<
 using VectorPool = Vector<T, A>;
 
 /**
+* @details Circular buffer container implemented with vector
+* 
+* - As a circular buffer, this will overwrite the oldest element after passing the threshold size
+* 
+* - NOTE: Immediately constructs empty values to the container for the max item amount
+* 
+* @tparam T element type
+* @tparam A allocator type (default: Internal::DefaultAllocator<T>)
 */
 template<
 	typename T,
