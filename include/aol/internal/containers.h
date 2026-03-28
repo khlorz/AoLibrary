@@ -162,7 +162,7 @@ template<
 	SizeT S
 >
 using Array
-#ifdef AOL_USE_STD_ARRAY
+#if defined(AOL_USE_STD_ARRAY)
 = std::array<T, S>;
 #else
 #error "No custom array yet!"
@@ -205,7 +205,7 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using Vector
-#ifdef AOL_USE_STD_VECTOR
+#if defined(AOL_USE_STD_VECTOR)
 = std::vector<T, A>;
 #else
 #error "No custom vector yet!"
@@ -379,7 +379,7 @@ template<
 	typename A = Internal::DefaultAllocator<P>
 >
 using InsertOrderMap
-#ifdef AOL_USE_TSL_INSERTORDERED_MAP
+#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_map<K, V, H, std::equal_to<K>, A>;
 #else
 #error "No alternative insert ordered map type yet!"
@@ -571,7 +571,7 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using InsertOrderSet
-#ifdef AOL_USE_TSL_INSERTORDERED_MAP
+#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_set<T, H, std::equal_to<T>, A>;
 #else
 #error "No alternative insert ordered map type yet!"
