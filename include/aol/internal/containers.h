@@ -28,10 +28,10 @@
 * Array includes
 *************************************************/
 
-#ifdef AOL_USE_CUSTOM_ARRAY
-#error "No custom array yet!"
-#else
+#ifdef AOL_USE_STD_ARRAY
 #include <array>
+#else
+#error "No custom array yet!"
 #endif
 
 
@@ -39,10 +39,10 @@
 * Vector includes
 *************************************************/
 
-#ifdef AOL_USE_CUSTOM_VECTOR
-#error "No custom vector yet!"
-#else
+#ifdef AOL_USE_STD_VECTOR
 #include <vector>
+#else
+#error "No custom vector yet!"
 #endif
 
 
@@ -164,10 +164,10 @@ template<
 	SizeT S
 >
 using Array
-#ifdef AOL_USE_CUSTOM_ARRAY
-#error "No custom array yet!"
-#else
+#ifdef AOL_USE_STD_ARRAY
 = std::array<T, S>;
+#else
+#error "No custom array yet!"
 #endif
 
 template<
@@ -207,10 +207,10 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using Vector
-#ifdef AOL_USE_CUSTOM_VECTOR
-#error "No RottenLibrary custom vector type yet!"
-#else
+#ifdef AOL_USE_STD_VECTOR
 = std::vector<T, A>;
+#else
+#error "No custom vector yet!"
 #endif
 
 /**

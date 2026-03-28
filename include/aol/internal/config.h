@@ -83,7 +83,7 @@
 *
 * - By default, the library uses std::array
 */
-//#define AOL_USE_CUSTOM_ARRAY
+#define AOL_USE_STD_ARRAY
 
 /***************************************
 * Custom Vector Types
@@ -94,7 +94,7 @@
 *
 * - By default, the library uses std::vector
 */
-//#define AOL_USE_CUSTOM_VECTOR
+#define AOL_USE_STD_VECTOR
 
 
 /***************************************
