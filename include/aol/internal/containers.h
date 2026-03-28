@@ -429,10 +429,12 @@ template<
 	typename V
 >
 using HashMapPair
-#if defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
+#if defined(AOL_USE_STD_UNORDERED_MAP)
+= std::pair<const K, V>;
+#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
 = std::pair<K, V>;
 #else
-= std::pair<const K, V>;
+#error "No custom hash map pair yet!"
 #endif
 
 /**
@@ -462,10 +464,12 @@ template<
 	typename A = Internal::DefaultAllocator<P>
 >
 using HashMap
-#ifdef AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP
+#if defined(AOL_USE_STD_UNORDERED_MAP)
+= std::unordered_map<K, V, ankerl::unordered_dense::hash<K>, std::equal_to<K>, A>;
+#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
 = ankerl::unordered_dense::map<K, V, H, std::equal_to<K>, A>;
 #else
-= std::unordered_map<K, V, ankerl::unordered_dense::hash<K>, std::equal_to<K>, A>;
+#error "No custom hash map yet!"
 #endif
 
 /**
@@ -617,10 +621,12 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using HashSet
-#ifdef AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP
+#if defined(AOL_USE_STD_UNORDERED_MAP)
+= std::unordered_set<T, ankerl::unordered_dense::hash<T>, std::equal_to<T>, A>;
+#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
 = ankerl::unordered_dense::set<T, H, std::equal_to<T>, A>;
 #else
-= std::unordered_set<T, ankerl::unordered_dense::hash<T>, std::equal_to<T>, A>;
+#error "No custom hash set yet!"
 #endif
 
 /**

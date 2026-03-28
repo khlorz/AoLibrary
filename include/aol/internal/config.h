@@ -121,6 +121,13 @@
 ****************************************/
 
 /**
+* This makes all AoLibrary containers using HashMap use a std::unordered_set
+*
+* - By default, the library already uses ankerl::unordered_dense::map
+*/
+//#define AOL_USE_STD_UNORDERED_SET
+
+/**
 * This makes all AoLibrary containers using HashSet use a custom hash set
 *
 * - By default, the library already uses ankerl::unordered_dense::set
