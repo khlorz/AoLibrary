@@ -192,6 +192,14 @@
 /***************************************
 * Custom KeyOrderSet Types
 ****************************************/
+
+/**
+* This makes all AoLibrary containers using KeyOrderSet use std::set
+*
+* - By default, the library already uses absl::btree_set
+*/
+//#define AOL_USE_STD_KEYORDERED_SET
+
 /**
 * This makes all AoLibrary containers using KeyOrderSet use absl::btree_set
 *

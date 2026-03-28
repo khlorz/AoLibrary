@@ -84,10 +84,10 @@
 * Key-ordered set includes
 *************************************************/
 
-#ifdef AOL_USE_ABSEIL_KEYORDERED_SET
-#include "absl/container/btree_set.h"
-#else
+#if defined(AOL_USE_STD_KEYORDERED_SET)
 #include <set>
+#elif defined(AOL_USE_ABSEIL_KEYORDERED_SET)
+#include "absl/container/btree_set.h"
 #endif
 
 
@@ -522,10 +522,12 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using KeyOrderSet
-#ifdef AOL_USE_ABSEIL_KEYORDERED_SET
+#if defined(AOL_USE_STD_ORDERED_SET)
+= std::set<T, std::less<T>, A>;
+#elif defined(AOL_USE_ABSEIL_KEYORDERED_SET)
 = absl::btree_set<T, std::less<T>, A>;
 #else
-= std::set<T, std::less<T>, A>;
+#error "No custom key ordered set yet!"
 #endif
 
 /**
