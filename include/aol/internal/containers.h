@@ -349,7 +349,7 @@ using InsertOrderMapPair
 #if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 = std::pair<K, V>;
 #else
-#error "No designated pair type yet!"
+#error "No custom insert ordered map pair yet!"
 #endif
 
 /**
@@ -382,7 +382,7 @@ using InsertOrderMap
 #if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_map<K, V, H, std::equal_to<K>, A>;
 #else
-#error "No alternative insert ordered map type yet!"
+#error "No custom insert ordered map yet!"
 #endif
 
 /**
