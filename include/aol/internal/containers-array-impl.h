@@ -7,6 +7,10 @@
 namespace AoL
 {
 
+/****************************************
+* General Array
+****************************************/
+
 namespace Internal
 {
 
@@ -480,6 +484,197 @@ public:
 	{
 	}
 };
+
+
+/****************************************
+* Circular Array
+****************************************/
+
+namespace Internal
+{
+
+/**
+* @details ArrayCircularEx iterator
+*
+* - Iterate made solely for ArrayCircular
+*/
+template<
+	typename C
+>
+struct ArrayCircularExIterator
+{
+	using container_type = std::remove_const_t<C>;
+    using container_ptr = C*;
+
+	using value_type = typename container_type::value_type;
+	using allocator_type = typename container_type::allocator_type;
+	using difference_type = PtrDiff;
+    using size_type = SizeT;
+
+	using iterator_concept = std::random_access_iterator_tag;
+	using iterator_category = std::random_access_iterator_tag;
+
+	using pointer = std::conditional_t<std::is_const_v<C>, typename container_type::const_pointer, typename container_type::pointer>;
+	using reference = std::conditional_t<std::is_const_v<C>, typename container_type::const_reference, typename container_type::reference>;
+
+    container_ptr container; // beginning of array
+    size_type idx; // offset into array
+
+    constexpr ArrayCircularExIterator() noexcept :
+        container{ nullptr },
+        idx{ 0 }
+    {
+    }
+
+    constexpr explicit ArrayCircularExIterator(C* c_ptr, size_type offset = 0) noexcept :
+        container(c_ptr),
+        idx(offset)
+    {
+        assert(idx <= container->size() && "Invalid offset! Offset is way beyond the array size!");
+    }
+
+    AOL_NO_DISCARD constexpr reference operator*() const noexcept
+    {
+        assert(container && "Invalid operation! Cannot dereference nullptr array iterator!");
+        assert(idx < container->size() && "Invalid operation! Cannot dereference out of range array iterator!");
+        return (*container)[idx];
+    }
+
+    AOL_NO_DISCARD constexpr pointer operator->() const noexcept
+    {
+        return std::addressof(this->operator*());
+    }
+
+    constexpr ArrayCircularExIterator& operator++() noexcept
+    {
+        assert(container && "Invalid operation! cannot increment nullptr array iterator!");
+        assert(idx < container->size() && "Invalid operation! Cannot increment array iterator past end!");
+        ++idx;
+        return *this;
+    }
+
+    constexpr ArrayCircularExIterator operator++(int) noexcept
+    {
+        ArrayCircularExIterator tmp = *this;
+        ++*this;
+        return tmp;
+    }
+
+    constexpr ArrayCircularExIterator& operator--() noexcept
+    {
+        assert(container && "Invalid operation! Cannot decrement nullptr array iterator!");
+        assert(idx != 0 && "Invalid operation! Cannot decrement array iterator before begin!");
+        --idx;
+        return *this;
+    }
+
+    constexpr ArrayCircularExIterator operator--(int) noexcept
+    {
+        ArrayCircularExIterator tmp = *this;
+        --*this;
+        return tmp;
+    }
+
+    constexpr ArrayCircularExIterator& operator+=(const difference_type offset) noexcept
+    {
+        AssertValidOffset(offset);
+        idx += static_cast<size_type>(offset);
+        return *this;
+    }
+
+    constexpr ArrayCircularExIterator& operator-=(const difference_type offset) noexcept
+    {
+        return *this += -offset;
+    }
+
+    AOL_NO_DISCARD constexpr difference_type operator-(const ArrayCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return static_cast<difference_type>(idx - other.idx);
+    }
+
+    AOL_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
+    {
+        return *(*this + offset);
+    }
+
+    AOL_NO_DISCARD constexpr bool operator==(const ArrayCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return idx == other.idx;
+    }
+
+    AOL_NO_DISCARD constexpr std::strong_ordering operator<=>(const ArrayCircularExIterator& other) const noexcept
+    {
+        AssertCompatibility(other);
+        return idx <=> other.idx;
+    }
+
+private:
+#ifndef NDEBUG
+    constexpr void AssertValidOffset(const difference_type offset) const noexcept
+    {
+        if (offset != 0) {
+            assert(container && "Invalid operation! Cannot seek nullptr array iterator!");
+        }
+
+        if (offset < 0) {
+            assert(idx >= size_type{ 0 } - static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
+        }
+
+        if (offset > 0) {
+            assert(container->size() - idx >= static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator after end!");
+        }
+    }
+
+    constexpr void AssertCompatibility(const ArrayCircularExIterator& other) const noexcept
+    {
+        assert(container == other.container && "Invalid operation! Array iterators incompatible!");
+    }
+#else
+    constexpr void AssertValidOffset(const difference_type offset) const noexcept
+    {
+        // empty function
+    }
+
+    constexpr void AssertCompatibility(const ArrayCircularExIterator& other) const noexcept
+    {
+        // empty function
+    }
+#endif
+
+public:
+    AOL_NO_DISCARD constexpr ArrayCircularExIterator operator+(const difference_type offset) const noexcept
+    {
+        ArrayCircularExIterator tmp = *this;
+        tmp += offset;
+        return tmp;
+    }
+
+    AOL_NO_DISCARD constexpr ArrayCircularExIterator operator-(const difference_type offset) const noexcept
+    {
+        ArrayCircularExIterator tmp = *this;
+        tmp -= offset;
+        return tmp;
+    }
+
+    AOL_NO_DISCARD friend constexpr ArrayCircularExIterator operator+(const difference_type offset, ArrayCircularExIterator next) noexcept
+    {
+        next += offset;
+        return next;
+    }
+};
+
+template<
+    typename T,
+    SizeT S
+>
+struct ArrayCircularEx
+{
+
+};
+
+} // Internal namespace
 
 } // AoL namespace
 

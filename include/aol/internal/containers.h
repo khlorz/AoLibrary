@@ -120,6 +120,12 @@ struct ContainerBase;
 
 template<
 	typename T,
+	SizeT S
+>
+struct ArrayCircularEx;
+
+template<
+	typename T,
 	typename A
 >
 struct VectorCircularEx;
@@ -183,6 +189,23 @@ template<
 >
 struct NamedArray4;
 
+/**
+* @details Circular buffer container implemented with vector
+*
+* - As a circular buffer, this will overwrite the oldest element after passing the threshold size
+*
+* - NOTE 1: Immediately constructs empty values to the container with the max item size
+*
+* - NOTE 2: Even if there is a max item size, it can be increased. See ArrayCircular for fixed size
+*
+* @tparam T element type
+* @tparam A allocator type (default: Internal::DefaultAllocator<T>)
+*/
+template<
+	typename T,
+	SizeT S
+>
+using ArrayCircular = Internal::ArrayCircularEx<T, S>;
 
 /*************************************************
 * Vectors
