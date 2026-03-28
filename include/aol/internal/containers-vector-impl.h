@@ -447,7 +447,7 @@ public:
     * 
     * - The same as data[0]
     */
-    AOL_NO_DISCARD constexpr T& front()
+    AOL_NO_DISCARD constexpr T& front() noexcept
 	{
 		assert(item_count > 0);
 		return container_obj[head];
@@ -458,11 +458,33 @@ public:
     * 
     * - The same as data[item_count - 1]
     */
-    AOL_NO_DISCARD constexpr T& back()
+    AOL_NO_DISCARD constexpr T& back() noexcept
 	{
 		assert(item_count > 0);
 		return container_obj[(head + item_count - 1) & mask];
 	}
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[0]
+    */
+    AOL_NO_DISCARD constexpr T& front() const noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[head];
+    }
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[item_count - 1]
+    */
+    AOL_NO_DISCARD constexpr T& back() const noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[(head + item_count - 1) & mask];
+    }
 
 private:
     AOL_NO_DISCARD constexpr auto begin_impl() noexcept
