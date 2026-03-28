@@ -383,6 +383,12 @@ public:
         head = 0;
     }
 
+    /*
+	* @details Remove the front element
+    * 
+	* - This process does not actually remove the element
+    *   but just moves the head forward and decreases the item count
+    */
     constexpr void pop_front() noexcept
     {
         assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
@@ -391,6 +397,12 @@ public:
         item_count--;
     }
 
+    /**
+	* @details Remove the back element
+    * 
+	* - This process does not actually remove the element
+    *   but just decreases the item count
+    */
     constexpr void pop_back() noexcept
     {
         assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
