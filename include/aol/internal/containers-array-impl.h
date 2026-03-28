@@ -23,6 +23,7 @@ struct ArrayIterator
 
 	using value_type = T;
 	using difference_type = PtrDiff;
+    using size_type = SizeT;
 
 	using pointer = T*;
 	using reference = T&;
@@ -34,7 +35,7 @@ struct ArrayIterator
         ptr{ nullptr }
     {}
 
-    constexpr explicit ArrayIterator(pointer arr_ptr, size_t offset = 0) noexcept :
+    constexpr explicit ArrayIterator(pointer arr_ptr, size_type offset = 0) noexcept :
         ptr{ arr_ptr + offset }
     {}
 
@@ -108,14 +109,14 @@ struct ArrayIterator
 
 #else
     pointer ptr; // beginning of array
-    size_t idx; // offset into array
+    size_type idx; // offset into array
 
     constexpr ArrayIterator() noexcept :
         ptr{nullptr},
         idx{0}
     {}
 
-    constexpr explicit ArrayIterator(pointer arr_ptr, size_t offset = 0) noexcept : 
+    constexpr explicit ArrayIterator(pointer arr_ptr, size_type offset = 0) noexcept :
         ptr(arr_ptr),
         idx(offset)
     {
@@ -167,7 +168,7 @@ struct ArrayIterator
     constexpr ArrayIterator& operator+=(const difference_type offset) noexcept
     {
         AssertValidOffset(offset);
-        idx += static_cast<size_t>(offset);
+        idx += static_cast<size_type>(offset);
         return *this;
     }
 
@@ -206,11 +207,11 @@ struct ArrayIterator
         }
 
         if (offset < 0) {
-            assert(idx >= size_t{ 0 } - static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
+            assert(idx >= size_type{ 0 } - static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator before begin!");
         }
 
         if (offset > 0) {
-            assert(Size - idx >= static_cast<size_t>(offset) && "Invalid operation! Cannot seek array iterator after end!");
+            assert(Size - idx >= static_cast<size_type>(offset) && "Invalid operation! Cannot seek array iterator after end!");
         }
     }
 
