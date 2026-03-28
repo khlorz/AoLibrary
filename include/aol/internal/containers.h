@@ -574,7 +574,7 @@ using InsertOrderSet
 #if defined(AOL_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_set<T, H, std::equal_to<T>, A>;
 #else
-#error "No alternative insert ordered map type yet!"
+#error "No custom insert ordered map set yet!"
 #endif
 
 /**
