@@ -189,23 +189,6 @@ template<
 >
 struct NamedArray4;
 
-/**
-* @details Circular buffer container implemented with vector
-*
-* - As a circular buffer, this will overwrite the oldest element after passing the threshold size
-*
-* - NOTE 1: Immediately constructs empty values to the container with the max item size
-*
-* - NOTE 2: Even if there is a max item size, it can be increased. See ArrayCircular for fixed size
-*
-* @tparam T element type
-* @tparam A allocator type (default: Internal::DefaultAllocator<T>)
-*/
-template<
-	typename T,
-	SizeT S
->
-using ArrayCircular = Internal::ArrayCircularEx<T, S>;
 
 /*************************************************
 * Vectors
@@ -252,23 +235,6 @@ template<
 >
 using VectorPool = Vector<T, A>;
 
-/**
-* @details Circular buffer container implemented with vector
-* 
-* - As a circular buffer, this will overwrite the oldest element after passing the threshold size
-* 
-* - NOTE 1: Immediately constructs empty values to the container with the max item size
-* 
-* - NOTE 2: Even if there is a max item size, it can be increased. See ArrayCircular for fixed size
-* 
-* @tparam T element type
-* @tparam A allocator type (default: Internal::DefaultAllocator<T>)
-*/
-template<
-	typename T,
-	typename A = Internal::DefaultAllocator<T>
->
-using VectorCircular = Internal::VectorCircularEx<T, A>;
 
 /*************************************************
 * Ordered maps
@@ -673,6 +639,51 @@ template<
 	typename A = Internal::DefaultPoolAllocator<T>
 >
 using HashSetPool = HashSet<T, H, A>;
+
+
+/*************************************************
+* Cyclic buffers
+*************************************************/
+
+
+/**
+* @details Fixed size cyclic buffer
+* 
+* - Cyclic buffer is a FIFO container that overwrite the oldest element when
+*   hitting the max number of elements it can contain
+* 
+* - This uses an array so this will immediately construct empty elements
+* 
+* - Only accepts power of two value for size (e.g. 2, 4, 8, 16, 32, etc)
+* 
+* @tparam T element type
+* @tparam S max item count/size
+*/
+template<
+	typename T,
+	SizeT S
+>
+using CyclicBufferF = Internal::ArrayCircularEx<T, S>;
+
+/**
+* @details Dynamic size cyclic buffer
+*
+* - Cyclic buffer is a FIFO container that overwrite the oldest element when
+*   hitting the max number of elements it can contain
+*
+* - This uses a vector and will only allocate when needed until it reaches the max
+*   number of elements it can contain
+*
+* - Only accepts power of two value for size (e.g. 2, 4, 8, 16, 32, etc)
+* 
+* @tparam T element type
+* @tparam A allocator type
+*/
+template<
+	typename T,
+	typename A = Internal::DefaultAllocator<T>
+>
+using CyclicBufferD = Internal::VectorCircularEx<T, A>;
 
 
 /*************************************************
