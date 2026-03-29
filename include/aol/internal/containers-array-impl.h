@@ -507,7 +507,6 @@ struct ArrayCircularExIterator
     using container_ptr = C*;
 
 	using value_type = typename container_type::value_type;
-	using allocator_type = typename container_type::allocator_type;
 	using difference_type = PtrDiff;
     using size_type = SizeT;
 
@@ -676,25 +675,25 @@ struct ArrayCircularEx
     using container_type = std::array<T, S>;
 
     using value_type = container_type::value_type;
-    using allocator_type = container_type::allocator_type;
+    using size_type = SizeT;
 
     using pointer = container_type::pointer;
     using const_pointer = container_type::const_pointer;
     using reference = container_type::reference;
     using const_reference = container_type::const_reference;
 
-    using iterator = Internal::ArrayCircularExIterator<ArrayCircularEx<T, A>>;
-    using const_iterator = ArrayCircularExIterator<const ArrayCircularEx<T, A>>;
+    using iterator = Internal::ArrayCircularExIterator<ArrayCircularEx<T, S>>;
+    using const_iterator = ArrayCircularExIterator<const ArrayCircularEx<T, S>>;
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    container_type array_data;
-    SizeT mask;
-    SizeT head;
-    SizeT item_count;
+    container_type container_obj;
+    size_type mask;
+    size_type head;
+    size_type item_count;
 
     ArrayCircularEx() noexcept :
-        array_data{ },
+        container_obj{ },
         mask{ S - 1 },
         head{ 0 },
         item_count{ 0 }
@@ -705,22 +704,265 @@ struct ArrayCircularEx
     ArrayCircularEx& operator = (const ArrayCircularEx& other) noexcept = default;
 
     ArrayCircularEx(ArrayCircularEx&& other) noexcept :
-        array_data{ std::move(other.array_data) },
+        container_obj{ std::move(other.container_obj) },
         mask{ other.mask },
         head{ other.head },
         item_count{ other.item_count }
     {
-        other.head = other.item_count = other.mask = static_cast<SizeT>(0);
+        other.head = other.item_count = other.mask = static_cast<size_type>(0);
     }
 
     ArrayCircularEx& operator = (ArrayCircularEx&& other) noexcept
     {
-        array_data = std::move(other.array_data);
+        container_obj = std::move(other.container_obj);
         mask = other.mask;
         head = other.head;
         item_count = other.item_count;
-        other.head = other.item_count = other.mask = static_cast<SizeT>(0);
+        other.head = other.item_count = other.mask = static_cast<size_type>(0);
         return *this;
+    }
+
+    /**
+    * @details Checks if the container is already full
+    *
+    * - Note that it will always be full if head > 0
+    *
+    * @returns bool true if full
+    */
+    AOL_NO_DISCARD constexpr bool full() const noexcept
+    {
+        return item_count == this->capacity();
+    }
+
+    /**
+    * @details Query for the maximum of items the vector can have
+    *
+    * - As a circular buffer, the capacity does not increase
+    *
+    * @returns SizeT maximum allowable items
+    */
+    AOL_NO_DISCARD constexpr auto capacity() const noexcept
+    {
+        return container_obj.size();
+    }
+
+    /**
+    * @details Add an element to the back
+    *
+    * - If the size is already at capacity, the new item will overwrite the oldest element
+    *
+    * @param new_item item to be added
+    */
+    template<typename U>
+    constexpr void push_back(U&& new_item) noexcept
+    {
+        assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
+
+        container_obj[(head + item_count) & mask] = std::forward<U>(new_item);
+        if (item_count == this->capacity())
+        {
+            head = (head + 1) & mask;
+        }
+        else
+        {
+            item_count++;
+        }
+    }
+
+    /**
+    * @details Add an element to the back
+    *
+    * - If the size is already at capacity, the new item will overwrite the oldest element
+    *
+    * @param args type construction arguments
+    */
+    template<typename...Args>
+    constexpr reference emplace_back(Args&&...args) noexcept
+    {
+        assert(mask > 0 && "No assigned item limit yet! Cannot add items!");
+
+        container_obj[(head + item_count) & mask] = T(std::forward<Args>(args)...);
+        if (item_count == this->capacity())
+        {
+            head = (head + 1) & mask;
+        }
+        else
+        {
+            item_count++;
+        }
+    }
+
+    /*
+    * @details Remove the front element
+    *
+    * - This process does not actually remove the element
+    *   but just moves the head forward and decreases the item count
+    */
+    constexpr void pop_front() noexcept
+    {
+        assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
+
+        head = (head + 1) & mask;
+        item_count--;
+    }
+
+    /**
+    * @details Remove the back element
+    *
+    * - This process does not actually remove the element
+    *   but just decreases the item count
+    */
+    constexpr void pop_back() noexcept
+    {
+        assert(item_count > 0 && "Invalid operation! Cannot pop an empty container!");
+
+        item_count--;
+    }
+
+    /**
+    * @details Clears the container
+    *
+    * - Like the description says, clears the container and its containing elements
+    */
+    constexpr void clear() noexcept
+    {
+        head = item_count = 0;
+    }
+
+    /**
+    * @details Access element
+    *
+    * - Asserts if idx is greater than or equal to item count of the vector
+    */
+    AOL_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
+    {
+        assert(idx < item_count && "Invalid operation! Input idx out of range!");
+        return container_obj[(head + idx) & mask];
+    }
+
+    /**
+    * @details Access element
+    *
+    * - Asserts if idx is greater than or equal item to count of the vector
+    */
+    AOL_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
+    {
+        assert(idx < item_count && "Invalid operation! Input idx out of range!");
+        return container_obj[(head + idx) & mask];
+    }
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[0]
+    */
+    AOL_NO_DISCARD constexpr T& front() noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[head];
+    }
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[item_count - 1]
+    */
+    AOL_NO_DISCARD constexpr T& back() noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[(head + item_count - 1) & mask];
+    }
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[0]
+    */
+    AOL_NO_DISCARD constexpr T& front() const noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[head];
+    }
+
+    /**
+    * @details Access the front element
+    *
+    * - The same as data[item_count - 1]
+    */
+    AOL_NO_DISCARD constexpr T& back() const noexcept
+    {
+        assert(item_count > 0);
+        return container_obj[(head + item_count - 1) & mask];
+    }
+
+    AOL_NO_DISCARD constexpr auto begin() noexcept
+    {
+        return iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr auto begin() const noexcept
+    {
+        return iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr auto cbegin() const noexcept
+    {
+        return const_iterator(this, 0);
+    }
+
+    AOL_NO_DISCARD constexpr auto end() noexcept
+    {
+        return iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto end() const noexcept
+    {
+        return iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto cend() const noexcept
+    {
+        return const_iterator(this, item_count);
+    }
+
+    AOL_NO_DISCARD constexpr auto rbegin() noexcept
+    {
+        return reverse_iterator(this->end());
+    }
+
+    AOL_NO_DISCARD constexpr auto rbegin() const noexcept
+    {
+        return const_reverse_iterator(this->cend());
+    }
+
+    AOL_NO_DISCARD constexpr auto crbegin() const noexcept
+    {
+        return const_reverse_iterator(this->cend());
+    }
+
+    AOL_NO_DISCARD constexpr auto rend() noexcept
+    {
+        return reverse_iterator(this->begin());
+    }
+
+    AOL_NO_DISCARD constexpr auto rend() const noexcept
+    {
+        return const_reverse_iterator(this->cbegin());
+    }
+
+    AOL_NO_DISCARD constexpr auto crend() const noexcept
+    {
+        return const_reverse_iterator(this->cbegin());
+    }
+
+    AOL_NO_DISCARD constexpr bool empty() const noexcept
+    {
+        return item_count == 0;
+    }
+
+    AOL_NO_DISCARD constexpr auto size() const noexcept
+    {
+        return item_count;
     }
 };
 
