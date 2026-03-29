@@ -122,13 +122,13 @@ template<
 	typename T,
 	SizeT S
 >
-struct ArrayCircularEx;
+struct CyclicBufferFixed;
 
 template<
 	typename T,
 	typename A
 >
-struct VectorCircularEx;
+struct CyclicBufferDynamic;
 
 template<
 	typename K,
@@ -663,7 +663,7 @@ template<
 	typename T,
 	SizeT S
 >
-using CyclicBufferF = Internal::ArrayCircularEx<T, S>;
+using CyclicBufferF = Internal::CyclicBufferFixed<T, S>;
 
 /**
 * @details Dynamic size cyclic buffer
@@ -683,7 +683,7 @@ template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
 >
-using CyclicBufferD = Internal::VectorCircularEx<T, A>;
+using CyclicBufferD = Internal::CyclicBufferDynamic<T, A>;
 
 
 /*************************************************
@@ -889,5 +889,6 @@ constexpr auto GetContainerData(C& c) noexcept
 #include "containers-array-impl.h"
 #include "containers-vector-impl.h"
 #include "containers-ordered-map-impl.h"
+#include "containers-cyclic-buffer-impl.h"
 
 // containers.h EOF
