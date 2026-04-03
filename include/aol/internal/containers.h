@@ -152,7 +152,7 @@ struct KeyOrderMapEx;
 *************************************************/
 
 /**
-* Static sized container at runtime
+* @details Static sized container at runtime
 *
 * - Compile-time size
 *
@@ -195,7 +195,7 @@ struct NamedArray4;
 *************************************************/
 
 /**
-* Resizable container at runtime
+* @details Resizable container at runtime
 *
 * - Dynamically resizable container
 *
@@ -218,7 +218,7 @@ using Vector
 #endif
 
 /**
-* Vector but specialized for pool allocation
+* @details Vector but specialized for pool allocation
 *
 * - Uses a pool-based allocator
 *
@@ -241,7 +241,7 @@ using VectorPool = Vector<T, A>;
 *************************************************/
 
 /**
-* Key-value pair type used by KeyOrderMap
+* @details Key-value pair type used by KeyOrderMap
 *
 * - This will be the main pair type used for KeyOrderMap type
 *
@@ -266,7 +266,7 @@ using KeyOrderMapPair
 #endif
 
 /**
-* Key-ordered associative map
+* @details Key-ordered associative map
 *
 * - Compared to InsertOrderMap, this map is sorted by key.
 *
@@ -301,7 +301,7 @@ using KeyOrderMap
 #endif
 
 /**
-* KeyOrderMap but specialized for pool allocators
+* @details KeyOrderMap but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -321,7 +321,7 @@ template<
 using KeyOrderMapPool = KeyOrderMap<K, V, P, A>;
 
 /**
-* Insert-value pair type used by InsertOrderedMap
+* @details Insert-value pair type used by InsertOrderedMap
 *
 * - This will be the main pair type used for InsertOrderMap type
 *
@@ -344,7 +344,7 @@ using InsertOrderMapPair
 #endif
 
 /**
-* Insertion-ordered associative map
+* @details Insertion-ordered associative map
 *
 * - Compared to KeyOrderMap, this map is sorted by the order of insertion.
 *
@@ -377,7 +377,7 @@ using InsertOrderMap
 #endif
 
 /**
-* InsertOrderMap but specialized for pool allocators
+* @details InsertOrderMap but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -404,7 +404,7 @@ using InsertOrderMapPool = InsertOrderMap<K, V, H, P, A>;
 *************************************************/
 
 /**
-* Insert-value pair type used by InsertOrderedMap
+* @details Insert-value pair type used by InsertOrderedMap
 *
 * - This will be the main pair type used for InsertOrderMap type
 *
@@ -429,7 +429,7 @@ using HashMapPair
 #endif
 
 /**
-* Hash map container
+* @details Hash map container
 *
 * - This container is not sorted/ordered but is associated with hashes of the key type
 *
@@ -464,7 +464,7 @@ using HashMap
 #endif
 
 /**
-* HashMap but specialized for pool allocators
+* @details HashMap but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -491,7 +491,7 @@ using HashMapPool = HashMap<K, V, H, P, A>;
 *************************************************/
 
 /**
-* Key-ordered associative set
+* @details Key-ordered associative set
 *
 * - As with other sets, this won't have any duplicate values. Any duplicates will be discarded
 *
@@ -522,7 +522,7 @@ using KeyOrderSet
 #endif
 
 /**
-* KeyOrderSet but specialized for pool allocators
+* @details KeyOrderSet but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -538,7 +538,7 @@ template<
 using KeyOrderSetPool = KeyOrderSet<T, A>;
 
 /**
-* Insertion-ordered associative set
+* @details Insertion-ordered associative set
 *
 * - As with other sets, this won't have any duplicate values
 *
@@ -569,7 +569,7 @@ using InsertOrderSet
 #endif
 
 /**
-* InsertOrderSet but specialized for pool allocators
+* @details InsertOrderSet but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -592,7 +592,7 @@ using InsertOrderSetPool = InsertOrderSet<T, H, A>;
 *************************************************/
 
 /**
-* Hash map but for sets
+* @details Hash map but for sets
 *
 * - This container is not sorted/ordered but is associated with hashes of the type with no duplicates
 *
@@ -623,7 +623,7 @@ using HashSet
 #endif
 
 /**
-* HashSet but specialized for pool allocators
+* @details HashSet but specialized for pool allocators
 *
 * - Default pool allocator is backed by mimalloc
 *
@@ -691,7 +691,7 @@ using CyclicBufferD = Internal::CyclicBufferDynamic<T, A>;
 *************************************************/
 
 /**
-* @brief Gets the begin iterator of a container.
+* @details  Gets the begin iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -707,7 +707,7 @@ constexpr auto GetBeginIt(C& c) noexcept
 }
 
 /**
-* @brief Gets the const begin iterator of a container.
+* @details  Gets the const begin iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -723,7 +723,7 @@ constexpr auto GetBeginIt(const C& c) noexcept
 }
 
 /**
-* @brief Gets the end iterator of a container.
+* @details  Gets the end iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -739,7 +739,7 @@ constexpr auto GetEndIt(C& c) noexcept
 }
 
 /**
-* @brief Gets the const end iterator of a container.
+* @details  Gets the const end iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -755,7 +755,7 @@ constexpr auto GetEndIt(const C& c) noexcept
 }
 
 /**
-* @brief Gets the reverse begin iterator of a container.
+* @details  Gets the reverse begin iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -771,7 +771,7 @@ constexpr auto GetBeginReverseIt(C& c) noexcept
 }
 
 /**
-* Gets the const reverse begin iterator of a container.
+* @details Gets the const reverse begin iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -787,7 +787,7 @@ constexpr auto GetBeginReverseIt(const C& c) noexcept
 }
 
 /**
-* @brief Gets the reverse end iterator of a container.
+* @details  Gets the reverse end iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -803,7 +803,7 @@ constexpr auto GetEndReverseIt(C& c) noexcept
 }
 
 /**
-* Gets the const reverse end iterator of a container.
+* @details Gets the const reverse end iterator of a container.
 *
 * - Usable on STL-compatible containers.
 *
@@ -819,7 +819,7 @@ constexpr auto GetEndReverseIt(const C& c) noexcept
 }
 
 /**
-* Returns the size of a container.
+* @details Returns the size of a container.
 *
 * - Usually returns `size_t`.
 *
@@ -835,7 +835,7 @@ constexpr auto GetContainerSize(const C& c) noexcept
 }
 
 /**
-* Checks whether a container is empty.
+* @details Checks whether a container is empty.
 *
 * @tparam C Container type
 * @param c Container instance
@@ -849,7 +849,7 @@ constexpr auto IsContainerEmpty(const C& c) noexcept
 }
 
 /**
-* Returns the underlying data pointer of a container.
+* @details Returns the underlying data pointer of a container.
 *
 * - Equivalent to `data()`. Applicable to both AoL containers and STL containers.
 *
@@ -864,7 +864,7 @@ constexpr auto GetContainerData(const C& c) noexcept
 }
 
 /**
-* Returns the underlying data pointer of a container
+* @details Returns the underlying data pointer of a container
 *
 * - Equivalent to `data()`. Applicable to both AoL containers and STL containers.
 *
