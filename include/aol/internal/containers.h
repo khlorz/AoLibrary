@@ -314,6 +314,70 @@ template<
 using KeyOrderMapPool = KeyOrderMap<K, V, P, A>;
 
 /**
+* @details Key-value pair type used by FlatKeyOrderMap
+*
+* - This will be the main pair type used for FlatKeyOrderMap type
+*
+* - Each aliases will have the same, more or less, interfaces so they are interchangeable depending on the map used
+*
+* - Read and look at the defines at include/config.h for more information on the type aliases
+*
+* @tparam K Key type
+* @tparam V Mapped value type
+*/
+template<
+	typename K,
+	typename V
+>
+using FlatKeyOrderMapPair = Internal::KeyValuePairEx<K, V>;
+
+/**
+* @details flat Key-ordered associative map
+*
+* - Compared to InsertOrderMap, this map is sorted by key.
+*
+* - Internally uses a vector
+* 
+* - For fast operations, use the build functions: build_start -> build_add... -> build_end
+* 
+* - Used for "Add elements then sort after"
+* 
+* - Optimized for lookups more than insertion
+*
+* @tparam K Key type
+* @tparam V Mapped value type
+* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
+* @tparam A Allocator type (default: Internal::DefaultAllocator<P>)
+*/
+template<
+	typename K,
+	typename V,
+	typename P = FlatKeyOrderPair<K, V>,
+	typename A = Internal::DefaultAllocator<P>
+>
+using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, A>;
+
+/**
+* @details FlatKeyOrderMap but specialized for pool allocators
+*
+* - Default pool allocator is backed by mimalloc
+*
+* - Internally operates on `mi_heap_t`
+*
+* @tparam K Key type
+* @tparam V Mapped value type
+* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
+* @tparam A Allocator type (default: Internal::DefaultPoolAllocator<P>)
+*/
+template<
+	typename K,
+	typename V,
+	typename P = Internal::KeyValuePairEx<K, V>,
+	typename A = Internal::DefaultPoolAllocator<P>
+>
+using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, A>;
+
+/**
 * @details Insert-value pair type used by InsertOrderedMap
 *
 * - This will be the main pair type used for InsertOrderMap type
