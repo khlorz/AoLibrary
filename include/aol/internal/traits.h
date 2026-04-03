@@ -15,22 +15,6 @@
 namespace AoL
 {
 
-//---------------------------------------
-// Internal Traits
-// - Basically, you do not have to worry about using this
-// - In case you do, maybe remove this from Internal namespace
-//---------------------------------------
-namespace Internal
-{
-
-template<typename T>
-concept HasContainerTypeTag = requires(T t)
-{
-	T::container_tag;
-};
-
-} // namespace Internal
-
 /**
 * AoLibrary traits
 * 
@@ -68,23 +52,6 @@ concept HasLessThanComparator = requires(T t1, T t2)
 {
 	t1.first < t2.first;
 };
-
-/**
-* Concept. Checks if the container is a AoLibrary custom container
-* 
-* @tparam C container type
-* @tparam T non-cvref container type
-*/
-template<typename C, typename T = std::remove_cvref_t<C>>
-concept IsRotContainer =
-(
-	HasBaseAlias<T>						&&
-	Internal::HasContainerTypeTag<T>	&&
-	std::is_base_of_v<
-		typename T::Base,
-		T
-	>
-);
 
 /**
 * Concept. Checks if the container is a AoLibrary custom container

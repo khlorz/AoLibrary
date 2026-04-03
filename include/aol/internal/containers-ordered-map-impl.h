@@ -47,36 +47,43 @@ struct KeyValuePairEx
 * @tparam A allocator type
 * @tparam C map container type
 */
-template<typename K, typename V, typename P, typename A, typename C>
-struct KeyOrderMapEx : public Internal::ContainerBase<KeyOrderMapEx<K,V,P,A,C>, P, C, ContainerTag_KeyOrderMap>
+template<typename K, typename V, typename P, typename A>
+struct KeyOrderMapEx
 {
-public:
-	using Base = Internal::ContainerBase<KeyOrderMapEx<K, V, P, A, C>, P, C, ContainerTag_KeyOrderMap>;
+	using container_type = AoL::Vector<P, A>;
+	using container_tag = AoL::Internal::ContainerTag;
 
-private:
-	using typename Base::container_tag;
-
-	using Base::container_obj;
-
-public:
 	using value_type = P;
-	using key_type = typename ContainerKeyType<P, container_tag>::type;
-	using mapped_type = typename ContainerMappedType<P, container_tag>::type;
+	using key_type = K;
+	using mapped_type = V;
 
+	using size_type = SizeT;
+
+	using iterator = typename container_type::iterator;
+	using const_iterator = typename container_type::const_iterator;
+	using reverse_iterator = typename container_type::reverse_iterator;
+	using const_reverse_iterator = typename container_type::const_reverse_iterator;
+
+	container_type container_obj;
 #ifndef NDEBUG
 	bool build_flag;
 #endif
 
 	KeyOrderMapEx() noexcept :
-		Base{ }
+		container_obj{ }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
 	{
 	}
 
-	KeyOrderMapEx(SizeT initial_capacity) noexcept :
-		Base{ }
+	KeyOrderMapEx(const KeyOrderMapEx& other) noexcept = default;
+	KeyOrderMapEx& operator = (const KeyOrderMapEx& other) noexcept = default;
+	KeyOrderMapEx(KeyOrderMapEx&& other) noexcept = default;
+	KeyOrderMapEx& operator = (KeyOrderMapEx&& other) noexcept = default;
+
+	explicit KeyOrderMapEx(SizeT initial_capacity) noexcept :
+		container_obj{ }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
@@ -84,16 +91,16 @@ public:
 		container_obj.reserve(initial_capacity);
 	}
 
-	KeyOrderMapEx(const A& allocator) noexcept :
-		Base{ allocator }
+	explicit KeyOrderMapEx(const A& allocator) noexcept :
+		container_obj{ allocator }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
 	{
 	}
 
-	KeyOrderMapEx(const Base::container_type& other_data) noexcept :
-		Base{ other_data }
+	explicit KeyOrderMapEx(const container_type& other_data) noexcept :
+		container_obj{ other_data }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
@@ -101,8 +108,8 @@ public:
 		Sort(container_obj);
 	}
 
-	KeyOrderMapEx(Base::container_type&& other_data) noexcept :
-		Base{ other_data }
+	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
+		container_obj{ other_data }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
@@ -110,13 +117,14 @@ public:
 		Sort(container_obj);
 	}
 
-	template<typename It> requires std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>
-	KeyOrderMapEx(It it_start, It it_end) noexcept :
-		Base{ it_start, it_end }
+	template<typename It>
+	explicit KeyOrderMapEx(It it_start, It it_end) noexcept :
+		container_obj{ it_start, it_end }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
 	{
+		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>, "Invalid iterator type!");
 		Sort(container_obj);
 	}
 
@@ -278,6 +286,90 @@ public:
 		return this->find(std::forward<InKey>(key)) != nullptr;
 	}
 
+	AOL_NO_DISCARD constexpr void clear() noexcept
+	{
+		return container_obj.clear();
+	}
+
+	AOL_NO_DISCARD constexpr P* data() noexcept
+	{
+		return container_obj.data();
+	}
+
+	AOL_NO_DISCARD constexpr const P* data() const noexcept
+	{
+		return container_obj.data();
+	}
+
+	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	{
+		return container_obj.empty();
+	}
+
+	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	{
+		return container_obj.size();
+	}
+
+	AOL_NO_DISCARD constexpr iterator begin() noexcept
+	{
+		return container_obj.begin();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+	{
+		return container_obj.cbegin();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator cbegin() const noexcept
+	{
+		return container_obj.cbegin();
+	}
+
+	AOL_NO_DISCARD constexpr iterator end() noexcept
+	{
+		return container_obj.end();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+	{
+		return container_obj.cend();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
+	{
+		return container_obj.cend();
+	}
+
+	AOL_NO_DISCARD constexpr iterator rbegin() noexcept
+	{
+		return container_obj.rbegin();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator rbegin() const noexcept
+	{
+		return container_obj.crbegin();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator crbegin() const noexcept
+	{
+		return container_obj.crbegin();
+	}
+
+	AOL_NO_DISCARD constexpr iterator rend() noexcept
+	{
+		return container_obj.rend();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator rend() const noexcept
+	{
+		return container_obj.crend();
+	}
+
+	AOL_NO_DISCARD constexpr const_iterator crend() const noexcept
+	{
+		return container_obj.crend();
+	}
 };
 
 } // AoL::Internal namespace

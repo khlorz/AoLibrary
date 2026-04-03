@@ -110,13 +110,7 @@ namespace AoL
 namespace Internal
 {
 
-template<
-	typename D,
-	typename T,
-	typename C,
-	typename Tag
->
-struct ContainerBase;
+struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 
 template<
 	typename T,
@@ -140,8 +134,7 @@ template<
 	typename K,
 	typename V,
 	typename P,
-	typename A,
-	typename C
+	typename A
 >
 struct KeyOrderMapEx;
 
@@ -877,6 +870,20 @@ constexpr auto GetContainerData(C& c) noexcept
 {
 	return c.data();
 }
+
+namespace Traits
+{
+
+/**
+* Concept. Checks if the container is a AoLibrary custom container
+* 
+* @tparam C container type
+* @tparam T non-cvref container type
+*/
+template<typename C, typename T = std::remove_cvref_t<C>>
+concept IsAoLContainer = std::is_same_v<typename T::container_tag, Internal::ContainerTag>;
+
+} // Traits namespace
 
 } // AoL namespace
 
