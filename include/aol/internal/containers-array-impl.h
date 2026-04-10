@@ -251,7 +251,7 @@ public:
 template<
 	SizeT S
 >
-struct AOL_EMPTY_BASE_OPTIMIZATION NamedArraySize
+struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedSize
 {
 	static constexpr SizeT ArrSize = S;
 };
@@ -261,10 +261,10 @@ template<
 	typename T,
     SizeT S
 >
-struct AOL_EMPTY_BASE_OPTIMIZATION NamedArrayBase : public NamedArraySize<S>
+struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedBase : public ArrayNamedSize<S>
 {
-	static_assert(std::is_trivial_v<T>, "ArrayNamed2 requires T to be trivial");
-	static_assert(std::is_standard_layout_v<T>, "ArrayNamed2 requires T to be standard-layout");
+	static_assert(std::is_trivial_v<T>, "ArrayNamedBase requires T to be trivial");
+	static_assert(std::is_standard_layout_v<T>, "ArrayNamedBase requires T to be standard-layout");
 
 	using value_type = T;
 	using size_type = SizeT;
@@ -366,10 +366,10 @@ struct AOL_EMPTY_BASE_OPTIMIZATION NamedArrayBase : public NamedArraySize<S>
 template<
 	typename T
 >
-struct ArrayNamed2 : public Internal::NamedArrayBase<ArrayNamed2<T>, T, 2>
+struct ArrayNamed2 : public Internal::ArrayNamedBase<ArrayNamed2<T>, T, 2>
 {
 private:
-    using Base = Internal::NamedArrayBase<ArrayNamed2<T>, T, 2>;
+    using Base = Internal::ArrayNamedBase<ArrayNamed2<T>, T, 2>;
 
 public:
 	union
@@ -408,10 +408,10 @@ public:
 template<
 	typename T
 >
-struct ArrayNamed3 : public Internal::NamedArrayBase<ArrayNamed3<T>, T, 3>
+struct ArrayNamed3 : public Internal::ArrayNamedBase<ArrayNamed3<T>, T, 3>
 {
 private:
-    using Base = Internal::NamedArrayBase<ArrayNamed3<T>, T, 3>;
+    using Base = Internal::ArrayNamedBase<ArrayNamed3<T>, T, 3>;
 
 public:
     union
@@ -451,10 +451,10 @@ public:
 template<
 	typename T
 >
-struct ArrayNamed4 : public Internal::NamedArrayBase<ArrayNamed4<T>, T, 4>
+struct ArrayNamed4 : public Internal::ArrayNamedBase<ArrayNamed4<T>, T, 4>
 {
 private:
-    using Base = Internal::NamedArrayBase<ArrayNamed4<T>, T, 4>;
+    using Base = Internal::ArrayNamedBase<ArrayNamed4<T>, T, 4>;
 
 public:
     union
