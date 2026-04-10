@@ -114,6 +114,12 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 
 template<
 	typename T,
+	typename A
+>
+struct VectorPartitionEx;
+
+template<
+	typename T,
 	SizeT S
 >
 struct CyclicBufferFixed;
