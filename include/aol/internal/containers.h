@@ -170,17 +170,17 @@ using Array
 template<
 	typename T
 >
-struct NamedArray2;
+struct ArrayNamed2;
 
 template<
 	typename T
 >
-struct NamedArray3;
+struct ArrayNamed3;
 
 template<
 	typename T
 >
-struct NamedArray4;
+struct ArrayNamed4;
 
 
 /*************************************************

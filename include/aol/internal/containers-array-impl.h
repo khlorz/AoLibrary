@@ -263,8 +263,8 @@ template<
 >
 struct AOL_EMPTY_BASE_OPTIMIZATION NamedArrayBase : public NamedArraySize<S>
 {
-	static_assert(std::is_trivial_v<T>, "NamedArray2 requires T to be trivial");
-	static_assert(std::is_standard_layout_v<T>, "NamedArray2 requires T to be standard-layout");
+	static_assert(std::is_trivial_v<T>, "ArrayNamed2 requires T to be trivial");
+	static_assert(std::is_standard_layout_v<T>, "ArrayNamed2 requires T to be standard-layout");
 
 	using value_type = T;
 	using size_type = SizeT;
@@ -366,10 +366,10 @@ struct AOL_EMPTY_BASE_OPTIMIZATION NamedArrayBase : public NamedArraySize<S>
 template<
 	typename T
 >
-struct NamedArray2 : public Internal::NamedArrayBase<NamedArray2<T>, T, 2>
+struct ArrayNamed2 : public Internal::NamedArrayBase<ArrayNamed2<T>, T, 2>
 {
 private:
-    using Base = Internal::NamedArrayBase<NamedArray2<T>, T, 2>;
+    using Base = Internal::NamedArrayBase<ArrayNamed2<T>, T, 2>;
 
 public:
 	union
@@ -382,17 +382,17 @@ public:
 		};
 	};
 
-	constexpr NamedArray2() noexcept(std::is_nothrow_default_constructible_v<T>)
+	constexpr ArrayNamed2() noexcept(std::is_nothrow_default_constructible_v<T>)
 		: data_arr{}
 	{
 	}
 
-    explicit constexpr NamedArray2(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
+    explicit constexpr ArrayNamed2(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value }
     {
     }
 
-    explicit constexpr NamedArray2(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_) noexcept(std::is_nothrow_copy_constructible_v<T>)
+    explicit constexpr ArrayNamed2(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_) noexcept(std::is_nothrow_copy_constructible_v<T>)
 		: data_arr{ x_, y_ }
 	{
 	}
@@ -408,10 +408,10 @@ public:
 template<
 	typename T
 >
-struct NamedArray3 : public Internal::NamedArrayBase<NamedArray3<T>, T, 3>
+struct ArrayNamed3 : public Internal::NamedArrayBase<ArrayNamed3<T>, T, 3>
 {
 private:
-    using Base = Internal::NamedArrayBase<NamedArray3<T>, T, 3>;
+    using Base = Internal::NamedArrayBase<ArrayNamed3<T>, T, 3>;
 
 public:
     union
@@ -425,17 +425,17 @@ public:
 	    };
     };
 
-	constexpr NamedArray3() noexcept(std::is_nothrow_default_constructible_v<T>)
+	constexpr ArrayNamed3() noexcept(std::is_nothrow_default_constructible_v<T>)
 		: data_arr{}
     {
 	}
 
-    explicit constexpr NamedArray3(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
+    explicit constexpr ArrayNamed3(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value, value }
     {
     }
 
-    explicit constexpr NamedArray3(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_) noexcept(std::is_nothrow_copy_constructible_v<T>)
+    explicit constexpr ArrayNamed3(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_) noexcept(std::is_nothrow_copy_constructible_v<T>)
 		: data_arr{ x_, y_, z_ }
     {
 	}
@@ -451,10 +451,10 @@ public:
 template<
 	typename T
 >
-struct NamedArray4 : public Internal::NamedArrayBase<NamedArray4<T>, T, 4>
+struct ArrayNamed4 : public Internal::NamedArrayBase<ArrayNamed4<T>, T, 4>
 {
 private:
-    using Base = Internal::NamedArrayBase<NamedArray4<T>, T, 4>;
+    using Base = Internal::NamedArrayBase<ArrayNamed4<T>, T, 4>;
 
 public:
     union
@@ -469,17 +469,17 @@ public:
 	    };
     };
 
-	constexpr NamedArray4() noexcept(std::is_nothrow_default_constructible_v<T>)
+	constexpr ArrayNamed4() noexcept(std::is_nothrow_default_constructible_v<T>)
 		: data_arr{}
 	{
 	}
 
-    explicit constexpr NamedArray4(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
+    explicit constexpr ArrayNamed4(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value, value, value }
     {
     }
 
-    explicit constexpr NamedArray4(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_, Traits::ConstRefOrCopyType<T> w_) noexcept(std::is_nothrow_copy_constructible_v<T>)
+    explicit constexpr ArrayNamed4(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_, Traits::ConstRefOrCopyType<T> w_) noexcept(std::is_nothrow_copy_constructible_v<T>)
 		: data_arr{ x_, y_, z_, w_ }
 	{
 	}
