@@ -352,7 +352,7 @@ using FlatKeyOrderMapPair = Internal::KeyValuePairEx<K, V>;
 template<
 	typename K,
 	typename V,
-	typename P = FlatKeyOrderPair<K, V>,
+	typename P = FlatKeyOrderMapPair<K, V>,
 	typename A = Internal::DefaultAllocator<P>
 >
 using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, A>;
