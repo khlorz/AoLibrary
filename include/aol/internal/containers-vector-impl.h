@@ -30,15 +30,18 @@ struct VectorPartitionEx
 	using const_reverse_iterator = vector_type::const_reverse_iterator;
 
 	vector_type container_obj;
+	AoL::Vector<size_type> partition_idx;
 
 	VectorPartitionEx() noexcept :
-		container_obj{ }
+		container_obj{ },
+		partition_idx{ size_type{ 0 } }
 	{}
 
 	VectorPartitionEx(const VectorPartitionEx& other) noexcept = default;
 
 	VectorPartitionEx(const VectorPartitionEx& other, const allocator_type& allocator) noexcept :
-		container_obj( other, allocator )
+		container_obj( other, allocator ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx& operator = (const VectorPartitionEx& other) noexcept = default;
@@ -46,30 +49,36 @@ struct VectorPartitionEx
 	VectorPartitionEx(VectorPartitionEx&& other) noexcept = default;
 
 	VectorPartitionEx(VectorPartitionEx&& other, const allocator_type& allocator) noexcept :
-		container_obj( other, allocator )
+		container_obj( std::move(other.container_obj), allocator ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx& operator = (VectorPartitionEx&& other) noexcept = default;
 
 	template<typename It>
 	VectorPartitionEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
-		container_obj{ start_it, end_it, allocator }
+		container_obj{ start_it, end_it, allocator },
+		partition_idx( )
 	{}
 
 	VectorPartitionEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
-		container_obj( initial_size, allocator )
+		container_obj( initial_size, allocator ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
-		container_obj( initial_size, value, allocator )
+		container_obj( initial_size, value, allocator ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx(allocator_type allocator) noexcept :
-		container_obj( allocator )
+		container_obj( allocator ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
-		container_obj( list, allocator )
+		container_obj( list, allocator ),
+		partition_idx( )
 	{}
 };
 
