@@ -33,8 +33,8 @@ struct VectorPartitionEx
 	AoL::Vector<size_type> partition_idx;
 
 	VectorPartitionEx() noexcept :
-		container_obj{ },
-		partition_idx{ size_type{ 0 } }
+		container_obj( ),
+		partition_idx( )
 	{}
 
 	VectorPartitionEx(const VectorPartitionEx& other) noexcept = default;
