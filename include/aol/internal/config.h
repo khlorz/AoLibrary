@@ -217,6 +217,21 @@
 #define AOL_USE_ABSEIL_KEYORDERED_SET
 
 
+/***************************************
+* Custom Subrange Types
+****************************************/
+
+/**
+* This makes all AoLibrary Subrange type use std::ranges::subrange
+* 
+* - By default, the library uses the custom subrange
+*/
+//#define AOL_USE_STD_SUBRANGE
+
+#if defined(AOL_USE_STD_SUBRANGE)
+#define AOL_USE_STD_RANGES
+#endif
+
 /*********************************************************************
 * HASHES
 /********************************************************************/

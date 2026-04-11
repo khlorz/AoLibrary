@@ -823,6 +823,9 @@
     <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\containers-subrange-impl.h">
+      <Filter>internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

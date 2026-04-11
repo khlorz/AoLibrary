@@ -234,6 +234,7 @@
     <ClInclude Include="aol\internal\containers-base-impl.h" />
     <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h" />
     <ClInclude Include="aol\internal\containers-ordered-map-impl.h" />
+    <ClInclude Include="aol\internal\containers-subrange-impl.h" />
     <ClInclude Include="aol\internal\containers-vector-impl.h" />
     <ClInclude Include="aol\internal\containers.h" />
     <ClInclude Include="aol\internal\dynamic_types.h" />

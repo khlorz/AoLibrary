@@ -100,6 +100,15 @@
 #endif
 
 
+/*************************************************
+* Ranges includes
+*************************************************/
+
+#if defined(AOL_USE_STD_RANGES)
+#include <ranges>
+#endif
+
+
 namespace AoL
 {
 
@@ -143,6 +152,11 @@ template<
 	typename A
 >
 struct KeyOrderMapEx;
+
+template<
+	typename It
+>
+struct SubrangeEx;
 
 }
 
@@ -750,6 +764,24 @@ using CyclicBufferD = Internal::CyclicBufferDynamic<T, A>;
 
 
 /*************************************************
+* Subrange
+*************************************************/
+
+#if defined(AOL_USE_STD_SUBRANGE)
+template<
+	typename It,
+	typename Sentinel = It,
+	std::ranges::subrange_kind Kind = std::sized_sentinel_for<Se, It> ? std::ranges::subrange_kind::sized : std::ranges::subrange_kind::unsized
+>
+using Subrange = std::ranges::subrange<It, Sentinel, Kind>;
+#else
+template<
+	typename It
+>
+using Subrange = Internal::SubrangeEx<It>;
+#endif
+
+/*************************************************
 * Container queries
 *************************************************/
 
@@ -967,5 +999,6 @@ concept IsAoLContainer = std::is_same_v<typename T::container_tag, Internal::Con
 #include "containers-vector-impl.h"
 #include "containers-ordered-map-impl.h"
 #include "containers-cyclic-buffer-impl.h"
+#include "containers-subrange-impl.h"
 
 // containers.h EOF
