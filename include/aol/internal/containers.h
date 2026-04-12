@@ -248,6 +248,13 @@ template<
 >
 using VectorPool = Vector<T, A>;
 
+/**/
+template<
+	typename T,
+	typename A = Internal::DefaultAllocator<T>
+>
+using VectorPartition = Internal::VectorPartitionEx<T, A>;
+
 
 /*************************************************
 * Ordered maps
