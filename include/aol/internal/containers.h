@@ -120,6 +120,9 @@ namespace Internal
 {
 
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
+struct AOL_EMPTY_BASE_OPTIMIZATION SubPartitionTag {};
+struct AOL_EMPTY_BASE_OPTIMIZATION MainPartitionTag {};
+struct AOL_EMPTY_BASE_OPTIMIZATION SubPartitionViewTag {};
 
 template<
 	typename T,
