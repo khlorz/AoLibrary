@@ -211,12 +211,13 @@ struct VectorPartitionEx
 		return sub_partitions.size();
 	}
 
-	constexpr void create_partition(size_type partition_size) noexcept
+	constexpr sub_partition_type& create_partition(size_type partition_size) noexcept
 	{
 		sub_partition_type& new_end_part = sub_partitions.emplace_back(container_obj, sub_partitions.back().start, sub_partitions.back().start + partition_size);
 		sub_partition_type& old_end_part = sub_partitions[sub_partitions.size() - 2];
 		std::swap(old_end_part, new_end_part);
 		new_end_part.start = old_end_part.finish;
+		return old_end_part;
 	}
 
 	constexpr void push_back(T&& value) noexcept
