@@ -23,6 +23,7 @@
 #include <compare>		// <=> operator
 #include <cassert>		// assert macro
 #include <utility>		// std::pair
+#include <ranges>		// std::views
 
 /*************************************************
 * Array includes
@@ -97,15 +98,6 @@
 
 #if defined(AOL_USE_TSL_INSERTORDERED_SET)
 #include "tsl/ordered_set.h"
-#endif
-
-
-/*************************************************
-* Ranges includes
-*************************************************/
-
-#if defined(AOL_USE_STD_RANGES)
-#include <ranges>
 #endif
 
 

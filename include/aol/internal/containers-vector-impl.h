@@ -240,6 +240,41 @@ struct VectorPartitionEx
 		return ret;
 	}
 
+	constexpr void reserve(size_type new_capacity) noexcept
+	{
+		container_obj.reserve(new_capacity);
+	}
+
+	constexpr void resize(size_type new_size) noexcept
+	{
+		size_type old_size = container_obj.size();
+		container_obj.resize(new_size);
+		if (old_size <= new_size)
+		{
+			sub_partitions.back().finish = new_size;
+		}
+		else
+		{
+			size_t new_sp_size = sub_partitions.size();
+
+			for (sub_partition_type& sp : std::views::reverse(sub_partitions))
+			{
+				if (sp.start >= new_size)
+				{
+					--new_sp_size;
+					continue;
+				}
+				if (sp.finish >= new_size)
+				{
+					sp.finish = new_size;
+					break;
+				}
+			}
+
+			sub_partitions.erase(sub_partitions.begin() + new_sp_size, sub_partitions.end());
+		}
+	}
+
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return container_obj.size();
