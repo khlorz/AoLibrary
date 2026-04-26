@@ -231,10 +231,10 @@ struct VectorPartitionEx
 		sub_partitions.back().finish = container_obj.size();
 	}
 
-	template<typename... Ts>
-	constexpr decltype(auto) emplace_back(Ts&&... ts) noexcept
+	template<typename... Args>
+	constexpr T& emplace_back(Args&&... args) noexcept
 	{
-		decltype(auto) ret = container_obj.emplace_back(std::forward<Ts>(ts)...);
+		T& ret = container_obj.emplace_back(std::forward<Args>(args)...);
 		sub_partitions.back().finish = container_obj.size();
 		return ret;
 	}
