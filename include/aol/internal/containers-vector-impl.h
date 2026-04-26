@@ -115,6 +115,22 @@ struct VectorPartitionEx
 		new_end_part.start = old_end_part.finish;
 	}
 
+	constexpr void push_back(T&& value) noexcept
+	{
+		container_obj.push_back(std::forward<T>(value));
+	}
+
+	constexpr void push_back(Traits::ConstRefOrCopyType<T> value) noexcept
+	{
+		container_obj.push_back(value);
+	}
+
+	template<typename... Ts>
+	constexpr decltype(auto) emplace_back(Ts&&... ts) noexcept
+	{
+		container_obj.emplace_back(std::forward<Ts>(ts)...);
+	}
+
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return container_obj.size();
