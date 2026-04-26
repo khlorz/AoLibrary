@@ -53,15 +53,29 @@ template<std::random_access_iterator It>
 struct SubrangeEx<It> : SubrangeExBase<It>
 {
 	using SubrangeExBase<It>::SubrangeExBase;
+	using value_type = typename SubrangeExBase<It>::value_type;
+	using size_type = SizeT;
 
-	AOL_NO_DISCARD auto constexpr size() const noexcept
+	AOL_NO_DISCARD size_type constexpr size() const noexcept
 	{
-		return this->finish - this->start;
+		return static_cast<size_type>(this->finish - this->start);
 	}
 
 	AOL_NO_DISCARD auto constexpr empty() const noexcept
 	{
 		return this->start == this->finish;
+	}
+
+	AOL_NO_DISCARD constexpr value_type& operator [] (size_type idx) noexcept
+	{
+		assert(idx < this->size() && "Invalid index!");
+		return *(this->start + idx);
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& operator [] (size_type idx) const noexcept
+	{
+		assert(idx < this->size() && "Invalid index!");
+		return *(this->start + idx);
 	}
 };
 
