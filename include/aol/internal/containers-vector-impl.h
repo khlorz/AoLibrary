@@ -235,7 +235,7 @@ struct VectorPartitionEx
 	}
 
 	template<typename F> requires std::predicate<F&, value_type&>
-	constexpr sub_partition_type& create_partition(F&& partition_predicate, bool is_stable = true) noexcept(noexcept(std::declval<F&>()(std::declval<value_type&>())))
+	constexpr sub_partition_type& create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type&>)
 	{
 		sub_partition_type& back_partition = sub_partitions.back();
 		auto default_partition_begin = 
