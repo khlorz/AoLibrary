@@ -37,6 +37,18 @@ struct SubPartition
 	{
 	}
 
+	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
+	{
+		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
+		return (*main_partition)[start + idx];
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
+	{
+		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
+		return (*main_partition)[start + idx];
+	}
+
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return finish - start;
