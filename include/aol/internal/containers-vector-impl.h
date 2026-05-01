@@ -37,6 +37,40 @@ struct SubPartition
 	{
 	}
 
+	constexpr void clear(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	{
+		for (value_type& v : *this)
+		{
+			v = default_value;
+		}
+	}
+
+	constexpr void erase(size_type idx, Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	{
+		(*this)[idx] = default_value;
+	}
+
+	constexpr void erase(size_type starting_point, size_type count, Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	{
+		size_type end_point = starting_point + count;
+		assert(starting_point < finish && "Invalid starting point!");
+		assert(end_point <= finish && "");
+		for (size_type i = starting_point; i < end_point; ++i)
+		{
+			(*this)[i] = default_value;
+		}
+	}
+
+	constexpr void pop_front(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	{
+		this->front() = default_value;
+	}
+
+	constexpr void pop_back(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	{
+		this->back() = default_value;
+	}
+
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
 	{
 		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
@@ -47,6 +81,26 @@ struct SubPartition
 	{
 		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[start + idx];
+	}
+
+	AOL_NO_DISCARD constexpr value_type& front() noexcept
+	{
+		return (*main_partition)[start];
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& front() const noexcept
+	{
+		return (*main_partition)[start];
+	}
+
+	AOL_NO_DISCARD constexpr value_type& back() noexcept
+	{
+		return (*main_partition)[finish - 1];
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& back() const noexcept
+	{
+		return (*main_partition)[finish - 1];
 	}
 
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
@@ -245,6 +299,20 @@ struct VectorPartitionEx
 		return create_partition(default_partition_begin - back_partition.begin());
 	}
 
+	constexpr void erase_partition(size_type idx) noexcept
+	{
+		assert(idx < sub_partitions.size() && "Invalid index value! Cannot remove beyond the sub partition size!");
+		assert(idx != sub_partitions.size() - 1 && "Invalid index value! Cannot remove the default partition!");
+		size_type shift_count = sub_partitions[idx].size();
+		for (size_type i = idx + 1; i < sub_partitions.size(); ++i)
+		{
+			sub_partitions[i].start -= shift_count;
+			sub_partitions[i].finish -= shift_count;
+		}
+		container_obj.erase(sub_partitions[idx].begin(), sub_partitions[idx].end());
+		sub_partitions.erase(sub_partitions.begin() + idx);
+	}
+
 	constexpr void push_back(T&& value) noexcept
 	{
 		container_obj.push_back(std::forward<T>(value));
@@ -298,6 +366,36 @@ struct VectorPartitionEx
 
 			sub_partitions.erase(sub_partitions.begin() + new_sp_size, sub_partitions.end());
 		}
+	}
+
+	AOL_NO_DISCARD constexpr value_type& front(size_type idx) noexcept
+	{
+		return container_obj.front();
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& front(size_type idx) const noexcept
+	{
+		return container_obj.front();
+	}
+
+	AOL_NO_DISCARD constexpr value_type& back(size_type idx) noexcept
+	{
+		return container_obj.back();
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& back(size_type idx) const noexcept
+	{
+		return container_obj.back();
+	}
+
+	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
+	{
+		return container_obj[idx];
+	}
+
+	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
+	{
+		return container_obj[idx];
 	}
 
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
