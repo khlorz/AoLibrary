@@ -213,11 +213,24 @@ struct VectorPartitionEx
 
 	constexpr sub_partition_type& create_partition(size_type partition_size) noexcept
 	{
-		sub_partition_type& new_end_part = sub_partitions.emplace_back(container_obj, sub_partitions.back().start, sub_partitions.back().start + partition_size);
-		sub_partition_type& old_end_part = sub_partitions[sub_partitions.size() - 2];
-		std::swap(old_end_part, new_end_part);
-		new_end_part.start = old_end_part.finish;
-		return old_end_part;
+		assert(sub_partitions.back().size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
+		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
+		assert(partition_size < sub_partitions.back().size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
+		size_type split_point = sub_partitions.back().start + partition_size;
+		sub_partitions.back().finish = split_point;
+		sub_partitions.emplace_back(container_obj, split_point, container_obj.size());
+		return sub_partitions[sub_partitions.size() - 2];
+	}
+
+	template<typename F> requires std::predicate<F&, value_type&>
+	constexpr sub_partition_type& create_partition(F&& partition_predicate, bool is_stable = true) noexcept(noexcept(std::declval<F&>()(std::declval<value_type&>())))
+	{
+		sub_partition_type& back_partition = sub_partitions.back();
+		auto default_partition_begin = 
+			is_stable ? 
+			std::stable_partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate)) :
+			std::partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate));
+		return create_partition(default_partition_begin - back_partition.begin());
 	}
 
 	constexpr void push_back(T&& value) noexcept
