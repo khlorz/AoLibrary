@@ -368,6 +368,20 @@ struct VectorPartitionEx
 		}
 	}
 
+	constexpr void clear_partitions() noexcept
+	{
+		for (sub_partition_type& partition : sub_partitions)
+		{
+			partition.clear();
+		}
+	}
+
+	constexpr void clear_all() noexcept
+	{
+		container_obj.clear();
+		sub_partitions.clear();
+	}
+
 	AOL_NO_DISCARD constexpr value_type& front(size_type idx) noexcept
 	{
 		return container_obj.front();
