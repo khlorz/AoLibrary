@@ -78,6 +78,46 @@ struct SubPartition
 		current_size--;
 	}
 
+	constexpr bool push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
+	{
+		// We no-op if the partition is already full
+		// It'll be up to the user what to do if that happens
+		if (current_size == this->max_size())
+		{
+			return false;
+		}
+
+		(*main_partition)[current_size++] = value; 
+		return true;
+	}
+
+	constexpr bool push_back(value_type&& value) noexcept
+	{
+		// We no-op if the partition is already full
+		// It'll be up to the user what to do if that happens
+		if (current_size == this->max_size())
+		{
+			return false;
+		}
+
+		(*main_partition)[current_size++] = std::move(value);
+		return true;
+	}
+
+	template<typename... Args>
+	constexpr value_type* emplace_back(Args&&... args) noexcept
+	{
+		// We no-op if the partition is already full
+		// It'll be up to the user what to do if that happens
+		if (current_size == this->max_size())
+		{
+			return false;
+		}
+
+		(*main_partition)[current_size++] = value_type(std::forward<Args>(args)...);
+		return true;
+	}
+
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
 	{
 		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
