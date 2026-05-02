@@ -36,4 +36,14 @@ void AoL::PartitionTests() noexcept
 
 		vp.create_partition(20, false);
 	}
+
+	{
+		fmt::print("Subpartition resizing down\n");
+		AoL::VectorPartition<int> vp{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 };
+		vp.create_partition(10);
+		auto& partition = vp.create_partition(8, false);
+
+		partition.erase(2, 4);
+		vp.resize(13);
+	}
 }

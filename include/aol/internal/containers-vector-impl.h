@@ -504,7 +504,7 @@ struct VectorPartitionEx
 		container_obj.resize(new_size);
 		if (old_size <= new_size)
 		{
-			sub_partitions.back().update_end_offset(new_size);
+			sub_partitions.back().update_end_offset(new_size, sub_partition_type::size_update_mode::unchanged);
 		}
 		else
 		{
@@ -519,7 +519,10 @@ struct VectorPartitionEx
 				}
 				if (sp.end_offset >= new_size)
 				{
-					sp.update_end_offset(new_size);
+					sp.update_end_offset(
+						new_size, 
+						sp.current_size < (new_size - sp.begin_offset) ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update
+					);
 					break;
 				}
 			}
