@@ -12,6 +12,7 @@ template<
 >
 struct SubPartition
 {
+public:
 	using main_partition_vector = V;
 
 	using container_tag = ContainerTag;
@@ -26,19 +27,21 @@ struct SubPartition
 	using reverse_iterator = typename main_partition_vector::reverse_iterator;
 	using const_reverse_iterator = typename main_partition_vector::const_reverse_iterator;
 
+private:
 	main_partition_vector* main_partition;
 	size_type begin_offset;
 	size_type end_offset;
 	size_type current_size;
 
-	SubPartition(V& main_partition_vector_, size_type begin_off, size_type end_off) :
+	SubPartition(V& main_partition_vector_, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
 		main_partition(std::addressof(main_partition_vector_)),
 		begin_offset(begin_off),
 		end_offset(end_off),
-		current_size(end_off - begin_off)
+		current_size(starting_size ? *starting_size : end_off - begin_off)
 	{
 	}
 
+public:
 	constexpr void clear() noexcept
 	{
 		current_size = 0;
@@ -159,7 +162,7 @@ struct SubPartition
 
 	AOL_NO_DISCARD constexpr bool empty() const noexcept
 	{
-		return current == 0;
+		return current_size == 0;
 	}
 	
 	AOL_NO_DISCARD constexpr size_type max_size() const noexcept
@@ -231,16 +234,40 @@ private:
 	template<typename, typename>
 	friend struct VectorPartitionEx;
 
-	void update_start_offset(size_type new_begin_off) noexcept
+	enum class size_update_mode
 	{
-		begin_offset = new_begin_off;
-		current_size = end_offset - begin_offset;
+		unchanged,
+		empty,
+		update
+	};
+
+	void update_current_size(size_update_mode update_type) noexcept
+	{
+		switch (update_type)
+		{
+		case size_update_mode::empty:
+			current_size = 0;
+			break;
+
+		case size_update_mode::update:
+			current_size = end_offset - begin_offset;
+			break;
+
+		default:
+			break;
+		}
 	}
 
-	void update_end_offset(size_type new_end_off) noexcept
+	void update_start_offset(size_type new_begin_off, size_update_mode update_type) noexcept
+	{
+		begin_offset = new_begin_off;
+		update_current_size(update_type);
+	}
+
+	void update_end_offset(size_type new_end_off, size_update_mode update_type) noexcept
 	{
 		end_offset = new_end_off;
-		current_size = end_offset - begin_offset;
+		update_current_size(update_type);
 	}
 
 	void shift_left_all_offset(size_type shift_count) noexcept
@@ -364,14 +391,30 @@ struct VectorPartitionEx
 		return sub_partitions.size();
 	}
 
-	constexpr sub_partition_type& create_partition(size_type partition_size) noexcept
+	constexpr sub_partition_type& create_partition(size_type partition_size, bool start_empty = true) noexcept
 	{
-		assert(sub_partitions.back().size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
+		auto& old_back_parti = sub_partitions.back();
+		assert(old_back_parti.size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
 		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
-		assert(partition_size < sub_partitions.back().size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
-		size_type split_point = sub_partitions.back().begin_offset + partition_size;
-		sub_partitions.back().update_end_offset(split_point);
-		sub_partitions.emplace_back(container_obj, split_point, container_obj.size());
+		assert(partition_size < old_back_parti.size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
+		size_type split_point = old_back_parti.begin_offset + partition_size;
+		size_type old_parti_size = old_back_parti.size();
+		bool is_new_parti_big = old_parti_size <= partition_size;
+		if (start_empty)
+		{
+			old_back_parti.update_end_offset(
+				split_point,
+				sub_partition_type::size_update_mode::empty
+			);
+		}
+		else
+		{
+			old_back_parti.update_end_offset(
+				split_point,
+				is_new_parti_big ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update
+			);
+		}
+		sub_partitions.emplace_back(container_obj, split_point, container_obj.size(), is_new_parti_big ? 0 : old_parti_size - partition_size);
 		return sub_partitions[sub_partitions.size() - 2];
 	}
 
@@ -383,7 +426,7 @@ struct VectorPartitionEx
 			is_stable ? 
 			std::stable_partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate)) :
 			std::partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate));
-		return create_partition(default_partition_begin - back_partition.begin());
+		return create_partition(default_partition_begin - back_partition.begin(), false);
 	}
 
 	constexpr void erase_partition(size_type idx) noexcept
@@ -399,24 +442,48 @@ struct VectorPartitionEx
 		sub_partitions.erase(sub_partitions.begin() + idx);
 	}
 
-	constexpr void push_back(T&& value) noexcept
+	constexpr void push_back(value_type&& value) noexcept
 	{
-		container_obj.push_back(std::forward<T>(value));
-		sub_partitions.back().update_end_offset(container_obj.size());
+		sub_partition_type& back_parti = container_obj.back();
+		if (back_parti.size() == back_parti.max_size())
+		{
+			container_obj.push_back(std::move(value));
+			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+		}
+		else
+		{
+			back_parti.push_back(std::move(value));
+		}
 	}
 
-	constexpr void push_back(Traits::ConstRefOrCopyType<T> value) noexcept
+	constexpr void push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
-		container_obj.push_back(value);
-		sub_partitions.back().update_end_offset(container_obj.size());
+		sub_partition_type& back_parti = sub_partitions.back();
+		if (back_parti.size() == back_parti.max_size())
+		{
+			container_obj.push_back(value);
+			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+		}
+		else
+		{
+			back_parti.push_back(value);
+		}
 	}
 
 	template<typename... Args>
-	constexpr T& emplace_back(Args&&... args) noexcept
+	constexpr value_type& emplace_back(Args&&... args) noexcept
 	{
-		T& ret = container_obj.emplace_back(std::forward<Args>(args)...);
-		sub_partitions.back().update_end_offset(container_obj.size());
-		return ret;
+		sub_partition_type& back_parti = sub_partitions.back();
+		if (back_parti.size() == back_parti.max_size())
+		{
+			value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
+			sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+			return ret;
+		}
+		else
+		{
+			return back_parti.emplace_back(std::forward<Args>(args)...);
+		}
 	}
 
 	constexpr void reserve(size_type new_capacity) noexcept
