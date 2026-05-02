@@ -80,12 +80,14 @@ struct SubPartition
 
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
 	{
+		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[begin_offset + idx];
 	}
 
 	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
 	{
+		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[begin_offset + idx];
 	}
@@ -113,6 +115,11 @@ struct SubPartition
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return current_size;
+	}
+
+	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	{
+		return current == 0;
 	}
 	
 	AOL_NO_DISCARD constexpr size_type max_size() const noexcept
