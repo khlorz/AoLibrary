@@ -68,6 +68,7 @@ public:
 
 	constexpr void pop_front() noexcept
 	{
+		assert(current_size > 0 && "Cannot pop an element in an empty partition!");
 		std::rotate(
 			this->begin(),
 			this->begin() + 1,
@@ -78,6 +79,7 @@ public:
 
 	constexpr void pop_back() noexcept
 	{
+		assert(current_size > 0 && "Cannot pop an element in an empty partition!");
 		current_size--;
 	}
 
