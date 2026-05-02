@@ -545,22 +545,22 @@ struct VectorPartitionEx
 		sub_partitions.clear();
 	}
 
-	AOL_NO_DISCARD constexpr value_type& front(size_type idx) noexcept
+	AOL_NO_DISCARD constexpr value_type& front() noexcept
 	{
 		return container_obj.front();
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& front(size_type idx) const noexcept
+	AOL_NO_DISCARD constexpr const value_type& front() const noexcept
 	{
 		return container_obj.front();
 	}
 
-	AOL_NO_DISCARD constexpr value_type& back(size_type idx) noexcept
+	AOL_NO_DISCARD constexpr value_type& back() noexcept
 	{
 		return container_obj.back();
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& back(size_type idx) const noexcept
+	AOL_NO_DISCARD constexpr const value_type& back() const noexcept
 	{
 		return container_obj.back();
 	}
