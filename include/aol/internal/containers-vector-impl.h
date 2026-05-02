@@ -398,7 +398,7 @@ struct VectorPartitionEx
 		auto& old_back_parti = sub_partitions.back();
 		assert(old_back_parti.size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
 		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
-		assert(partition_size < old_back_parti.size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
+		assert(partition_size < old_back_parti.max_size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
 		size_type split_point = old_back_parti.begin_offset + partition_size;
 		size_type old_parti_size = old_back_parti.size();
 		bool is_new_parti_big = old_parti_size <= partition_size;
