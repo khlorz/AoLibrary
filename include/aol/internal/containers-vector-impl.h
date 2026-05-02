@@ -400,28 +400,28 @@ struct VectorPartitionEx
 
 	constexpr sub_partition_type& create_partition(size_type partition_size, bool start_empty = true) noexcept
 	{
+		// The old back partition will become the newly created partition
+		// The newly emplace_back-ed sub_partition will become the default partition
+		// We update the new partition current_size if start_empty is false
+
 		auto& old_back_parti = sub_partitions.back();
+
 		assert(old_back_parti.size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
 		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
 		assert(partition_size < old_back_parti.max_size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
+
 		size_type split_point = old_back_parti.begin_offset + partition_size;
 		size_type old_parti_size = old_back_parti.size();
-		bool is_new_parti_big = old_parti_size <= partition_size;
+		bool has_smaller_old_size = old_parti_size <= partition_size;
 		if (start_empty)
 		{
-			old_back_parti.update_end_offset(
-				split_point,
-				sub_partition_type::size_update_mode::empty
-			);
+			old_back_parti.update_end_offset(split_point,sub_partition_type::size_update_mode::empty);
 		}
 		else
 		{
-			old_back_parti.update_end_offset(
-				split_point,
-				is_new_parti_big ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update
-			);
+			old_back_parti.update_end_offset(split_point, has_smaller_old_size ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update);
 		}
-		sub_partitions.emplace_back(sub_partition_type::construct_me(container_obj, split_point, container_obj.size(), is_new_parti_big ? 0 : old_parti_size - partition_size));
+		sub_partitions.emplace_back(sub_partition_type::construct_me(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
 		return sub_partitions[sub_partitions.size() - 2];
 	}
 
