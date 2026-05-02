@@ -90,7 +90,7 @@ public:
 			return false;
 		}
 
-		(*main_partition)[current_size++] = value; 
+		(*main_partition)[begin_offset + current_size++] = value; 
 		return true;
 	}
 
@@ -103,7 +103,7 @@ public:
 			return false;
 		}
 
-		(*main_partition)[current_size++] = std::move(value);
+		(*main_partition)[begin_offset + current_size++] = std::move(value);
 		return true;
 	}
 
@@ -114,11 +114,11 @@ public:
 		// It'll be up to the user what to do if that happens
 		if (current_size == this->max_size())
 		{
-			return false;
+			return nullptr;
 		}
 
-		(*main_partition)[current_size++] = value_type(std::forward<Args>(args)...);
-		return true;
+		(*main_partition)[begin_offset + current_size++] = value_type(std::forward<Args>(args)...);
+		return &this->back();
 	}
 
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
@@ -444,7 +444,7 @@ struct VectorPartitionEx
 
 	constexpr void push_back(value_type&& value) noexcept
 	{
-		sub_partition_type& back_parti = container_obj.back();
+		sub_partition_type& back_parti = sub_partitions.back();
 		if (back_parti.size() == back_parti.max_size())
 		{
 			container_obj.push_back(std::move(value));
@@ -482,7 +482,7 @@ struct VectorPartitionEx
 		}
 		else
 		{
-			return back_parti.emplace_back(std::forward<Args>(args)...);
+			return *back_parti.emplace_back(std::forward<Args>(args)...);
 		}
 	}
 
