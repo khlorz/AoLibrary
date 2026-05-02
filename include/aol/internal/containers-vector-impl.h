@@ -29,81 +29,93 @@ struct SubPartition
 	main_partition_vector* main_partition;
 	size_type start;
 	size_type finish;
+	size_type current_size;
 
 	SubPartition(V& main_partition_vector_, size_type start_, size_type finish_) :
 		main_partition(std::addressof(main_partition_vector_)),
 		start(start_),
-		finish(finish_)
+		finish(finish_),
+		current_size(finish - start)
 	{
 	}
 
-	constexpr void clear(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	constexpr void clear() noexcept
 	{
-		for (value_type& v : *this)
-		{
-			v = default_value;
-		}
+		current_size = 0;
 	}
 
-	constexpr void erase(size_type idx, Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	constexpr void erase(size_type idx) noexcept
 	{
-		(*this)[idx] = default_value;
+		this->erase(idx, 1);
 	}
 
-	constexpr void erase(size_type starting_point, size_type count, Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	constexpr void erase(size_type starting_point, size_type count) noexcept
 	{
 		size_type end_point = starting_point + count;
-		assert(starting_point < finish && "Invalid starting point!");
-		assert(end_point <= finish && "");
-		for (size_type i = starting_point; i < end_point; ++i)
-		{
-			(*this)[i] = default_value;
-		}
+		assert(count > 0 && "Cannot erase with a count of zero!");
+		assert(starting_point < current_size && "Invalid starting point!");
+		assert(end_point <= current_size && "Invalid count!");
+		std::rotate(
+			this->begin() + starting_point,
+			this->begin() + end_point,
+			this->end()
+		);
+		current_size -= count;
 	}
 
-	constexpr void pop_front(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	constexpr void pop_front() noexcept
 	{
-		this->front() = default_value;
+		std::rotate(
+			this->begin(),
+			this->begin() + 1,
+			this->end()
+		);
+		current_size--;
 	}
 
-	constexpr void pop_back(Traits::ConstRefOrCopyType<value_type> default_value = value_type{}) noexcept
+	constexpr void pop_back() noexcept
 	{
-		this->back() = default_value;
+		current_size--;
 	}
 
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
 	{
-		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
+		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[start + idx];
 	}
 
 	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
 	{
-		assert(idx < finish && "Invalid index! Accessing beyond allowable size!");
+		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[start + idx];
 	}
 
 	AOL_NO_DISCARD constexpr value_type& front() noexcept
 	{
-		return (*main_partition)[start];
+		return (*this)[0];
 	}
 
 	AOL_NO_DISCARD constexpr const value_type& front() const noexcept
 	{
-		return (*main_partition)[start];
+		return (*this)[0];
 	}
 
 	AOL_NO_DISCARD constexpr value_type& back() noexcept
 	{
-		return (*main_partition)[finish - 1];
+		return (*this)[current_size - 1];
 	}
 
 	AOL_NO_DISCARD constexpr const value_type& back() const noexcept
 	{
-		return (*main_partition)[finish - 1];
+		return (*this)[current_size - 1];
 	}
 
 	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	{
+		return current_size;
+	}
+	
+	AOL_NO_DISCARD constexpr size_type max_size() const noexcept
 	{
 		return finish - start;
 	}
@@ -125,17 +137,17 @@ struct SubPartition
 
 	AOL_NO_DISCARD constexpr iterator end() noexcept
 	{
-		return main_partition->begin() + finish;
+		return main_partition->begin() + current_size;
 	}
 
 	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
 	{
-		return main_partition->cbegin() + finish;
+		return main_partition->cbegin() + current_size;
 	}
 
 	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
 	{
-		return main_partition->cbegin() + finish;
+		return main_partition->cbegin() + current_size;
 	}
 
 	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
@@ -166,6 +178,16 @@ struct SubPartition
 	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
 		return const_reverse_iterator(this->cbegin());
+	}
+
+private:
+	template<typename, typename>
+	friend struct VectorPartitionEx;
+
+	void update_endpoint(size_type new_endpoint) noexcept
+	{
+		finish = new_endpoint;
+		current_size = finish - start;
 	}
 };
 
@@ -283,7 +305,7 @@ struct VectorPartitionEx
 		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
 		assert(partition_size < sub_partitions.back().size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
 		size_type split_point = sub_partitions.back().start + partition_size;
-		sub_partitions.back().finish = split_point;
+		sub_partitions.back().update_endpoint(split_point);
 		sub_partitions.emplace_back(container_obj, split_point, container_obj.size());
 		return sub_partitions[sub_partitions.size() - 2];
 	}
