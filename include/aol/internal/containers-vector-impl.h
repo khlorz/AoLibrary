@@ -95,7 +95,7 @@ public:
 	{
 		// We no-op if the partition is already full
 		// It'll be up to the user what to do if that happens
-		if (current_size == this->max_size())
+		if (this->full())
 		{
 			return false;
 		}
@@ -108,7 +108,7 @@ public:
 	{
 		// We no-op if the partition is already full
 		// It'll be up to the user what to do if that happens
-		if (current_size == this->max_size())
+		if (this->full())
 		{
 			return false;
 		}
@@ -122,7 +122,7 @@ public:
 	{
 		// We no-op if the partition is already full
 		// It'll be up to the user what to do if that happens
-		if (current_size == this->max_size())
+		if (this->full())
 		{
 			return nullptr;
 		}
@@ -173,6 +173,11 @@ public:
 	AOL_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return current_size == 0;
+	}
+
+	AOL_NO_DISCARD constexpr bool full() const noexcept
+	{
+		return this->size() == this->max_size();
 	}
 	
 	AOL_NO_DISCARD constexpr size_type max_size() const noexcept
@@ -248,8 +253,9 @@ private:
 		update
 	};
 
-	void update_current_size(size_update_mode update_type) noexcept
+	void update_start_offset(size_type new_begin_off, size_update_mode update_type) noexcept
 	{
+		begin_offset = new_begin_off;
 		switch (update_type)
 		{
 		case size_update_mode::empty:
@@ -265,16 +271,22 @@ private:
 		}
 	}
 
-	void update_start_offset(size_type new_begin_off, size_update_mode update_type) noexcept
-	{
-		begin_offset = new_begin_off;
-		update_current_size(update_type);
-	}
-
 	void update_end_offset(size_type new_end_off, size_update_mode update_type) noexcept
 	{
 		end_offset = new_end_off;
-		update_current_size(update_type);
+		switch (update_type)
+		{
+		case size_update_mode::empty:
+			current_size = 0;
+			break;
+
+		case size_update_mode::update:
+			current_size = end_offset - begin_offset;
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	void shift_left_all_offset(size_type shift_count) noexcept
@@ -452,7 +464,7 @@ struct VectorPartitionEx
 	constexpr void push_back(value_type&& value) noexcept
 	{
 		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.size() == back_parti.max_size())
+		if (back_parti.full())
 		{
 			container_obj.push_back(std::move(value));
 			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
@@ -466,7 +478,7 @@ struct VectorPartitionEx
 	constexpr void push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
 		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.size() == back_parti.max_size())
+		if (back_parti.full())
 		{
 			container_obj.push_back(value);
 			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
@@ -481,7 +493,7 @@ struct VectorPartitionEx
 	constexpr value_type& emplace_back(Args&&... args) noexcept
 	{
 		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.size() == back_parti.max_size())
+		if (back_parti.full())
 		{
 			value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
 			sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
