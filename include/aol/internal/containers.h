@@ -783,14 +783,28 @@ using Subrange = Internal::SubrangeEx<It>;
 * Partitions
 *************************************************/
 
-/**/
+/*
+* @details SubPartition of a container.
+* 
+* Constructible only from a partition. Can be copied or moved but not constructed.
+* 
+* @tparam T value type of the main container
+* @tparam A allocator type of the main container (default: Internal::DefaultAllocator<T>)
+*/
 template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
 >
 using SubPartition = Internal::SubPartitionEx<Vector<T,A>>;
 
-/**/
+/*
+* @details Partition using AoL::Vector
+* 
+* As a vector, the storage is contiguous.
+* 
+* @tparam T value type
+* @tparam A allocator type (default: Internal::DefaultAllocator<T>)
+*/
 template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
