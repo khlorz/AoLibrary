@@ -114,6 +114,11 @@ namespace Internal
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 
 template<
+	typename V
+>
+struct SubPartition;
+
+template<
 	typename T,
 	typename A
 >
@@ -239,13 +244,6 @@ template<
 	typename A = Internal::DefaultPoolAllocator<T>
 >
 using VectorPool = Vector<T, A>;
-
-/**/
-template<
-	typename T,
-	typename A = Internal::DefaultAllocator<T>
->
-using VectorPartition = Internal::VectorPartitionEx<T, A>;
 
 
 /*************************************************
@@ -779,6 +777,25 @@ template<
 >
 using Subrange = Internal::SubrangeEx<It>;
 #endif
+
+
+/*************************************************
+* Partitions
+*************************************************/
+
+/**/
+template<
+	typename T,
+	typename A = Internal::DefaultAllocator<T>
+>
+using SubPartition = Internal::SubPartition<Vector<T,A>>;
+
+/**/
+template<
+	typename T,
+	typename A = Internal::DefaultAllocator<T>
+>
+using VectorPartition = Internal::VectorPartitionEx<T, A>;
 
 /*************************************************
 * Container queries

@@ -2,6 +2,16 @@
 
 #include "aol/aol.h"
 
+template<typename T>
+void PrintPartition(AoL::SubPartition<T>& partition)
+{
+	for (auto& v : partition)
+	{
+		fmt::print("Value: {}\n", v);
+	}
+	fmt::print("\n\n");
+}
+
 void AoL::PartitionTests() noexcept
 {
 	{
@@ -14,12 +24,14 @@ void AoL::PartitionTests() noexcept
 	{
 		fmt::print("Subpartition creation\n");
 		AoL::VectorPartition<int> vp{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 };
-		vp.create_partition(10);
-		vp.create_partition(
-			[](int v) noexcept
-			{
-				return v % 2 == 0;
-			}
+		PrintPartition(vp.create_partition(10, false));
+		PrintPartition(
+			vp.create_partition(
+				[](int v) noexcept
+				{
+					return v % 2 == 0;
+				}
+			)
 		);
 	}
 
@@ -34,7 +46,7 @@ void AoL::PartitionTests() noexcept
 		back_partition.pop_back();
 		back_partition.pop_back();
 
-		vp.create_partition(20, false);
+		PrintPartition(vp.create_partition(20, false));
 	}
 
 	{
@@ -45,6 +57,7 @@ void AoL::PartitionTests() noexcept
 
 		partition.erase(2, 4);
 		vp.resize(13);
+		PrintPartition(vp.get_partition(0));
 	}
 
 	{
@@ -56,5 +69,7 @@ void AoL::PartitionTests() noexcept
 		{
 			partition.push_back(i);
 		}
+
+		PrintPartition(partition);
 	}
 }
