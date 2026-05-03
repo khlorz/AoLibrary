@@ -826,6 +826,9 @@
     <ClInclude Include="aol\internal\containers-subrange-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\containers-partitions-impl.h">
+      <Filter>internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

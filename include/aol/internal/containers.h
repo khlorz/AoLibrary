@@ -1002,5 +1002,6 @@ concept IsAoLContainer = std::is_same_v<typename T::container_tag, Internal::Con
 #include "containers-ordered-map-impl.h"
 #include "containers-cyclic-buffer-impl.h"
 #include "containers-subrange-impl.h"
+#include "containers-partitions-impl.h"
 
 // containers.h EOF
