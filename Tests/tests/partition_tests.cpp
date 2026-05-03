@@ -46,4 +46,15 @@ void AoL::PartitionTests() noexcept
 		partition.erase(2, 4);
 		vp.resize(13);
 	}
+
+	{
+		fmt::print("push_back on empty size partition\n");
+		AoL::VectorPartition<int> vp{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 };
+		auto& partition = vp.create_partition(10);
+
+		for (int i = 0; i < (int)partition.max_size(); ++i)
+		{
+			partition.push_back(i);
+		}
+	}
 }
