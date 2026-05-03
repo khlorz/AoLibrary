@@ -116,7 +116,7 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 template<
 	typename V
 >
-struct SubPartition;
+struct SubPartitionEx;
 
 template<
 	typename T,
@@ -788,7 +788,7 @@ template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
 >
-using SubPartition = Internal::SubPartition<Vector<T,A>>;
+using SubPartition = Internal::SubPartitionEx<Vector<T,A>>;
 
 /**/
 template<
