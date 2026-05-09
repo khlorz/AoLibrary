@@ -25,6 +25,9 @@
     <ClInclude Include="tests\all_tests.h">
       <Filter>tests</Filter>
     </ClInclude>
+    <ClInclude Include="tests\config.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="benchmarks">

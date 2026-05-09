@@ -5,8 +5,10 @@
 
 #ifndef BENCHMARK_CONFIG_ON
 
-#include "all_tests.h"
+#include "config.h"
+#if AOL_TESTS_FLAG(GENERIC_MANAGER)
 
+#include "all_tests.h"
 #include "aol/aol.h"
 #include "aol/data_components/managers.h"
 
@@ -91,4 +93,5 @@ void GenericManagerTests() noexcept
 
 } // namespace AoL
 
-#endif
+#endif // AOL_TESTS_FLAG(GENERIC_MANAGER)
+#endif // BENCHMARK_CONFIG_ON

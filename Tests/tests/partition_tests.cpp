@@ -1,5 +1,14 @@
-#include "all_tests.h"
+/********************************************************************
+* Partition tests
+* - Tests for Partition containers
+********************************************************************/
 
+#ifndef BENCHMARK_CONFIG_ON
+
+#include "config.h"
+#if AOL_TESTS_FLAG(PARTITION)
+
+#include "all_tests.h"
 #include "aol/aol.h"
 
 template<typename T>
@@ -73,3 +82,6 @@ void AoL::PartitionTests() noexcept
 		PrintPartition(partition);
 	}
 }
+
+#endif // AOL_TEST_FLAG(PARTITION)
+#endif // BENCHMARK_CONFIG_ON
