@@ -44,11 +44,6 @@ private:
 	{
 	}
 
-	static SubPartitionEx construct_me(V& main_partition_vector_, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt)
-	{
-		return SubPartitionEx(main_partition_vector_, begin_off, end_off, starting_size);
-	}
-
 public:
 	constexpr void clear() noexcept
 	{
@@ -128,7 +123,7 @@ public:
 		}
 
 		(*main_partition)[begin_offset + current_size++] = value_type(std::forward<Args>(args)...);
-		return &this->back();
+		return std::addressof(this->back());
 	}
 
 	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
@@ -433,7 +428,7 @@ struct VectorPartitionEx
 		{
 			old_back_parti.update_end_offset(split_point, has_smaller_old_size ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update);
 		}
-		sub_partitions.emplace_back(sub_partition_type::construct_me(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
+		sub_partitions.emplace_back(sub_partition_type(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
 		return sub_partitions[sub_partitions.size() - 2];
 	}
 
