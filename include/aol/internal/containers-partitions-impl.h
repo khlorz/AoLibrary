@@ -28,6 +28,9 @@ public:
 	using const_reverse_iterator = typename main_partition_vector::const_reverse_iterator;
 
 private:
+	template<typename>
+	friend struct PartitionContiguousBase;
+
 	template<typename, typename>
 	friend struct PartitionVectorEx;
 
@@ -328,6 +331,48 @@ struct PartitionContiguousBase
 		return static_cast<const D*>(this)->sub_partitions.size();
 	}
 
+	constexpr decltype(auto) create_partition(size_type partition_size, bool start_empty = true) noexcept
+	{
+		// The old back partition will become the newly created partition
+		// The newly emplace_back-ed sub_partition will become the default partition
+		// We update the new partition current_size if start_empty is false
+		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
+		auto& container_obj = static_cast<D*>(this)->container_obj;
+		using sub_partition_type = std::decay_t<decltype(sub_partitions)>::value_type;
+
+		auto& old_back_parti = sub_partitions.back();
+
+		assert(old_back_parti.size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
+		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
+		assert(partition_size < old_back_parti.max_size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
+
+		size_type split_point = old_back_parti.begin_offset + partition_size;
+		size_type old_parti_size = old_back_parti.size();
+		bool has_smaller_old_size = old_parti_size <= partition_size;
+		if (start_empty)
+		{
+			old_back_parti.update_end_offset(split_point, sub_partition_type::size_update_mode::empty);
+		}
+		else
+		{
+			old_back_parti.update_end_offset(split_point, has_smaller_old_size ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update);
+		}
+		sub_partitions.emplace_back(sub_partition_type(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
+		return sub_partitions[sub_partitions.size() - 2];
+	}
+
+	template<typename F, typename T = D::value_type> requires std::predicate<F&, T&>
+	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, T&>)
+	{
+		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
+		auto& back_partition = sub_partitions.back();
+		auto default_partition_begin =
+			is_stable ?
+			std::stable_partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate)) :
+			std::partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate));
+		return create_partition(default_partition_begin - back_partition.begin(), false);
+	}
+
 	AOL_NO_DISCARD constexpr decltype(auto) front() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.front();
@@ -443,6 +488,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	using container_tag = ContainerTag;
 	using value_type = vector_type::value_type;
 	using allocator_type = vector_type::allocator_type;
+	using iterator_tag = std::contiguous_iterator_tag;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
@@ -512,44 +558,6 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
-	}
-
-	constexpr sub_partition_type& create_partition(size_type partition_size, bool start_empty = true) noexcept
-	{
-		// The old back partition will become the newly created partition
-		// The newly emplace_back-ed sub_partition will become the default partition
-		// We update the new partition current_size if start_empty is false
-
-		auto& old_back_parti = sub_partitions.back();
-
-		assert(old_back_parti.size() > 1 && "Invalid function call! The remaining partition only has a size of one!");
-		assert(partition_size > 0 && "Invalid partition size! Cannot create a partition with zero size!");
-		assert(partition_size < old_back_parti.max_size() && "Invalid partition size! Partition size cannot be more than or equal to the remaining partition");
-
-		size_type split_point = old_back_parti.begin_offset + partition_size;
-		size_type old_parti_size = old_back_parti.size();
-		bool has_smaller_old_size = old_parti_size <= partition_size;
-		if (start_empty)
-		{
-			old_back_parti.update_end_offset(split_point, sub_partition_type::size_update_mode::empty);
-		}
-		else
-		{
-			old_back_parti.update_end_offset(split_point, has_smaller_old_size ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update);
-		}
-		sub_partitions.emplace_back(sub_partition_type(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
-		return sub_partitions[sub_partitions.size() - 2];
-	}
-
-	template<typename F> requires std::predicate<F&, value_type&>
-	constexpr sub_partition_type& create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type&>)
-	{
-		sub_partition_type& back_partition = sub_partitions.back();
-		auto default_partition_begin =
-			is_stable ?
-			std::stable_partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate)) :
-			std::partition(back_partition.begin(), back_partition.end(), std::forward<F>(partition_predicate));
-		return create_partition(default_partition_begin - back_partition.begin(), false);
 	}
 
 	constexpr void erase_partition(size_type idx) noexcept

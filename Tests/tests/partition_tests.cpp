@@ -29,10 +29,7 @@ void AoL::PartitionTests() noexcept
 		AoL::PartitionVector<int> vp1{ 1,2,3,4,5,6,7,8,9,10 };
 		AoL::PartitionVector<int> vp2{ 10 };
 
-		for (auto v : vp1)
-		{
-			fmt::print("Value: {}", v);
-		}
+		PrintPartition(vp1.get_partition(0));
 	}
 	
 	{
@@ -71,7 +68,8 @@ void AoL::PartitionTests() noexcept
 
 		partition.erase(2, 4);
 		vp.resize(13);
-		PrintPartition(vp.get_partition(0));
+		fmt::print("PartitionVector after erasing from 2 to 6, and resizing down to 13\n");
+		PrintPartition(vp.get_partition(vp.number_of_partitions() - 1));
 	}
 
 	{

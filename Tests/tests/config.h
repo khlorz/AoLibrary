@@ -5,7 +5,7 @@
 ********************************************************************/
 
 // Change to 1 if you want to run all tests
-#define AOL_TESTS_ALL_TESTS_ENABLED_FLAG 1
+#define AOL_TESTS_ALL_TESTS_ENABLED_FLAG 0
 
 // Change to 1 if you want to disable all tests
 #define AOL_TESTS_ALL_TESTS_DISABLED_FLAG 0
