@@ -122,7 +122,7 @@ template<
 	typename T,
 	typename A
 >
-struct VectorPartitionEx;
+struct PartitionVectorEx;
 
 template<
 	typename T,
@@ -795,7 +795,7 @@ template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
 >
-using SubPartition = Internal::SubPartitionEx<Vector<T,A>>;
+using SubPartitionV = Internal::SubPartitionEx<Vector<T,A>>;
 
 /*
 * @details Partition using AoL::Vector
@@ -809,7 +809,7 @@ template<
 	typename T,
 	typename A = Internal::DefaultAllocator<T>
 >
-using VectorPartition = Internal::VectorPartitionEx<T, A>;
+using PartitionVector = Internal::PartitionVectorEx<T, A>;
 
 /*************************************************
 * Container queries

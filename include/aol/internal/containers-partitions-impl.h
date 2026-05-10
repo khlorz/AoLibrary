@@ -29,7 +29,7 @@ public:
 
 private:
 	template<typename, typename>
-	friend struct VectorPartitionEx;
+	friend struct PartitionVectorEx;
 
 	main_partition_vector* main_partition;
 	size_type begin_offset;
@@ -304,7 +304,7 @@ template<
 	typename T,
 	typename A
 >
-struct VectorPartitionEx
+struct PartitionVectorEx
 {
 	using vector_type = AoL::Vector<T, A>;
 
@@ -325,58 +325,58 @@ struct VectorPartitionEx
 	vector_type container_obj;
 	AoL::Vector<sub_partition_type> sub_partitions;
 
-	VectorPartitionEx() noexcept :
+	PartitionVectorEx() noexcept :
 		container_obj(),
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 	}
 
-	VectorPartitionEx(const VectorPartitionEx& other) noexcept = default;
+	PartitionVectorEx(const PartitionVectorEx& other) noexcept = default;
 
-	VectorPartitionEx(const VectorPartitionEx& other, const allocator_type& allocator) noexcept :
+	PartitionVectorEx(const PartitionVectorEx& other, const allocator_type& allocator) noexcept :
 		container_obj(other.container_obj, allocator),
 		sub_partitions(other.sub_partitions)
 	{
 	}
 
-	VectorPartitionEx& operator = (const VectorPartitionEx& other) noexcept = default;
+	PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept = default;
 
-	VectorPartitionEx(VectorPartitionEx&& other) noexcept = default;
+	PartitionVectorEx(PartitionVectorEx&& other) noexcept = default;
 
-	VectorPartitionEx(VectorPartitionEx&& other, const allocator_type& allocator) noexcept :
+	PartitionVectorEx(PartitionVectorEx&& other, const allocator_type& allocator) noexcept :
 		container_obj(std::move(other.container_obj), allocator),
 		sub_partitions(std::move(other.sub_partitions))
 	{
 	}
 
-	VectorPartitionEx& operator = (VectorPartitionEx&& other) noexcept = default;
+	PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept = default;
 
 	template<typename It>
-	VectorPartitionEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
+	PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
 		container_obj{ start_it, end_it, allocator },
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
 	}
 
-	VectorPartitionEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
+	PartitionVectorEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
 		container_obj(initial_size, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	VectorPartitionEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
+	PartitionVectorEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
 		container_obj(initial_size, value, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	VectorPartitionEx(allocator_type allocator) noexcept :
+	PartitionVectorEx(allocator_type allocator) noexcept :
 		container_obj(allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 	}
 
-	VectorPartitionEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
+	PartitionVectorEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
