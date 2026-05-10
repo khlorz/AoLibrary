@@ -373,6 +373,18 @@ struct PartitionContiguousBase
 		return create_partition(default_partition_begin - back_partition.begin(), false);
 	}
 
+	constexpr void erase_partition(size_type idx) noexcept
+	{
+		assert(idx < sub_partitions.size() && "Invalid index value! Cannot remove beyond the sub partition size!");
+		assert(idx != sub_partitions.size() - 1 && "Invalid index value! Cannot remove the default partition!");
+		size_type shift_count = sub_partitions[idx].size();
+		for (size_type i = idx + 1; i < sub_partitions.size(); ++i)
+		{
+			sub_partitions[i].shift_left_all_offset(shift_count);
+		}
+		sub_partitions.erase(sub_partitions.begin() + idx);
+	}
+
 	AOL_NO_DISCARD constexpr decltype(auto) front() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.front();
@@ -558,19 +570,6 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
-	}
-
-	constexpr void erase_partition(size_type idx) noexcept
-	{
-		assert(idx < sub_partitions.size() && "Invalid index value! Cannot remove beyond the sub partition size!");
-		assert(idx != sub_partitions.size() - 1 && "Invalid index value! Cannot remove the default partition!");
-		size_type shift_count = sub_partitions[idx].size();
-		for (size_type i = idx + 1; i < sub_partitions.size(); ++i)
-		{
-			sub_partitions[i].shift_left_all_offset(shift_count);
-		}
-		container_obj.erase(sub_partitions[idx].begin(), sub_partitions[idx].end());
-		sub_partitions.erase(sub_partitions.begin() + idx);
 	}
 
 	constexpr void push_back(value_type&& value) noexcept
