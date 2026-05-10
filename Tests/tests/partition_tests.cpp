@@ -28,6 +28,11 @@ void AoL::PartitionTests() noexcept
 		fmt::print("Ctors\n");
 		AoL::PartitionVector<int> vp1{ 1,2,3,4,5,6,7,8,9,10 };
 		AoL::PartitionVector<int> vp2{ 10 };
+
+		for (auto v : vp1)
+		{
+			fmt::print("Value: {}", v);
+		}
 	}
 	
 	{

@@ -297,6 +297,115 @@ private:
 	}
 };
 
+template<
+	typename D
+>
+struct PartitionContiguousBase
+{
+	using size_type = SizeT;
+	using difference_type = PtrDiff;
+
+	AOL_NO_DISCARD constexpr decltype(auto) front() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.front();
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) front() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.front();
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) back() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.back();
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) back() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.back();
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
+	{
+		return (*static_cast<D*>(this)->container_obj)[idx];
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
+	{
+		return (*static_cast<const D*>(this)->container_obj)[idx];
+	}
+
+	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.size();
+	}
+
+	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.empty();
+	}
+
+	AOL_NO_DISCARD constexpr auto begin() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.begin();
+	}
+
+	AOL_NO_DISCARD constexpr auto begin() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.cbegin();
+	}
+
+	AOL_NO_DISCARD constexpr auto cbegin() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.cbegin();
+	}
+
+	AOL_NO_DISCARD constexpr auto end() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.end();
+	}
+
+	AOL_NO_DISCARD constexpr auto end() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.cend();
+	}
+
+	AOL_NO_DISCARD constexpr auto cend() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.cend();
+	}
+
+	AOL_NO_DISCARD constexpr auto rbegin() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.rbegin();
+	}
+
+	AOL_NO_DISCARD constexpr auto rbegin() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.crbegin();
+	}
+
+	AOL_NO_DISCARD constexpr auto crbegin() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.crbegin();
+	}
+
+	AOL_NO_DISCARD constexpr auto rend() noexcept
+	{
+		return static_cast<D*>(this)->container_obj.rend();
+	}
+
+	AOL_NO_DISCARD constexpr auto rend() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.crend();
+	}
+
+	AOL_NO_DISCARD constexpr auto crend() const noexcept
+	{
+		return static_cast<const D*>(this)->container_obj.crend();
+	}
+};
+
 /**
 * Partitioned Vector
 */
@@ -304,7 +413,7 @@ template<
 	typename T,
 	typename A
 >
-struct PartitionVectorEx
+struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 {
 	using vector_type = AoL::Vector<T, A>;
 
@@ -550,106 +659,6 @@ struct PartitionVectorEx
 	{
 		container_obj.clear();
 		sub_partitions.clear();
-	}
-
-	AOL_NO_DISCARD constexpr value_type& front() noexcept
-	{
-		return container_obj.front();
-	}
-
-	AOL_NO_DISCARD constexpr const value_type& front() const noexcept
-	{
-		return container_obj.front();
-	}
-
-	AOL_NO_DISCARD constexpr value_type& back() noexcept
-	{
-		return container_obj.back();
-	}
-
-	AOL_NO_DISCARD constexpr const value_type& back() const noexcept
-	{
-		return container_obj.back();
-	}
-
-	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
-	{
-		return container_obj[idx];
-	}
-
-	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
-	{
-		return container_obj[idx];
-	}
-
-	AOL_NO_DISCARD constexpr size_type size() const noexcept
-	{
-		return container_obj.size();
-	}
-
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
-	{
-		return container_obj.empty();
-	}
-
-	AOL_NO_DISCARD constexpr iterator begin() noexcept
-	{
-		return container_obj.begin();
-	}
-
-	AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
-	{
-		return container_obj.cbegin();
-	}
-
-	AOL_NO_DISCARD constexpr const_iterator cbegin() const noexcept
-	{
-		return container_obj.cbegin();
-	}
-
-	AOL_NO_DISCARD constexpr iterator end() noexcept
-	{
-		return container_obj.end();
-	}
-
-	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
-	{
-		return container_obj.cend();
-	}
-
-	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
-	{
-		return container_obj.cend();
-	}
-
-	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
-	{
-		return container_obj.rbegin();
-	}
-
-	AOL_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
-	{
-		return container_obj.crbegin();
-	}
-
-	AOL_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
-	{
-		return container_obj.crbegin();
-	}
-
-	AOL_NO_DISCARD constexpr reverse_iterator rend() noexcept
-	{
-		return container_obj.rend();
-	}
-
-	AOL_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
-	{
-		return container_obj.crend();
-	}
-
-	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
-	{
-		return container_obj.crend();
 	}
 };
 
