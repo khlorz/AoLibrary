@@ -305,6 +305,29 @@ struct PartitionContiguousBase
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
+	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
+	{
+		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
+		return static_cast<const D*>(this)->sub_partitions[partition_idx];
+	}
+
+	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
+	{
+		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
+		return static_cast<D*>(this)->sub_partitions[partition_idx];
+	}
+
+	AOL_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
+	{
+		assert(partition_idx < this->number_of_partitions() && "Invalid partition index! Reminder: Partition numbering is 0-based indexing!");
+		return static_cast<const D*>(this)->sub_partitions[partition_idx].size();
+	}
+
+	AOL_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
+	{
+		return static_cast<const D*>(this)->sub_partitions.size();
+	}
+
 	AOL_NO_DISCARD constexpr decltype(auto) front() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.front();
@@ -489,29 +512,6 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
-	}
-
-	AOL_NO_DISCARD constexpr const sub_partition_type& get_partition(size_type partition_idx) const noexcept
-	{
-		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
-		return sub_partitions[partition_idx];
-	}
-
-	AOL_NO_DISCARD constexpr sub_partition_type& get_partition(size_type partition_idx) noexcept
-	{
-		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
-		return sub_partitions[partition_idx];
-	}
-
-	AOL_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
-	{
-		assert(partition_idx < this->number_of_partitions() && "Invalid partition index! Reminder: Partition numbering is 0-based indexing!");
-		return sub_partitions[partition_idx].size();
-	}
-
-	AOL_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
-	{
-		return sub_partitions.size();
 	}
 
 	constexpr sub_partition_type& create_partition(size_type partition_size, bool start_empty = true) noexcept

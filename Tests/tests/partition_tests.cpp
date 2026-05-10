@@ -12,7 +12,7 @@
 #include "aol/aol.h"
 
 template<typename T>
-void PrintPartition(AoL::SubPartitionV<T>& partition)
+void PrintPartition(const AoL::SubPartitionV<T>& partition)
 {
 	for (auto& v : partition)
 	{
