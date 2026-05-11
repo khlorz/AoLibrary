@@ -495,24 +495,24 @@ template<
 >
 struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 {
-	using vector_type = AoL::Vector<T, A>;
+	using container_type = AoL::Vector<T, A>;
 
 	using container_tag = ContainerTag;
-	using value_type = vector_type::value_type;
-	using allocator_type = vector_type::allocator_type;
+	using value_type = container_type::value_type;
+	using allocator_type = container_type::allocator_type;
 	using iterator_tag = std::contiguous_iterator_tag;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
-	using iterator = typename vector_type::iterator;
-	using const_iterator = typename vector_type::const_iterator;
-	using reverse_iterator = typename vector_type::reverse_iterator;
-	using const_reverse_iterator = typename vector_type::const_reverse_iterator;
+	using iterator = typename container_type::iterator;
+	using const_iterator = typename container_type::const_iterator;
+	using reverse_iterator = typename container_type::reverse_iterator;
+	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-	using sub_partition_type = SubPartitionEx<vector_type>;
+	using sub_partition_type = SubPartitionEx<container_type>;
 
-	vector_type container_obj;
+	container_type container_obj;
 	AoL::Vector<sub_partition_type> sub_partitions;
 
 	PartitionVectorEx() noexcept :
