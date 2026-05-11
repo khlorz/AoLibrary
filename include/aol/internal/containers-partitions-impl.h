@@ -375,6 +375,8 @@ struct PartitionContiguousBase
 
 	constexpr void erase_partition(size_type idx) noexcept
 	{
+		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
+
 		assert(idx < sub_partitions.size() && "Invalid index value! Cannot remove beyond the sub partition size!");
 		assert(idx != sub_partitions.size() - 1 && "Invalid index value! Cannot remove the default partition!");
 		size_type shift_count = sub_partitions[idx].size();
