@@ -48,16 +48,44 @@ private:
 	}
 
 public:
+	/*
+	* @details Clears the subpartition
+	* 
+	* - With respect to the main partition, the elements are not cleared per se, just inaccessible by the subpartition
+	*/
 	constexpr void clear() noexcept
 	{
 		current_size = 0;
 	}
 
+	/*
+	* @details Erase an element with a given index
+	* 
+	* - Erases an element from the subpartition
+	*
+	* - With respect to the main partition, the element is not erased per se, just inaccessible by the subpartition
+	* 
+	* - This will shift the elements if the element is not the back element
+	* 
+	* @param idx the index of the element to be erased
+	*/
 	constexpr void erase(size_type idx) noexcept
 	{
 		this->erase(idx, 1);
 	}
 
+	/*
+	* @details Erase an element with a given range
+	*
+	* - Erases a range of element from the subpartition
+	*
+	* - With respect to the main partition, the element/s is/are not erased per se, just inaccessible by the subpartition
+	*
+	* - This will shift the elements if the elements are not the elements in the back
+	*
+	* @param starting_point the starting index to be erased
+	* @param count the number of elements to be erased
+	*/
 	constexpr void erase(size_type starting_point, size_type count) noexcept
 	{
 		size_type end_point = starting_point + count;
@@ -72,6 +100,13 @@ public:
 		current_size -= count;
 	}
 
+	/*
+	* @details Erase the element at the front
+	*
+	* - With respect to the main partition, the element is not erased per se, just inaccessible by the subpartition
+	*
+	* - This will shift the elements by one to the left
+	*/
 	constexpr void pop_front() noexcept
 	{
 		assert(current_size > 0 && "Cannot pop an element in an empty partition!");
@@ -83,12 +118,27 @@ public:
 		current_size--;
 	}
 
+	/*
+	* @details Erase the element at the back
+	*
+	* - With respect to the main partition, the element is not erased per se, just inaccessible by the subpartition
+	*
+	* - Popping at the back won't cause any shifting
+	*/
 	constexpr void pop_back() noexcept
 	{
 		assert(current_size > 0 && "Cannot pop an element in an empty partition!");
 		current_size--;
 	}
 
+	/*
+	* @details Push an element in the back
+	* 
+	* - No op the partition is already full. In this case, the function returns false
+	* 
+	* @param value value to be pushed
+	* @returns true if successful, otherwise false
+	*/
 	constexpr bool push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
 		// We no-op if the partition is already full
@@ -102,6 +152,14 @@ public:
 		return true;
 	}
 
+	/*
+	* @details Push an element in the back
+	*
+	* - No op the partition is already full. In this case, the function returns false
+	*
+	* @param value value to be pushed
+	* @returns true if successful, otherwise false
+	*/
 	constexpr bool push_back(value_type&& value) noexcept
 	{
 		// We no-op if the partition is already full
@@ -115,6 +173,14 @@ public:
 		return true;
 	}
 
+	/*
+	* @details Construct an element in place at the back
+	*
+	* - No op the partition is already full. In this case, the function returns a nullptr
+	*
+	* @param value value to be pushed
+	* @returns pointer to the constructed element, otherwise nullptr
+	*/
 	template<typename... Args>
 	constexpr value_type* emplace_back(Args&&... args) noexcept
 	{
