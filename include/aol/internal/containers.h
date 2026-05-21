@@ -133,6 +133,11 @@ template<
 >
 struct PartitionVectorEx;
 
+template<
+	typename T,
+	AoL::SizeT S
+>
+struct PartitionArrayEx;
 
 /****************************
 * Cyclic Buffers
@@ -833,6 +838,20 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using PartitionVector = Internal::PartitionVectorEx<T, A>;
+
+/*
+* @details Partition using AoL::AoL
+*
+* As an array, the storage is contiguous.
+*
+* @tparam T value type
+* @tparam S array size
+*/
+template<
+	typename T,
+	AoL::SizeT S
+>
+using PartitionArray = Internal::PartitionArrayEx<T, S>;
 
 /*************************************************
 * Container queries

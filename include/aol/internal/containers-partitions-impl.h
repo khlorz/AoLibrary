@@ -34,6 +34,9 @@ private:
 	template<typename, typename>
 	friend struct PartitionVectorEx;
 
+	template<typename, AoL::SizeT>
+	friend struct PartitionArrayEx;
+
 	main_partition_vector* main_partition;
 	size_type begin_offset;
 	size_type end_offset;
@@ -657,7 +660,6 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	using container_tag = ContainerTag;
 	using value_type = container_type::value_type;
 	using allocator_type = container_type::allocator_type;
-	using iterator_tag = std::contiguous_iterator_tag;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
@@ -938,6 +940,30 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		container_obj.clear();
 		sub_partitions.clear();
 	}
+};
+
+template<
+	typename T,
+	AoL::SizeT S
+>
+struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
+{
+	using base = PartitionContiguousBase<PartitionArrayEx<T, S>>;
+
+	using container_type = AoL::Array<T, A>;
+
+	using container_tag = ContainerTag;
+	using value_type = container_type::value_type;
+
+	using size_type = SizeT;
+	using difference_type = PtrDiff;
+
+	using iterator = typename container_type::iterator;
+	using const_iterator = typename container_type::const_iterator;
+	using reverse_iterator = typename container_type::reverse_iterator;
+	using const_reverse_iterator = typename container_type::const_reverse_iterator;
+
+	using sub_partition_type = SubPartitionEx<container_type>;
 };
 
 } // AoL::Internal namespace
