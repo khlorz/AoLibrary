@@ -804,7 +804,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		if (back_parti.full())
 		{
 			container_obj.push_back(std::move(value));
-			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
 		}
 		else
 		{
@@ -827,7 +827,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		if (back_parti.full())
 		{
 			container_obj.push_back(value);
-			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
 		}
 		else
 		{
@@ -852,7 +852,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		if (back_parti.full())
 		{
 			value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
-			sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+			sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
 			return ret;
 		}
 		else
