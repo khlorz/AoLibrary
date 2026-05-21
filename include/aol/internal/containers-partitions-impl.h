@@ -306,6 +306,9 @@ template<
 struct AOL_EMPTY_BASE_OPTIMIZATION PartitionContiguousBase
 {
 protected:
+	// We make the constructor protected so the base won't be constructible outside the derived classes
+	// Constructor is just an assertion so I wouldn't make a mistake of creating a non-contiguous container
+
 	template<typename It = D::container_type::iterator>
 	using iterator_type = It;
 	template<typename T = D::value_type>
