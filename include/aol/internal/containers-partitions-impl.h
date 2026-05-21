@@ -320,29 +320,76 @@ public:
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
+	/*
+	* @details Gets a reference to a partition
+	*
+	* - 0-based indexing
+	* 
+	* @param partition_idx index of the partition
+	* @returns Reference to the partition
+	*/
 	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return static_cast<const D*>(this)->sub_partitions[partition_idx];
 	}
 
+	/*
+	* @details Gets a reference to a partition
+	*
+	* - 0-based indexing
+	*
+	* @param partition_idx index of the partition
+	* @returns Reference to the partition
+	*/
 	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return static_cast<D*>(this)->sub_partitions[partition_idx];
 	}
 
+	/*
+	* @details Gets the size of a specific partition
+	*
+	* - 0-based indexing
+	*
+	* @param partition_idx index of the partition
+	* @returns Size of the partition in size_t
+	*/
 	AOL_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition index! Reminder: Partition numbering is 0-based indexing!");
 		return static_cast<const D*>(this)->sub_partitions[partition_idx].size();
 	}
 
+	/*
+	* @details Gets the number of sub partitions
+	*
+	* @param partition_idx index of the partition
+	* @returns Size of the partition in size_t
+	*/
 	AOL_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
 	{
 		return static_cast<const D*>(this)->sub_partitions.size();
 	}
 
+	/*
+	* @details Create a sub-partition
+	* 
+	* - This creates a sub partition of a given size
+	* 
+	* - Invalid to create a new partition if the default partition has a max size of one
+	* 
+	* - Invalid to create a new partition with a size of 0
+	* 
+	* - Invalid to create a new partition that has the same size or more than the max size of the default partition
+	*
+	* - The created partition has an option to retain whatever elements are given or start the partition as empty
+	* 
+	* @param partition_size size of the will-be created partition
+	* @param start_empty condition to retain any elements or not from the default partition
+	* @returns Reference to the newly created partition
+	*/
 	constexpr decltype(auto) create_partition(size_type partition_size, bool start_empty = true) noexcept 
 	{
 		// The old back partition will become the newly created partition
@@ -373,6 +420,21 @@ public:
 		return sub_partitions[sub_partitions.size() - 2];
 	}
 
+	/*
+	* @details Create a sub-partition
+	*
+	* - This creates a sub partition from a given predicate for std::partition/std::stable_partition
+	* 
+	* - If the resulting size for the partition is 0 or the same as the default partition, it is invalid
+	*
+	* - The created partition will always retain the elements
+	* 
+	* - The algorithm has an option to partition in stable mode or not for preserving 
+	*
+	* @param partition_predicate predicate for partitioning
+	* @param is_stable condition on whether the algorithm will preserve the order or not
+	* @returns Reference to the newly created partition
+	*/
 	template<typename F> requires std::predicate<F&, value_type<>&>
 	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type<>&>)
 	{
@@ -385,6 +447,17 @@ public:
 		return create_partition(default_partition_begin - back_partition.begin(), false);
 	}
 
+	/*
+	* @details Erase a partition
+	* 
+	* - This preserves the elements of the partition with respect to the main partition
+	* 
+	* - Only removes the fact that the partition will be erased
+	* 
+	* - The elements are still unaccessible by the sub partitions however
+	* 
+	* @param idx the partition to be erased. 0-based indexing
+	*/
 	constexpr void erase_partition(size_type idx) noexcept
 	{
 		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
