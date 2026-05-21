@@ -306,8 +306,10 @@ template<
 struct AOL_EMPTY_BASE_OPTIMIZATION PartitionContiguousBase
 {
 protected:
-	template<typename It = D::container_type::iterator_type>
+	template<typename It = D::container_type::iterator>
 	using iterator_type = It;
+	template<typename T = D::value_type>
+	using value_type = T;
 
 	PartitionContiguousBase() noexcept
 	{
@@ -341,7 +343,7 @@ public:
 		return static_cast<const D*>(this)->sub_partitions.size();
 	}
 
-	constexpr decltype(auto) create_partition(size_type partition_size, bool start_empty = true) noexcept
+	constexpr decltype(auto) create_partition(size_type partition_size, bool start_empty = true) noexcept 
 	{
 		// The old back partition will become the newly created partition
 		// The newly emplace_back-ed sub_partition will become the default partition
@@ -371,8 +373,8 @@ public:
 		return sub_partitions[sub_partitions.size() - 2];
 	}
 
-	template<typename F, typename T = D::value_type> requires std::predicate<F&, T&>
-	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, T&>)
+	template<typename F> requires std::predicate<F&, value_type<>&>
+	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type<>&>)
 	{
 		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
 		auto& back_partition = sub_partitions.back();
@@ -535,58 +537,110 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 	}
 
-	PartitionVectorEx(const PartitionVectorEx& other) noexcept = default;
+	PartitionVectorEx(const PartitionVectorEx& other) noexcept :
+		base{ },
+		container_obj{ other.container_obj },
+		sub_partitions{ other.sub_partitions }
+	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+	}
 
-	PartitionVectorEx(const PartitionVectorEx& other, const allocator_type& allocator) noexcept :
+	explicit PartitionVectorEx(const PartitionVectorEx& other, const allocator_type& allocator) noexcept :
 		base{ },
 		container_obj(other.container_obj, allocator),
 		sub_partitions(other.sub_partitions)
 	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
 	}
 
-	PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept = default;
+	PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept
+	{
+		container_obj = other.container_obj;
+		sub_partitions.clear();
+		for (auto& other_sub_partition : other.sub_partitions)
+		{
+			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
+			new_sp.main_partition = std::addressof(container_obj);
+		}
 
-	PartitionVectorEx(PartitionVectorEx&& other) noexcept = default;
+		return *this;
+	}
 
-	PartitionVectorEx(PartitionVectorEx&& other, const allocator_type& allocator) noexcept :
+	PartitionVectorEx(PartitionVectorEx&& other) noexcept :
+		base{ },
+		container_obj{ std::move(other.container_obj) },
+		sub_partitions{ std::move(other.sub_partitions) }
+	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+
+		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
+	}
+
+	explicit PartitionVectorEx(PartitionVectorEx&& other, const allocator_type& allocator) noexcept :
 		base{ },
 		container_obj(std::move(other.container_obj), allocator),
 		sub_partitions(std::move(other.sub_partitions))
 	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+
+		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 	}
 
-	PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept = default;
+	PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept
+	{
+		container_obj = std::move(other.container_obj);
+		sub_partitions = std::move(other.sub_partitions);
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
+
+		return *this;
+	}
 
 	template<typename It>
-	PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
+	explicit PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj{ start_it, end_it, allocator },
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
 	}
 
-	PartitionVectorEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
+	explicit PartitionVectorEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(initial_size, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	PartitionVectorEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
+	explicit PartitionVectorEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(initial_size, value, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	PartitionVectorEx(allocator_type allocator) noexcept :
+	explicit PartitionVectorEx(allocator_type allocator) noexcept :
 		base{ },
 		container_obj(allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 	}
 
-	PartitionVectorEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
+	explicit PartitionVectorEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
