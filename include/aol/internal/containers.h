@@ -111,7 +111,16 @@ namespace AoL
 namespace Internal
 {
 
+/****************************
+* Type tags
+****************************/
+
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
+
+
+/****************************
+* Partition
+****************************/
 
 template<
 	typename V
@@ -124,6 +133,11 @@ template<
 >
 struct PartitionVectorEx;
 
+
+/****************************
+* Cyclic Buffers
+****************************/
+
 template<
 	typename T,
 	SizeT S
@@ -135,6 +149,10 @@ template<
 	typename A
 >
 struct CyclicBufferDynamic;
+
+/****************************
+* Maps
+****************************/
 
 template<
 	typename K,
@@ -149,6 +167,11 @@ template<
 	typename A
 >
 struct KeyOrderMapEx;
+
+
+/****************************
+* Subranges
+****************************/
 
 template<
 	typename It
