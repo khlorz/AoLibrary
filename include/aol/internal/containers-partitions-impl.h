@@ -323,15 +323,15 @@ private:
 		switch (update_type)
 		{
 		case size_update_mode::empty:
-		current_size = 0;
-		break;
+			current_size = 0;
+			break;
 
 		case size_update_mode::update:
-		current_size = end_offset - begin_offset;
-		break;
+			current_size = end_offset - begin_offset;
+			break;
 
 		default:
-		break;
+			break;
 		}
 	}
 
@@ -789,6 +789,15 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 	}
 
+	/*
+	* @details Pushes an element at the back
+	* 
+	* - This operation also increases the default partition's max size
+	* 
+	* - However, this will not add an element to the default partition
+	* 
+	* @param value the value to be pushed
+	*/
 	constexpr void push_back(value_type&& value) noexcept
 	{
 		sub_partition_type& back_parti = sub_partitions.back();
@@ -803,6 +812,15 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	/*
+	* @details Pushes an element at the back
+	*
+	* - This operation also increases the default partition's max size
+	*
+	* - However, this will not add an element to the default partition
+	*
+	* @param value the value to be pushed
+	*/
 	constexpr void push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
 		sub_partition_type& back_parti = sub_partitions.back();
@@ -817,6 +835,16 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	/*
+	* @details Constructs an element in place at the back
+	*
+	* - This operation also increases the default partition's max size
+	*
+	* - However, this will not add an element to the default partition
+	*
+	* @param args the value to be pushed
+	* @returns Reference to the constructed element                                                                                                                                                                   
+	*/
 	template<typename... Args>
 	constexpr value_type& emplace_back(Args&&... args) noexcept
 	{
@@ -833,11 +861,25 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	/*
+	* @details Increases the capacity
+	* 
+	* - No op if the new capacity is lower current capacity
+	*/
 	constexpr void reserve(size_type new_capacity) noexcept
 	{
 		container_obj.reserve(new_capacity);
 	}
 
+	/*
+	* @details Resizes the container
+	* 
+	* - On resizing down, this will erase all the affected partition. If needed, will also reduce the max size/current size
+	* 
+	* - On resizing up, the default partition will have an increased max size, but the current size is unchanged
+	* 
+	* @param new_size new size of the container
+	*/
 	constexpr void resize(size_type new_size) noexcept
 	{
 		size_type old_size = container_obj.size();
@@ -871,6 +913,13 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	/*
+	* @details Clears all the partition
+	* 
+	* - Like what the function name implies, it calls all the clear() method of the partitions
+	* 
+	* - The elements of the main partition will be untouched
+	*/
 	constexpr void clear_partitions() noexcept
 	{
 		for (sub_partition_type& partition : sub_partitions)
@@ -879,6 +928,11 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	/*
+	* @details Clears the container
+	* 
+	* - Clears the elements and the partitions will be cleared as well, but not erased
+	*/
 	constexpr void clear_all() noexcept
 	{
 		container_obj.clear();
