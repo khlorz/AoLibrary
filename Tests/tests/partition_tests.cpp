@@ -21,6 +21,16 @@ void PrintPartition(const AoL::SubPartition<P>& partition)
 	fmt::print("\n");
 }
 
+template<typename It>
+void PrintIteration(It begin, It end)
+{
+	for (auto it = begin; it != end; ++it)
+	{
+		fmt::print("Value: {}\n", *it);
+	}
+	fmt::print("\n");
+}
+
 void AoL::PartitionTests() noexcept
 {
 	fmt::print("\nPartition tests\n");
@@ -147,13 +157,13 @@ void AoL::PartitionTests() noexcept
 			{
 				fmt::print("Initializer list ctor:\n");
 				AoL::PartitionArray<int, 8> ap{ 1,2,3,4,5,6,7,8 };
-				PrintPartition(ap.get_partition(0));
+				PrintIteration(ap.begin(), ap.end());
 			}
 			fmt::print("\n");
 			{
 				fmt::print("Default ctor");
 				AoL::PartitionArray<int, 8> ap{};
-				PrintPartition(ap.get_partition(0));
+				PrintIteration(ap.begin(), ap.end());
 			}
 		}
 	}
