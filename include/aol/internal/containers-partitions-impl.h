@@ -976,6 +976,87 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
 	using sub_partition_type = SubPartitionEx<PartitionArrayEx<T,S>>;
+
+	container_type container_obj;
+	AoL::Vector<sub_partition_type> sub_partitions;
+
+	constexpr PartitionArrayEx() noexcept :
+		base{ },
+		container_obj(),
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size(), 0} }
+	{
+	}
+
+	constexpr PartitionArrayEx(const PartitionArrayEx& other) noexcept :
+		base{ },
+		container_obj{ other.container_obj },
+		sub_partitions{ other.sub_partitions }
+	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+	}
+
+	constexpr PartitionArrayEx& operator = (const PartitionArrayEx& other) noexcept
+	{
+		container_obj = other.container_obj;
+		sub_partitions.clear();
+		for (auto& other_sub_partition : other.sub_partitions)
+		{
+			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
+			new_sp.main_partition = std::addressof(container_obj);
+		}
+
+		return *this;
+	}
+
+	constexpr PartitionArrayEx(PartitionArrayEx&& other) noexcept :
+		base{ },
+		container_obj{ std::move(other.container_obj) },
+		sub_partitions{ std::move(other.sub_partitions) }
+	{
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+
+		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
+	}
+
+	constexpr PartitionArrayEx& operator = (PartitionArrayEx&& other) noexcept
+	{
+		container_obj = std::move(other.container_obj);
+		sub_partitions = std::move(other.sub_partitions);
+		for (auto& sub_partition : sub_partitions)
+		{
+			sub_partition.main_partition = std::addressof(container_obj);
+		}
+		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
+
+		return *this;
+	}
+
+	template<typename It>
+	explicit constexpr PartitionArrayEx(It start_it, It end_it) noexcept :
+		base{ },
+		container_obj{ start_it, end_it },
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{}
+
+	explicit constexpr PartitionArrayEx(Traits::ConstRefOrCopyType<value_type> fill_value) noexcept :
+		base{ },
+		container_obj(fill_value),
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{}
+
+	template<typename... Args> requires (sizeof...(Args) <= S)
+	explicit constexpr PartitionArrayEx(Args&&... args) noexcept :
+		base{ },
+		container_obj{std::forward<Args>(args)...},
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{
+	}
 };
 
 } // AoL::Internal namespace
