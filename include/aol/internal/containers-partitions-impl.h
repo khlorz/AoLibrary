@@ -52,7 +52,7 @@ private:
 	size_type end_offset;
 	size_type current_size;
 
-	SubPartitionEx(main_partition_container<>& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
+	constexpr SubPartitionEx(main_partition_container<>& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
 		main_partition(std::addressof(main_partition_container_ref)),
 		begin_offset(begin_off),
 		end_offset(end_off),
@@ -388,12 +388,12 @@ protected:
 	// We make the constructor protected so the base won't be constructible outside the derived classes
 	// Constructor is just an assertion so I wouldn't make a mistake of creating a non-contiguous container
 
-	template<typename It = D::container_type::iterator>
+	template<typename It = typename D::container_type::iterator>
 	using iterator_type = It;
-	template<typename T = D::value_type>
+	template<typename T = typename D::value_type>
 	using value_type = T;
 
-	PartitionContiguousBase() noexcept
+	constexpr PartitionContiguousBase() noexcept
 	{
 		static_assert(std::contiguous_iterator<iterator_type<>>, "Invalid partition container! Only contiguous types allowed!");
 	}
@@ -686,14 +686,14 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	container_type container_obj;
 	AoL::Vector<sub_partition_type> sub_partitions;
 
-	PartitionVectorEx() noexcept :
+	constexpr PartitionVectorEx() noexcept :
 		base{ },
 		container_obj(),
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 	}
 
-	PartitionVectorEx(const PartitionVectorEx& other) noexcept :
+	constexpr PartitionVectorEx(const PartitionVectorEx& other) noexcept :
 		base{ },
 		container_obj{ other.container_obj },
 		sub_partitions{ other.sub_partitions }
@@ -704,7 +704,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
-	explicit PartitionVectorEx(const PartitionVectorEx& other, const allocator_type& allocator) noexcept :
+	explicit constexpr PartitionVectorEx(const PartitionVectorEx& other, const allocator_type& allocator) noexcept :
 		base{ },
 		container_obj(other.container_obj, allocator),
 		sub_partitions(other.sub_partitions)
@@ -715,7 +715,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
-	PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept
+	constexpr PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept
 	{
 		container_obj = other.container_obj;
 		sub_partitions.clear();
@@ -728,7 +728,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		return *this;
 	}
 
-	PartitionVectorEx(PartitionVectorEx&& other) noexcept :
+	constexpr PartitionVectorEx(PartitionVectorEx&& other) noexcept :
 		base{ },
 		container_obj{ std::move(other.container_obj) },
 		sub_partitions{ std::move(other.sub_partitions) }
@@ -741,7 +741,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 	}
 
-	explicit PartitionVectorEx(PartitionVectorEx&& other, const allocator_type& allocator) noexcept :
+	explicit constexpr PartitionVectorEx(PartitionVectorEx&& other, const allocator_type& allocator) noexcept :
 		base{ },
 		container_obj(std::move(other.container_obj), allocator),
 		sub_partitions(std::move(other.sub_partitions))
@@ -754,7 +754,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 	}
 
-	PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept
+	constexpr PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept
 	{
 		container_obj = std::move(other.container_obj);
 		sub_partitions = std::move(other.sub_partitions);
@@ -768,35 +768,35 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	}
 
 	template<typename It>
-	explicit PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
+	explicit constexpr PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj{ start_it, end_it, allocator },
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
 	}
 
-	explicit PartitionVectorEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
+	explicit constexpr PartitionVectorEx(size_type initial_size, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(initial_size, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	explicit PartitionVectorEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
+	explicit constexpr PartitionVectorEx(size_type initial_size, AoL::Traits::ConstRefOrCopyType<value_type> value, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(initial_size, value, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, initial_size} }
 	{
 	}
 
-	explicit PartitionVectorEx(allocator_type allocator) noexcept :
+	explicit constexpr PartitionVectorEx(allocator_type allocator) noexcept :
 		base{ },
 		container_obj(allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 	}
 
-	explicit PartitionVectorEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
+	explicit constexpr PartitionVectorEx(std::initializer_list<value_type> list, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
 		container_obj(list, allocator),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
