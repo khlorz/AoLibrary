@@ -8,24 +8,23 @@ namespace AoL::Internal
 {
 
 template<
-	typename V
+	typename C
 >
 struct SubPartitionEx
 {
 public:
-	using main_partition_vector = V;
+	using main_partition_container = C;
 
 	using container_tag = ContainerTag;
-	using value_type = typename main_partition_vector::value_type;
-	using allocator_type = typename main_partition_vector::allocator_type;
+	using value_type = typename main_partition_container::value_type;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
-	using iterator = typename main_partition_vector::iterator;
-	using const_iterator = typename main_partition_vector::const_iterator;
-	using reverse_iterator = typename main_partition_vector::reverse_iterator;
-	using const_reverse_iterator = typename main_partition_vector::const_reverse_iterator;
+	using iterator = typename main_partition_container::iterator;
+	using const_iterator = typename main_partition_container::const_iterator;
+	using reverse_iterator = typename main_partition_container::reverse_iterator;
+	using const_reverse_iterator = typename main_partition_container::const_reverse_iterator;
 
 private:
 	template<typename>
@@ -37,13 +36,13 @@ private:
 	template<typename, AoL::SizeT>
 	friend struct PartitionArrayEx;
 
-	main_partition_vector* main_partition;
+	main_partition_container* main_partition;
 	size_type begin_offset;
 	size_type end_offset;
 	size_type current_size;
 
-	SubPartitionEx(V& main_partition_vector_, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
-		main_partition(std::addressof(main_partition_vector_)),
+	SubPartitionEx(main_partition_container& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
+		main_partition(std::addressof(main_partition_container_ref)),
 		begin_offset(begin_off),
 		end_offset(end_off),
 		current_size(starting_size ? *starting_size : end_off - begin_off)
@@ -950,7 +949,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 {
 	using base = PartitionContiguousBase<PartitionArrayEx<T, S>>;
 
-	using container_type = AoL::Array<T, A>;
+	using container_type = AoL::Array<T, S>;
 
 	using container_tag = ContainerTag;
 	using value_type = container_type::value_type;

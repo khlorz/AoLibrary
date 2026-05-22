@@ -123,7 +123,7 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 ****************************/
 
 template<
-	typename V
+	typename C
 >
 struct SubPartitionEx;
 
@@ -815,15 +815,9 @@ using Subrange = Internal::SubrangeEx<It>;
 * @details SubPartition of a container.
 * 
 * Constructible only from a partition. Can be copied or moved but not constructed.
-* 
-* @tparam T value type of the main container
-* @tparam A allocator type of the main container (default: Internal::DefaultAllocator<T>)
 */
-template<
-	typename T,
-	typename A = Internal::DefaultAllocator<T>
->
-using SubPartitionV = Internal::SubPartitionEx<Vector<T,A>>;
+template<typename P>
+using SubPartition = Internal::SubPartitionEx<P>;
 
 /*
 * @details Partition using AoL::Vector

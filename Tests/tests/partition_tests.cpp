@@ -11,8 +11,8 @@
 #include "all_tests.h"
 #include "aol/aol.h"
 
-template<typename T>
-void PrintPartition(const AoL::SubPartitionV<T>& partition)
+template<typename P>
+void PrintPartition(const AoL::SubPartition<P>& partition)
 {
 	for (auto& v : partition)
 	{
