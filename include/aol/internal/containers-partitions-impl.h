@@ -433,6 +433,19 @@ public:
 	}
 
 	/*
+	* @details Gets the reference to the default partition
+	* 
+	* - The default partition is the partition that will always be the basis for new partitions
+	* 
+	* @returns Reference to the default partition
+	*/
+	AOL_NO_DISCARD constexpr decltype(auto) get_default_partition() noexcept
+	{
+		assert(this->number_of_partitions() > 0 && "This shouldn't happen but somehow it did. You done messed up.");
+		return static_cast<D*>(this)->sub_partitions.back();
+	}
+
+	/*
 	* @details Gets the size of a specific partition
 	*
 	* - 0-based indexing
