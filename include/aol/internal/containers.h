@@ -117,6 +117,9 @@ namespace Internal
 
 struct AOL_EMPTY_BASE_OPTIMIZATION ContainerTag {};
 
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Contiguous {};
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Block {};
+
 
 /****************************
 * Partition

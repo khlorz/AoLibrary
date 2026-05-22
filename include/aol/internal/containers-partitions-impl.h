@@ -12,19 +12,30 @@ template<
 >
 struct SubPartitionEx
 {
+	static_assert(AoL::Traits::AssertFalse<C>, "Using the wrong SubPartitionType");
+};
+
+template<
+	typename C
+> requires std::same_as<PartitionTag_Contiguous, typename C::partition_tag>
+struct SubPartitionEx<C>
+{
 public:
-	using main_partition_container = C;
+	using main_partition_type = C;
+	
+	template<typename Ct = typename main_partition_type::container_type>
+	using main_partition_container = Ct;
 
 	using container_tag = ContainerTag;
-	using value_type = typename main_partition_container::value_type;
+	using value_type = main_partition_container<>::value_type;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
-	using iterator = typename main_partition_container::iterator;
-	using const_iterator = typename main_partition_container::const_iterator;
-	using reverse_iterator = typename main_partition_container::reverse_iterator;
-	using const_reverse_iterator = typename main_partition_container::const_reverse_iterator;
+	using iterator = typename main_partition_container<>::iterator;
+	using const_iterator = typename main_partition_container<>::const_iterator;
+	using reverse_iterator = typename main_partition_container<>::reverse_iterator;
+	using const_reverse_iterator = typename main_partition_container<>::const_reverse_iterator;
 
 private:
 	template<typename>
@@ -36,12 +47,12 @@ private:
 	template<typename, AoL::SizeT>
 	friend struct PartitionArrayEx;
 
-	main_partition_container* main_partition;
+	main_partition_container<>* main_partition;
 	size_type begin_offset;
 	size_type end_offset;
 	size_type current_size;
 
-	SubPartitionEx(main_partition_container& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
+	SubPartitionEx(main_partition_container<>& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
 		main_partition(std::addressof(main_partition_container_ref)),
 		begin_offset(begin_off),
 		end_offset(end_off),
@@ -391,6 +402,8 @@ public:
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
+	using partition_tag = PartitionTag_Contiguous;
+
 	/*
 	* @details Gets a reference to a partition
 	*
@@ -668,7 +681,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-	using sub_partition_type = SubPartitionEx<container_type>;
+	using sub_partition_type = SubPartitionEx<PartitionVectorEx<T,A>>;
 
 	container_type container_obj;
 	AoL::Vector<sub_partition_type> sub_partitions;
@@ -962,7 +975,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-	using sub_partition_type = SubPartitionEx<container_type>;
+	using sub_partition_type = SubPartitionEx<PartitionArrayEx<T,S>>;
 };
 
 } // AoL::Internal namespace
