@@ -780,6 +780,13 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		return *this;
 	}
 
+	/*
+	* @details Copying/moving by iterator
+	*
+	* - Important: This can take any valid iterator for the same value_type
+	*
+	* - Due to this, the newly constructed Partition will start from zero, even if copied from one of the PartitionXXXEx type
+	*/
 	template<typename It>
 	explicit constexpr PartitionVectorEx(It start_it, It end_it, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
@@ -1050,6 +1057,13 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		return *this;
 	}
 
+	/*
+	* @details Copying/moving by iterator
+	* 
+	* - Important: This can take any valid iterator for the same value_type
+	* 
+	* - Due to this, the newly constructed Partition will always start with a default partition, even if copied from one of the PartitionXXX type
+	*/
 	template<typename It>
 	explicit constexpr PartitionArrayEx(It start_it, It end_it) noexcept :
 		base{ },
