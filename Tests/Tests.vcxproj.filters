@@ -17,6 +17,9 @@
     <ClCompile Include="tests\partition_tests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\serialization_tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmarks\all_benchmarks.h">

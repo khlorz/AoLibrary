@@ -10,6 +10,7 @@ void RunTests()
 	BasicDataTests();
 	GenericManagerTests();
 	PartitionTests();
+	SerializationTests();
 }
 
 }

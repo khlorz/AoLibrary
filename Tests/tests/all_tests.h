@@ -25,6 +25,12 @@ AOL_TESTS_DECLARATION_ON(Partition)
 AOL_TESTS_DECLARATION_OFF(Partition)
 #endif
 
+#if AOL_TESTS_FLAG(SERIALIZATION)
+AOL_TESTS_DECLARATION_ON(Serialization)
+#else
+AOL_TESTS_DECLARATION_OFF(Serialization)
+#endif
+
 void RunTests();
 
 }

@@ -47,6 +47,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="tests\partition_tests.cpp" />
+    <ClCompile Include="tests\serialization_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmarks\all_benchmarks.h">
