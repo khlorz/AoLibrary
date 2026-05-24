@@ -1,11 +1,11 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary types
 ****************************************************************************************
 * - These fundamental types typedef for ease of library use
 * - If using the library, better to use this types
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_TYPES_H
+#define AOL_INTERNAL_TYPES_H
 
 #include <cstddef>
 
@@ -28,4 +28,6 @@ using SizeT		= std::size_t;
 using PtrSize	= decltype(sizeof(Void*));
 using PtrDiff	= std::ptrdiff_t;
 
-}
+} // AoL namespace
+
+#endif // AOL_INTERNAL_TYPES_H
