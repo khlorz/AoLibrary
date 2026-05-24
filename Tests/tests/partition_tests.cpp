@@ -11,6 +11,8 @@
 #include "all_tests.h"
 #include "aol/aol.h"
 
+#define AOL_PRINT_NEW_LINE fmt::print("\n");
+
 template<typename P>
 void PrintPartition(const AoL::SubPartition<P>& partition)
 {
@@ -154,15 +156,56 @@ void AoL::PartitionTests() noexcept
 		fmt::print("***********************************\n");
 		{
 			fmt::print("Ctors\n");
+			AoL::PartitionArray<int, 8> ap_copy{ 8,7,6,5,4,3,2,1 };
 			{
 				fmt::print("Initializer list ctor:\n");
 				AoL::PartitionArray<int, 8> ap{ 1,2,3,4,5,6,7,8 };
 				PrintIteration(ap.begin(), ap.end());
 			}
-			fmt::print("\n");
 			{
-				fmt::print("Default ctor");
+				fmt::print("Default ctor\n");
 				AoL::PartitionArray<int, 8> ap{};
+				PrintIteration(ap.begin(), ap.end());
+			}
+			{
+				fmt::print("Copy ctor\n");
+				AoL::PartitionArray<int, 8> ap_new{ ap_copy };
+				PrintIteration(ap_new.begin(), ap_new.end());
+			}
+			{
+				fmt::print("Copy operator\n");
+				AoL::PartitionArray<int, 8> ap_new;
+				ap_new = ap_copy;
+				PrintIteration(ap_new.begin(), ap_new.end());
+			}
+			{
+				fmt::print("Move ctor\n");
+				AoL::PartitionArray<AoL::String, 8> ap_move{ "1s", "2s", "3s", "4s", "5s", "6s", "7s", "8s" };
+				AoL::PartitionArray<AoL::String, 8> ap_new{ std::move(ap_move) };
+				PrintIteration(ap_new.begin(), ap_new.end());
+			}
+			{
+				fmt::print("Move operator\n");
+				AoL::PartitionArray<AoL::String, 8> ap_move{ "1s", "2s", "3s", "4s", "5s", "6s", "7s", "8s" };
+				AoL::PartitionArray<AoL::String, 8> ap_new;
+				ap_new = std::move(ap_move);
+				PrintIteration(ap_new.begin(), ap_new.end());
+			}
+			{
+				fmt::print("Iterator ctor\n");
+				{
+					AoL::PartitionArray<AoL::String, 8> ap_move{ "1s", "2s", "3s", "4s", "5s", "6s", "7s", "8s" };
+					AoL::PartitionArray<AoL::String, 8> ap_new{ std::make_move_iterator(ap_move.begin()), std::make_move_iterator(ap_move.end()) };
+					PrintIteration(ap_new.begin(), ap_new.end());
+				}
+				{
+					AoL::PartitionArray<int, 8> ap_new{ ap_copy.begin(), ap_copy.end() };
+					PrintIteration(ap_new.begin(), ap_new.end());
+				}
+			}
+			{
+				fmt::print("Fill ctor\n");
+				AoL::PartitionArray<int, 8> ap(10);
 				PrintIteration(ap.begin(), ap.end());
 			}
 		}

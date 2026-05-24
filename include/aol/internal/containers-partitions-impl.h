@@ -995,7 +995,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-	using sub_partition_type = SubPartitionEx<PartitionArrayEx<T,S>>;
+	using sub_partition_type = SubPartitionEx<PartitionArrayEx<T, S>>;
 
 	container_type container_obj;
 	AoL::Vector<sub_partition_type> sub_partitions;
@@ -1004,8 +1004,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		base{ },
 		container_obj(),
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size(), 0} }
-	{
-	}
+	{}
 
 	constexpr PartitionArrayEx(const PartitionArrayEx& other) noexcept :
 		base{ },
@@ -1059,25 +1058,39 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 
 	/*
 	* @details Copying/moving by iterator
-	* 
+	*
 	* - Important: This can take any valid iterator for the same value_type
-	* 
+	*
 	* - Due to this, the newly constructed Partition will always start with a default partition, even if copied from one of the PartitionXXX type
 	*/
 	template<typename It>
 	explicit constexpr PartitionArrayEx(It start_it, It end_it) noexcept :
 		base{ },
-		container_obj{ start_it, end_it },
-		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
-	{}
+		container_obj{ },
+		sub_partitions{ sub_partition_type{container_obj, 0, static_cast<size_type>(end_it - start_it)} }
+	{
+		auto dst = container_obj.begin();
+
+		for (; start_it != end_it && dst != container_obj.end(); ++start_it, ++dst)
+		{
+			*dst = *start_it;
+		}
+	}
 
 	explicit constexpr PartitionArrayEx(Traits::ConstRefOrCopyType<value_type> fill_value) noexcept :
 		base{ },
-		container_obj(fill_value),
+		container_obj{},
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
-	{}
+	{
+		std::fill(container_obj.begin(), container_obj.end(), fill_value);
+	}
 
-	template<typename... Args> requires (sizeof...(Args) <= S)
+	template<typename... Args>
+		requires (
+		sizeof...(Args) == S &&
+		(std::convertible_to<std::remove_cvref_t<Args>, T> && ...) &&
+		(!std::same_as<std::remove_cvref_t<Args>, PartitionArrayEx> && ...)
+	)
 	explicit constexpr PartitionArrayEx(Args&&... args) noexcept :
 		base{ },
 		container_obj{std::forward<Args>(args)...},
