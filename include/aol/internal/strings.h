@@ -1,11 +1,11 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary strings
 ****************************************************************************************
 * - The main string type used by the library
 * - This string is different from std::string due to custom allocators
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_STRINGS_H
+#define AOL_INTERNAL_STRINGS_H
 
 #include "config.h"
 
@@ -559,3 +559,5 @@ constexpr auto StrToValue(char* const start, char* const end, T& out_val, Args&&
 }
 
 } // AoL namespace
+
+#endif // AOL_INTERNAL_STRINGS_H
