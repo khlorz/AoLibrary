@@ -1,11 +1,11 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary Configurations
 ****************************************************************************************
 * - Uncomment the defines you want to enable
 * - This will apply to all AoLibrary files
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_CONFIG_H
+#define AOL_INTERNAL_CONFIG_H
 
 /*********************************************************************
 * ALLOCATORS
@@ -246,3 +246,5 @@
 * - By default, the library already uses ankerl::unordered_dense::hash
 */
 #define AOL_USE_UNORDERED_DENSE_HASH
+
+#endif // AOL_INTERNAL_CONFIG_H
