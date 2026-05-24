@@ -2,10 +2,16 @@
 * AoLibrary serialization
 ****************************************************************************************
 * - Serialization of the library types require the cereal library
-* - To serialize the type, just include this header and that's it
+* - To serialize the type, just include this header after all other includes
+* - Does not need to be included everywhere, include only when needed
 ***************************************************************************************/
 #ifndef AOL_SERIALIZATION_SERIALIZE_H
 #define AOL_SERIALIZATION_SERIALIZE_H
+
+
+/*****************************************************
+* Essential includes
+*****************************************************/
 
 #include "cereal/cereal.hpp"										/* main serialization include */
 #include "cereal/types/base_class.hpp"								/* for inheritance types*/
@@ -20,156 +26,11 @@
 
 
 /*****************************************************
-* Containers serialization
+* Implementation includes
 *****************************************************/
 
-#include "aol/internal/containers.h"
+#include "serialize-containers-impl.h"
+#include "serialize-data-components-impl.h"
 
-namespace cereal
-{
-
-/****************************************
-* Derived containers
-* - Derived from Internal::ContainerBase
-****************************************/
-
-template<
-	typename Archive,
-	typename K,
-	typename V
->
-void save(Archive& archive, const AoL::Internal::KeyValuePairEx<K, V>& kvp)
-{
-	archive(
-		kvp.first,
-		kvp.second
-	);
-}
-
-template<
-	typename Archive,
-	typename K,
-	typename V
->
-void load(Archive& archive, AoL::Internal::KeyValuePairEx<K, V>& kvp)
-{
-	archive(
-		kvp.first,
-		kvp.second
-	);
-}
-
-template<
-	typename Archive,
-	typename K,
-	typename V,
-	typename P,
-	typename A
->
-void save(Archive& archive, const AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
-{
-	archive(c.container_obj);
-}
-
-template<
-	typename Archive,
-	typename K,
-	typename V,
-	typename P,
-	typename A
->
-void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
-{
-	archive(c.container_obj);
-}
-
-}
-
-
-/****************************************
-* Data-driven types serialization
-****************************************/
-
-#include "aol/data_components/profiles.h"
-
-namespace cereal
-{
-
-/****************************************
-* DataBasic
-****************************************/
-
-
-template<typename Archive, typename T>
-void serialize(Archive& archive, AoL::Internal::DataID<T>& data_id)
-{
-	archive(data_id.value_);
-}
-
-template<typename Archive, typename Derived>
-void save(Archive& archive, const AoL::DataBasic<Derived>& data)
-{
-	archive(
-		data.name,
-		data.description,
-		data.short_name,
-		data.id
-	);
-}
-
-template<typename Archive, typename Derived>
-void load(Archive& archive, AoL::DataBasic<Derived>& data)
-{
-	using DataBasic = AoL::DataBasic<Derived>;
-
-	archive(
-		data.name,
-		data.description,
-		data.short_name,
-		data.id
-	);
-
-	if (data.name.size() > DataBasic::Default::Name)
-	{
-		data.name.resize(DataBasic::Default::NameLength);
-	}
-
-	if (data.description.size() > DataBasic::Default::Description)
-	{
-		data.description.resize(DataBasic::Default::DescriptionLength);
-	}
-
-	if (data.short_name.size() > DataBasic::Default::ShortName)
-	{
-		data.short_name.resize(DataBasic::Default::ShortNameLength);
-	}
-}
-
-template<typename Archive, typename Derived>
-void save(Archive& archive, const AoL::DataMinimal<Derived>& data)
-{
-	archive(
-		data.name,
-		data.id
-	);
-}
-
-template<typename Archive, typename Derived>
-void load(Archive& archive, AoL::DataMinimal<Derived>& data)
-{
-	using DataBasic = AoL::DataMinimal<Derived>;
-
-	archive(
-		data.name,
-		data.id
-	);
-
-	if (data.name.size() > DataBasic::Default::Name)
-	{
-		data.name.resize(DataBasic::Default::NameLength);
-	}
-}
-
-} // namespace AoL
 
 #endif // AOL_SERIALIZATION_SERIALIZE_H

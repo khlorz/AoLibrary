@@ -829,6 +829,12 @@
     <ClInclude Include="aol\internal\containers-partitions-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\serialization\serialize-containers-impl.h">
+      <Filter>serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\serialization\serialize-data-components-impl.h">
+      <Filter>serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

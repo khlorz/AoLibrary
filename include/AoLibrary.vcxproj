@@ -248,6 +248,8 @@
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
+    <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
+    <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
     <ClInclude Include="aol\serialization\serialize.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />
