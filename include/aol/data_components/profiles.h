@@ -1,5 +1,3 @@
-#pragma once
-
 /***********************************************************
 * AoLibrary Data Component Profiles
 ************************************************************
@@ -7,6 +5,8 @@
 * - Variety of choices for different cases
 * - Read type comments for more information on the type
 ***********************************************************/
+#ifndef AOL_DATA_COMPONENTS_PROFILES_H
+#define AOL_DATA_COMPONENTS_PROFILES_H
 
 #include "aol/internal/config.h"
 #include "aol/internal/macros.h"
@@ -157,4 +157,6 @@ protected:
 };
 
 
-}
+} // AoL namespace
+
+#endif // AOL_DATA_COMPONENTS_PROFILES_H
