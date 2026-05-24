@@ -1,11 +1,11 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary Macros
 ****************************************************************************************
 * - All macros used by the library will be used here
 * - Macros must always start with AOL_ to not pollute the namespace
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_MACROS_H
+#define AOL_INTERNAL_MACROS_H
 
 /**
 * Empty base optimization
@@ -26,4 +26,4 @@
 #define AOL_BRANCH_LIKELY [[likely]]
 
 
-// macros.h EOF
+#endif // AOL_INTERNAL_MACROS_H

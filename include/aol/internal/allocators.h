@@ -1,5 +1,3 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary library
 ****************************************************************************************
@@ -8,6 +6,8 @@
 * - Do be careful when integrating types from the library that uses a different
 *	allocator as it might be a problem when moving or copying objects
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_ALLOCATORS_H
+#define AOL_INTERNAL_ALLOCATORS_H
 
 #include "config.h"
 
@@ -101,3 +101,5 @@ using DefaultStringPoolAllocator
 #endif
 
 }
+
+#endif // AOL_INTERNAL_ALLOCATORS_H

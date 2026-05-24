@@ -1,5 +1,3 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary algorithms
 ****************************************************************************************
@@ -7,6 +5,8 @@
 * - Some algorithms as well that are improved from the generic ones for specific use
 *   cases like LowerBound()
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_ALGORITHM_H
+#define AOL_INTERNAL_ALGORITHM_H
 
 #include "config.h"
 
@@ -141,3 +141,5 @@ constexpr auto Find(E&& e, const C& c, T&& val) noexcept requires std::is_execut
 
 
 } // namespace AoL
+
+#endif // AOL_INTERNAL_ALGORITHM_H
