@@ -1,5 +1,3 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary exceptions
 ****************************************************************************************
@@ -8,6 +6,8 @@
 *	library's string, I had to make a custom exception
 * - Do make sure to use the standard library exception for stl-related things
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_EXCEPTIONS_H
+#define AOL_INTERNAL_EXCEPTIONS_H
 
 #include "config.h"
 
@@ -102,3 +102,5 @@ public:
 };
 
 }
+
+#endif // AOL_INTERNAL_EXCEPTIONS_H
