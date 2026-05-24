@@ -1,5 +1,3 @@
-#pragma once
-
 /***********************************************************
 * AoLibrary Data Component Managers
 ************************************************************
@@ -7,6 +5,8 @@
 * - Best used in cases where managers are needed with the
 *	same interfaces and easier management
 ***********************************************************/
+#ifndef AOL_DATA_COMPONENTS_MANAGERS_H
+#define AOL_DATA_COMPONENTS_MANAGERS_H
 
 #include "aol/internal/config.h"
 
@@ -166,5 +166,6 @@ public:
 
 };
 
-}
+} // AoL namespace
 
+#endif // AOL_DATA_COMPONENTS_MANAGERS_H
