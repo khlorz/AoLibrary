@@ -1,11 +1,11 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary math
 ****************************************************************************************
 * - Some math functions used by the library
 * - Currently small, but will be adding more as I do more project
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_MATH_H
+#define AOL_INTERNAL_MATH_H
 
 #include "config.h"
 
@@ -100,3 +100,5 @@ constexpr void SubtractInPlaceWithGuard(T& value, T subtrahend) noexcept
 }
 
 } // namespace AoL
+
+#endif // AOL_INTERNAL_MATH_H
