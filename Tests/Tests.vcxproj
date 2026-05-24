@@ -46,6 +46,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="tests\partition_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmarks\all_benchmarks.h">
@@ -58,6 +59,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="tests\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\include\AoLibrary.vcxproj">

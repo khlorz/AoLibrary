@@ -29,29 +29,58 @@ namespace cereal
 {
 
 /****************************************
-* Internal::ContainerBase
-* - The base class for most containers
-****************************************/
-
-template<typename Archive, AoL::ContainerTypeTag CTT, typename T, typename C>
-void serialize(Archive& archive, AoL::Internal::ContainerBase<CTT, T, C>& container)
-{
-	archive(container);
-}
-
-/****************************************
 * Derived containers
 * - Derived from Internal::ContainerBase
 ****************************************/
 
 template<
 	typename Archive,
-	AoL::Traits::IsRotContainer C,
-	typename B = C::Base
+	typename K,
+	typename V
 >
-void serialize(Archive& archive, C& c)
+void save(Archive& archive, const AoL::Internal::KeyValuePairEx<K, V>& kvp)
 {
-	archive(base_class<B>(&c));
+	archive(
+		kvp.first,
+		kvp.second
+	);
+}
+
+template<
+	typename Archive,
+	typename K,
+	typename V
+>
+void load(Archive& archive, AoL::Internal::KeyValuePairEx<K, V>& kvp)
+{
+	archive(
+		kvp.first,
+		kvp.second
+	);
+}
+
+template<
+	typename Archive,
+	typename K,
+	typename V,
+	typename P,
+	typename A
+>
+void save(Archive& archive, const AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
+{
+	archive(c.container_obj);
+}
+
+template<
+	typename Archive,
+	typename K,
+	typename V,
+	typename P,
+	typename A
+>
+void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
+{
+	archive(c.container_obj);
 }
 
 }

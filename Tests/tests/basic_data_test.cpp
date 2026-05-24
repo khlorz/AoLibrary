@@ -5,8 +5,10 @@
 
 #ifndef BENCHMARK_CONFIG_ON
 
-#include "all_tests.h"
+#include "config.h"
+#if AOL_TESTS_FLAG(BASIC_DATA)
 
+#include "all_tests.h"
 #include "aol/aol.h"
 #include "aol/data_components/profiles.h"
 
@@ -47,4 +49,5 @@ void BasicDataTests() noexcept
 
 } // namespace AoL
 
-#endif
+#endif // AOL_TEST_FLAG(BASIC_DATA)
+#endif // BENCHAMARK_CONFIG_ON

@@ -7,6 +7,10 @@
 * - This will apply to all AoLibrary files
 ***************************************************************************************/
 
+/*********************************************************************
+* ALLOCATORS
+/********************************************************************/
+
 /***************************************
 * General Allocator
 ****************************************/
@@ -57,8 +61,8 @@
 */
 //#define AOL_USE_BOOST_POOL_ALLOCATOR
 
-#if defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR) && defined(AOL_USE_BOOST_POOL_ALLOCATOR)
-#error "Only define one pool allocator type!"
+#if defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR) == defined(AOL_USE_BOOST_POOL_ALLOCATOR)
+#error "You must define one pool allocator type!"
 #endif
 
 
@@ -74,6 +78,22 @@
 //#define AOL_USE_MIMALLOCATOR_STRING_ALLOCATOR
 
 
+/*********************************************************************
+* CONTAINERS
+/********************************************************************/
+
+/***************************************
+* Custom Vector Types
+****************************************/
+
+/**
+* This makes all AoLibrary containers using Array use a custom vector type
+*
+* - By default, the library uses std::array
+*/
+#define AOL_USE_STD_ARRAY
+
+
 /***************************************
 * Custom Vector Types
 ****************************************/
@@ -83,7 +103,7 @@
 *
 * - By default, the library uses std::vector
 */
-//#define AOL_USE_CUSTOM_VECTOR_TYPE
+#define AOL_USE_STD_VECTOR
 
 
 /***************************************
@@ -91,7 +111,14 @@
 ****************************************/
 
 /**
-* This makes all AoLibrary containers using HashMap use a custom hash map
+* This makes all AoLibrary containers using HashMap use a std::unordered_map
+*
+* - By default, the library already uses ankerl::unordered_dense::map
+*/
+//#define AOL_USE_STD_UNORDERED_MAP
+
+/**
+* This makes all AoLibrary containers using HashMap use a ankerl::unordered_dense::map
 *
 * - By default, the library already uses ankerl::unordered_dense::map
 */
@@ -101,6 +128,13 @@
 /***************************************
 * Custom HashSet Types
 ****************************************/
+
+/**
+* This makes all AoLibrary containers using HashMap use a std::unordered_set
+*
+* - By default, the library already uses ankerl::unordered_dense::map
+*/
+//#define AOL_USE_STD_UNORDERED_SET
 
 /**
 * This makes all AoLibrary containers using HashSet use a custom hash set
@@ -167,6 +201,14 @@
 /***************************************
 * Custom KeyOrderSet Types
 ****************************************/
+
+/**
+* This makes all AoLibrary containers using KeyOrderSet use std::set
+*
+* - By default, the library already uses absl::btree_set
+*/
+//#define AOL_USE_STD_KEYORDERED_SET
+
 /**
 * This makes all AoLibrary containers using KeyOrderSet use absl::btree_set
 *
@@ -174,6 +216,25 @@
 */
 #define AOL_USE_ABSEIL_KEYORDERED_SET
 
+
+/***************************************
+* Custom Subrange Types
+****************************************/
+
+/**
+* This makes all AoLibrary Subrange type use std::ranges::subrange
+* 
+* - By default, the library uses the custom subrange
+*/
+//#define AOL_USE_STD_SUBRANGE
+
+#if defined(AOL_USE_STD_SUBRANGE)
+#define AOL_USE_STD_RANGES
+#endif
+
+/*********************************************************************
+* HASHES
+/********************************************************************/
 
 /***************************************
 * Custom Hashes

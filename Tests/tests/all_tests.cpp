@@ -9,6 +9,7 @@ void RunTests()
 {
 	BasicDataTests();
 	GenericManagerTests();
+	PartitionTests();
 }
 
 }

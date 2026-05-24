@@ -14,12 +14,18 @@
     <ClCompile Include="tests\basic_data_test.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\partition_tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmarks\all_benchmarks.h">
       <Filter>benchmarks</Filter>
     </ClInclude>
     <ClInclude Include="tests\all_tests.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\config.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
