@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
-    <ClInclude Include="aol\serialization\serialization.h">
+    <ClInclude Include="aol\serialization\serialize.h">
       <Filter>serialization</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\algorithm.h">

@@ -248,7 +248,7 @@
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
-    <ClInclude Include="aol\serialization\serialization.h" />
+    <ClInclude Include="aol\serialization\serialize.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />
     <ClInclude Include="aol\third-party\fmt\chrono.h" />

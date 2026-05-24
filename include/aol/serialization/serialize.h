@@ -4,8 +4,8 @@
 * - Serialization of the library types require the cereal library
 * - To serialize the type, just include this header and that's it
 ***************************************************************************************/
-#ifndef AOL_SERIALIZATION_SERIALIZATION_H
-#define AOL_SERIALIZATION_SERIALIZATION_H
+#ifndef AOL_SERIALIZATION_SERIALIZE_H
+#define AOL_SERIALIZATION_SERIALIZE_H
 
 #include "cereal/cereal.hpp"										/* main serialization include */
 #include "cereal/types/base_class.hpp"								/* for inheritance types*/
@@ -172,4 +172,4 @@ void load(Archive& archive, AoL::DataMinimal<Derived>& data)
 
 } // namespace AoL
 
-#endif // AOL_SERIALIZATION_SERIALIZATION_H
+#endif // AOL_SERIALIZATION_SERIALIZE_H
