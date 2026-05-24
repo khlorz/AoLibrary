@@ -1,5 +1,3 @@
-#pragma once
-
 /***************************************************************************************
 * AoLibrary containers
 ****************************************************************************************
@@ -8,6 +6,8 @@
 * - Some custom containers and functions are provided as well
 * - Additional containers/functions will be added in the future as the library grows
 ***************************************************************************************/
+#ifndef AOL_INTERNAL_CONTAINERS_H
+#define AOL_INTERNAL_CONTAINERS_H
 
 #include "config.h"
 
@@ -1071,4 +1071,4 @@ concept IsAoLContainer = std::is_same_v<typename T::container_tag, Internal::Con
 #include "containers-subrange-impl.h"
 #include "containers-partitions-impl.h"
 
-// containers.h EOF
+#endif // AOL_INTERNAL_CONTAINERS_H
