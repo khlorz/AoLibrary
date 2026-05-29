@@ -61,82 +61,82 @@ C* LowerBound(const C* p_start, const C* p_end, const K& key)
 
 // Sort the whole container
 // - use std::sort for custom size container
-template<typename C>
-constexpr void Sort(C& c) noexcept
+template<typename It>
+constexpr void Sort(It it_begin, It it_end) noexcept
 {
-	std::sort(GetBeginIt(c), GetEndIt(c));
+	std::sort(it_begin, it_end);
 }
 
 // Sort the whole container with comparator
 // - use std::sort for custom size container
-template<typename C, typename F>
-constexpr void Sort(C& c, F&& f) noexcept requires (!std::is_execution_policy_v<F>)
+template<typename It, typename F>
+constexpr void Sort(It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>)
 {
-	std::sort(GetBeginIt(c), GetEndIt(c), std::forward<F>(f));
+	std::sort(it_begin, it_end, std::forward<F>(f));
 }
 
 // Sort the whole container with custom execution
 // - use std::sort for custom size container
-template<typename C, typename E>
-constexpr void Sort(E&& e, C& c) noexcept requires std::is_execution_policy_v<E>
+template<typename It, typename E>
+constexpr void Sort(E&& e, It it_begin, It it_end) noexcept requires std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), GetBeginIt(c), GetEndIt(c));
+	std::sort(std::forward<E>(e), it_begin, it_end);
 }
 
 // Sort the whole container with custom execution and comparator
 // - use std::sort for custom size container
-template<typename C, typename F, typename E>
-constexpr void Sort(E&& e, C& c, F&& f) noexcept requires (!std::is_execution_policy_v<F>) && std::is_execution_policy_v<E>
+template<typename It, typename F, typename E>
+constexpr void Sort(E&& e, It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>) && std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), GetBeginIt(c), GetEndIt(c), std::forward<F>(f));
+	std::sort(std::forward<E>(e), it_begin, it_end, std::forward<F>(f));
 }
 
 // Reverse sort the whole container
 // - use std::sort for custom size container
-template<typename C>
-constexpr void SortReverse(C& c) noexcept
+template<typename It>
+constexpr void SortReverse(It it_begin, It it_end) noexcept
 {
-	std::sort(ContainerBeginReverse(c), ContainerEndReverse(c));
+	std::sort(std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end));
 }
 
 // Reverse sort the whole container with comparator
 // - use std::sort for custom size container
-template<typename C, typename F>
-constexpr void SortReverse(C& c, F&& f) noexcept requires (!std::is_execution_policy_v<F>)
+template<typename It, typename F>
+constexpr void SortReverse(It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>)
 {
-	std::sort(ContainerBeginReverse(c), ContainerEndReverse(c), std::forward<F>(f));
+	std::sort(std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end), std::forward<F>(f));
 }
 
 // Reverse sort the whole container with custom execution
 // - use std::sort for custom size container
-template<typename C, typename E>
-constexpr void SortReverse(E&& e, C& c) noexcept requires std::is_execution_policy_v<E>
+template<typename It, typename E>
+constexpr void SortReverse(E&& e, It it_begin, It it_end) noexcept requires std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), ContainerBeginReverse(c), ContainerEndReverse(c));
+	std::sort(std::forward<E>(e), std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end));
 }
 
 // Reverse sort the whole container with custom execution and comparator
 // - use std::sort for custom size container
-template<typename C, typename F, typename E>
-constexpr void SortReverse(E&& e, C& c, F&& f) noexcept requires (!std::is_execution_policy_v<F>) && std::is_execution_policy_v<E>
+template<typename It, typename F, typename E>
+constexpr void SortReverse(E&& e, It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>) && std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), ContainerBeginReverse(c), ContainerEndReverse(c), std::forward<F>(f));
+    std::sort(std::forward<E>(e), std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end), std::forward<F>(f));
 }
 
 // Find a value from a container
 // - use std::find for custom size container
-template<typename C, typename T>
-constexpr auto Find(const C& c, T&& val) noexcept
+template<typename It, typename T>
+constexpr auto Find(It it_begin, It it_end, T&& val) noexcept
 {
-	return std::find(GetBeginIt(c), GetEndIt(c), std::forward<T>(val));
+	return std::find(it_begin, it_end, std::forward<T>(val));
 }
 
 // Find a value from a container with custom execution
 // - use std::find for custom size container
-template<typename C, typename T, typename E>
-constexpr auto Find(E&& e, const C& c, T&& val) noexcept requires std::is_execution_policy_v<E>
+template<typename It, typename T, typename E>
+constexpr auto Find(E&& e, It it_begin, It it_end, T&& val) noexcept requires std::is_execution_policy_v<E>
 {
-	return std::find(std::forward<E>(e), GetBeginIt(c), GetEndIt(c), std::forward<T>(val));
+	return std::find(std::forward<E>(e), it_begin, it_end, std::forward<T>(val));
 }
 
 

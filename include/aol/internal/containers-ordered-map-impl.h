@@ -28,6 +28,11 @@ struct KeyValuePairEx
 	{
 		return this->first <=> other.first;
 	}
+
+	constexpr auto operator == (const KeyValuePairEx& other) const noexcept
+	{
+		return this->first == other.first;
+	}
 };
 
 /**
@@ -105,7 +110,7 @@ struct KeyOrderMapEx
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
@@ -114,7 +119,7 @@ struct KeyOrderMapEx
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	template<typename It>
@@ -125,7 +130,7 @@ struct KeyOrderMapEx
 #endif
 	{
 		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>, "Invalid iterator type!");
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	constexpr void build_start() noexcept
@@ -142,7 +147,7 @@ struct KeyOrderMapEx
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
 #ifndef NDEBUG
 		const InKey& ref_key = key;
-		auto it = std::find(container_obj.begin(), container_obj.end(), ref_key);
+		auto it = AoL::Find(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
 		assert(it == container_obj.end() && "Key already exists!");
 #endif
 		container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -154,7 +159,7 @@ struct KeyOrderMapEx
 #ifndef NDEBUG
 		build_flag = false;
 #endif
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	template<typename InKey, typename InValue>

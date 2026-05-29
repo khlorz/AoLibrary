@@ -25,7 +25,8 @@ namespace AoL
 
 void SerializationTests() noexcept
 {
-	fmt::print("Serialization tests:\n");
+	fmt::print("**********Serialization tests**********\n");
+	fmt::print("*****Fundamental types*****\n");
 	SerializeThis(
 		1,
 		[](int i)
@@ -42,6 +43,43 @@ void SerializationTests() noexcept
 			fmt::print("{:3f}\n\n", f);
 		}
 	);
+	SerializeThis(
+		std::string("asdasdkjqlkwje"),
+		[](auto str)
+		{
+			fmt::print("string:\n");
+			fmt::print("{}\n\n", str);
+		}
+	);
+	fmt::print("*****Container types*****\n");
+	SerializeThis(
+		AoL::Internal::KeyValuePairEx<int, int>{1, 2},
+		[](auto kvp)
+		{
+			fmt::print("KeyValuePairEx<int, int>\n");
+			fmt::print("key = {} | value = {}\n\n", kvp.first, kvp.second);
+		}
+	);
+	{
+		AoL::Internal::KeyOrderMapEx<int, int, AoL::Internal::KeyValuePairEx<int, int>, AoL::Internal::DefaultAllocator< AoL::Internal::KeyValuePairEx<int, int>>> map{};
+		map.build_start();
+		map.build_add(1, 2);
+		map.build_add(100, 50);
+		map.build_add(40, 199);
+		map.build_add(50123, 824);
+		map.build_add(214712047, 1279);
+		map.build_end();
+		SerializeThis(
+			map,
+			[](auto& map)
+			{
+				fmt::print("KeyOrderMapEx<int, int>\n");
+				for (auto kvp : map)
+					fmt::print("key = {} | value = {}\n", kvp.first, kvp.second);
+				fmt::print("\n");
+			}
+		);
+	}
 }
 
 }
