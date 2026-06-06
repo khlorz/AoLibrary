@@ -147,7 +147,7 @@ struct KeyOrderMapEx
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
 #ifndef NDEBUG
 		const InKey& ref_key = key;
-		auto it = AoL::Find(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
+		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
 		assert(it == container_obj.end() && "Key already exists!");
 #endif
 		container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -167,7 +167,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
 		if (p_ret >= container_obj.data() + container_obj.size())
 		{
 			container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -188,7 +188,7 @@ struct KeyOrderMapEx
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
 #else
-		return LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
 #endif // !NDEBUG
 	}
 
@@ -201,7 +201,7 @@ struct KeyOrderMapEx
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
 #else
-		return LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
 #endif // !NDEBUG
 	}
 
@@ -210,7 +210,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret->second;
@@ -227,7 +227,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret->second;
@@ -258,7 +258,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret;
@@ -274,7 +274,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret;
