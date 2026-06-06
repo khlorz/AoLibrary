@@ -42,7 +42,7 @@ constexpr auto FindBrute(E&& e, It it_begin, It it_end, T&& val) noexcept requir
 	return std::find(std::forward<E>(e), it_begin, it_end, std::forward<T>(val));
 }
 
-template<typename C, typename K> requires std::is_pointer_v<C> && Internal::IsValidLowerBoundType<C, K>
+template<typename C, typename K> requires Internal::IsValidLowerBoundType<C, K>
 C* FindLowerBound(const C* p_start, const C* p_end, const K& key)
 {
     C* p_current = const_cast<C*>(p_start);
