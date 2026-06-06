@@ -838,6 +838,9 @@
     <ClInclude Include="aol\internal\algorithm-find-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\algorithm-sort-impl.h">
+      <Filter>internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
