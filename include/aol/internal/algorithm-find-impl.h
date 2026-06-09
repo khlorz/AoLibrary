@@ -15,14 +15,14 @@ concept IsPairType = requires(T t)
     t.second;
 };
 
-template<typename K>
-concept HasComparableKey = requires(K k1, K k2)
+template<typename T1, typename T2>
+concept HasComparableKey = requires(T1 t1, T2 t2)
 {
-    { k1 < k2 } -> std::convertible_to<bool>;
+    { t1.first < t2 } -> std::convertible_to<bool>;
 };
 
 template<typename T, typename K>
-concept IsValidLowerBoundType = IsPairType<T> && HasComparableKey<K>;
+concept IsValidLowerBoundType = IsPairType<T> && HasComparableKey<T, K>;
 
 }
 
