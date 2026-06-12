@@ -43,16 +43,10 @@ constexpr auto FindBrute(E&& e, It it_begin, It it_end, T&& val) noexcept requir
 }
 
 /*
-* @details Slightly modified lower_bound algorithm
-* 
-* - Requires the container to be sorted, otherwise, it will be UB
-* 
-* - This overload requires the pointer to the container and the pointer to the end of the container
-* 
-* - The value type of the container must have std::pair interface, requiring the member 'first'
-* 
-* - Usually faster than the iterator overload of this function
-* 
+* @details General usage lower bound algorithm
+*
+* - Just a slightly modified implementation of std::lower_bound
+*
 * @tparam It iterator type (can be a pointer)
 * @tparam K key type
 * @tparam Comparator comparison predicate (default: std::less<void>)
@@ -62,7 +56,7 @@ constexpr auto FindBrute(E&& e, It it_begin, It it_end, T&& val) noexcept requir
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
-It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{})
+It FindLowerBoundGeneral(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{}) noexcept
 {
     It it_current = it_begin;
     for (PtrSize current_count = (PtrSize)(it_end - it_current); current_count > 0; )
@@ -81,6 +75,66 @@ It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator 
     }
     return it_current;
 }
+
+/*
+* @details Branchless lower bound algorithm
+*
+* - A 'branchless' implementation for lower bound
+* 
+* - Usually faster than the general one, but always profile it
+*
+* @tparam It iterator type (can be a pointer)
+* @tparam K key type
+* @tparam Comparator comparison predicate (default: std::less<void>)
+* @param p_start pointer to container address or start
+* @param p_end pointer to container end address
+* @param key value to be found
+* @return iterator to lower bound position for value
+*/
+template<typename It, typename K, typename Comparator = std::less<void>>
+constexpr It FindLowerBoundBranchless(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
+{
+    size_t length = it_end - it_begin;
+    if (length == 0)
+        return it_end;
+    size_t step = std::bit_floor(length);
+    if (step != length && compare(it_begin[step], value))
+    {
+        length -= step + 1;
+        if (length == 0)
+            return it_end;
+        step = std::bit_ceil(length);
+        it_begin = it_end - step;
+    }
+    for (step /= 2; step != 0; step /= 2)
+    {
+        if (compare(it_begin[step], value))
+            it_begin += step;
+    }
+    return it_begin + compare(*it_begin, value);
+}
+
+/*
+* @details Default lower bound algorithm of the library
+*
+* - This uses the branchless implementation
+*
+* - Requires the container to be sorted, otherwise, it is UB
+*
+* @tparam It iterator type (can be a pointer)
+* @tparam K key type
+* @tparam Comparator comparison predicate (default: std::less<void>)
+* @param p_start pointer to container address or start
+* @param p_end pointer to container end address
+* @param key value to be found
+* @return iterator to lower bound position for value
+*/
+template<typename It, typename K, typename Comparator = std::less<void>>
+It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{}) noexcept
+{
+    return FindLowerBoundBranchless(it_begin, it_end, value, comparator);
+}
+
 
 } // AoL namespace
 

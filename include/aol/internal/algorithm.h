@@ -13,6 +13,7 @@
 #include "types.h"
 
 #include <algorithm>
+#include <bit>
 
 namespace AoL
 {
