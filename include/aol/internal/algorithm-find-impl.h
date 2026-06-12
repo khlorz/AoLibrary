@@ -63,8 +63,8 @@ C* FindLowerBound(const C* p_start, const C* p_end, const K& key)
     return p_current;
 }
 
-template<typename It, typename K, typename Comparator>
-It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator)
+template<typename It, typename K, typename Comparator = std::less<void>>
+It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{})
 {
     It p_current = it_begin;
     for (PtrSize current_count = (PtrSize)(it_end - p_current); current_count > 0; )
