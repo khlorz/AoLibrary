@@ -48,9 +48,10 @@ template<
 	typename K,
 	typename V,
 	typename P,
+	typename C,
 	typename A
 >
-void save(Archive& archive, const AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
+void save(Archive& archive, const AoL::Internal::KeyOrderMapEx<K, V, P, C, A>& c)
 {
 	archive(c.container_obj);
 }
@@ -60,9 +61,10 @@ template<
 	typename K,
 	typename V,
 	typename P,
+	typename C,
 	typename A
 >
-void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, A>& c)
+void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, C, A>& c)
 {
 	archive(c.container_obj);
 }

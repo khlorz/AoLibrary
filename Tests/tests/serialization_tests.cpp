@@ -61,7 +61,7 @@ void SerializationTests() noexcept
 		}
 	);
 	{
-		AoL::Internal::KeyOrderMapEx<int, int, AoL::Internal::KeyValuePairEx<int, int>, AoL::Internal::DefaultAllocator< AoL::Internal::KeyValuePairEx<int, int>>> map{};
+		AoL::FlatKeyOrderMap<int, int> map{};
 		map.build_start();
 		map.build_add(1, 2);
 		map.build_add(100, 50);

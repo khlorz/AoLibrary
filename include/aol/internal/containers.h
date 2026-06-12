@@ -168,10 +168,14 @@ template<
 >
 struct KeyValuePairEx;
 
+template<typename P>
+struct PairLessComparator;
+
 template<
 	typename K,
 	typename V,
 	typename P,
+	typename C,
 	typename A
 >
 struct KeyOrderMapEx;
@@ -338,7 +342,7 @@ using KeyOrderMap
 #elif defined(AOL_USE_ABSEIL_KEYORDERED_MAP)
 = absl::btree_map<K, V, std::less<K>, A>;
 #else
-= Internal::KeyOrderMapEx<K, V, P, A, Vector<P>>;
+= Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 #endif
 
 /**
@@ -403,7 +407,7 @@ template<
 	typename P = FlatKeyOrderMapPair<K, V>,
 	typename A = Internal::DefaultAllocator<P>
 >
-using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, A>;
+using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 
 /**
 * @details FlatKeyOrderMap but specialized for pool allocators
@@ -423,7 +427,7 @@ template<
 	typename P = Internal::KeyValuePairEx<K, V>,
 	typename A = Internal::DefaultPoolAllocator<P>
 >
-using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, A>;
+using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 
 /**
 * @details Insert-value pair type used by InsertOrderedMap
