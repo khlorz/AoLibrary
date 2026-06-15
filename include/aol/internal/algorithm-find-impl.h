@@ -165,6 +165,45 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
 }
 
 /*
+* @details Random lower bound algorith
+*
+* - Binary search but random
+*
+* - Can be really fast, can be really slow, depends on your luck
+*
+* @tparam It iterator type (can be a pointer)
+* @tparam K key type
+* @tparam Comparator comparison predicate (default: std::less<void>)
+* @param p_start pointer to container address or start
+* @param p_end pointer to container end address
+* @param key value to be found
+* @return iterator to lower bound position for value
+*/
+template<typename It, typename K, typename Comparator = std::less<void>>
+It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator comp = Comparator{}) noexcept
+{
+    if (it_begin == it_end)
+    {
+        return it_end;
+    }
+
+    for (size_t len = it_end - it_begin; len > 1; )
+    {
+        It mid = it_begin + (std::rand() % len);
+        if (!comp(*mid, value))
+        {
+            it_end = mid + 1;
+        }
+        else
+        {
+            it_begin = mid + 1;
+        }
+    }
+
+    return comp(*it_begin, value) ? it_end : it_begin;
+}
+
+/*
 * @details Default lower bound algorithm of the library
 *
 * - This uses the Eytzinger implementation
