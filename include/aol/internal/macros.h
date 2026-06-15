@@ -25,5 +25,27 @@
 #define AOL_BRANCH_UNLIKELY [[unlikely]]
 #define AOL_BRANCH_LIKELY [[likely]]
 
+/**
+* We use each platform's prefetch function
+* Cannot proceed with no prefetch function
+*/
+#if defined(__GNUC__) || defined(__clang__)
+#define BS_PREFETCH(addr) __builtin_prefetch(addr)
+#elif defined(_MSC_VER)
+#include <xmmintrin.h>
+#define AOL_MACRO_FUNC_PREFETCH(addr) _mm_prefetch((const char*)(addr), _MM_HINT_T0)
+#else
+#error "No prefetch function! Create one or use a different function!"
+#endif
+
+/**
+* Counting trailing ones
+*/
+#if __cplusplus >= 202002L
+#define AOL_MACRO_FUNC_COUNTR_ONE(x) std::countr_one(x)
+#else
+#error "The library must be on C++20 standard!"
+#endif
+
 
 #endif // AOL_INTERNAL_MACROS_H
