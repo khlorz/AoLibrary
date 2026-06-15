@@ -5,27 +5,6 @@
 namespace AoL
 {
 
-namespace Internal
-{
-
-template<typename T>
-concept IsPairType = requires(T t)
-{
-    t.first;
-    t.second;
-};
-
-template<typename T1, typename T2>
-concept HasComparableKey = requires(T1 t1, T2 t2)
-{
-    { t1.first < t2 } -> std::convertible_to<bool>;
-};
-
-template<typename T, typename K>
-concept IsValidLowerBoundType = IsPairType<T> && HasComparableKey<T, K>;
-
-}
-
 // Find a value from a container using brute force
 // - use std::find for custom size container
 template<typename It, typename T>
@@ -98,23 +77,34 @@ It FindLowerBoundGeneral(It it_begin, It it_end, const K& value, Comparator comp
 template<typename It, typename K, typename Comparator = std::less<void>>
 constexpr It FindLowerBoundBranchless(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
-    size_t length = it_end - it_begin;
+    using diff_t = SizeT;
+
+    diff_t length = it_end - it_begin;
     if (length == 0)
+    {
         return it_end;
-    size_t step = std::bit_floor(length);
+    }
+
+    diff_t step = std::bit_floor(length);
     if (step != length && compare(it_begin[step], value))
     {
         length -= step + 1;
         if (length == 0)
+        {
             return it_end;
+        }
         step = std::bit_ceil(length);
         it_begin = it_end - step;
     }
+
     for (step /= 2; step != 0; step /= 2)
     {
         if (compare(it_begin[step], value))
+        {
             it_begin += step;
+        }
     }
+
     return it_begin + compare(*it_begin, value);
 }
 
@@ -141,9 +131,11 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
 {
     using diff_t = AoL::SizeT;
 
-    diff_t n = (diff_t)(it_end - it_begin);
+    diff_t n = static_cast<diff_t>(it_end - it_begin);
     if (n <= 0)
+    {
         return it_end;
+    }
 
     // Eytzinger uses 1-based indexing
     diff_t k = 1;
@@ -162,7 +154,9 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
     k >>= AOL_MACRO_FUNC_COUNTR_ONE(k);
 
     if (k == 0 || k > n)
+    {
         return it_end;
+    }
 
     return it_begin + k;
 }
@@ -186,14 +180,18 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
 template<typename It, typename K, typename Comparator = std::less<void>>
 It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
+    using diff_t = SizeT;
+
     if (it_begin == it_end)
     {
         return it_end;
     }
 
-    for (size_t len = it_end - it_begin; len > 1; )
+    it_end--;
+
+    while (it_begin < it_end)
     {
-        It mid = it_begin + (std::rand() % len);
+        It mid = it_begin + (std::rand() % static_cast<diff_t>(it_end - it_begin));
         if (!compare(*mid, value))
         {
             it_end = mid + 1;

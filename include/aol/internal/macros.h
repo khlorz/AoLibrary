@@ -42,6 +42,7 @@
 * Counting trailing ones
 */
 #if __cplusplus >= 202002L
+#include <bit>
 #define AOL_MACRO_FUNC_COUNTR_ONE(x) std::countr_one(x)
 #else
 #error "The library must be on C++20 standard!"
