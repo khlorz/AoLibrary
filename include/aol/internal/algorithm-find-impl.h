@@ -53,17 +53,18 @@ constexpr auto FindBrute(E&& e, It it_begin, It it_end, T&& val) noexcept requir
 * @param p_start pointer to container address or start
 * @param p_end pointer to container end address
 * @param key value to be found
+* @param compare predicate for < comparison (defaulted to std::less<void>)
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
-It FindLowerBoundGeneral(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{}) noexcept
+It FindLowerBoundGeneral(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
     It it_current = it_begin;
     for (PtrSize current_count = (PtrSize)(it_end - it_current); current_count > 0; )
     {
         PtrSize temp_count = current_count >> 1;
         It mid = it_current + temp_count;
-        if (comparator(*mid, value))
+        if (compare(*mid, value))
         {
             it_current = ++mid;
             current_count -= temp_count + 1;
@@ -91,6 +92,7 @@ It FindLowerBoundGeneral(It it_begin, It it_end, const K& value, Comparator comp
 * @param p_start pointer to container address or start
 * @param p_end pointer to container end address
 * @param key value to be found
+* @param compare predicate for < comparison (defaulted to std::less<void>)
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
@@ -131,10 +133,11 @@ constexpr It FindLowerBoundBranchless(It it_begin, It it_end, const K& value, Co
 * @param p_start pointer to container address or start
 * @param p_end pointer to container end address
 * @param key value to be found
+* @param compare predicate for < comparison (defaulted to std::less<void>)
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
-It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator comp = Comparator{}) noexcept
+It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
     using diff_t = AoL::SizeT;
 
@@ -152,7 +155,7 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
         AOL_MACRO_FUNC_PREFETCH(std::to_address(it_begin + k) + 16);
 
         // if elem < value => go right
-        k = 2 * k + (comp(elem, value) ? 1 : 0);
+        k = 2 * k + (compare(elem, value) ? 1 : 0);
     }
 
     // recover last valid node
@@ -177,10 +180,11 @@ It FindLowerBoundEytzinger(It it_begin, It it_end, const K& value, Comparator co
 * @param p_start pointer to container address or start
 * @param p_end pointer to container end address
 * @param key value to be found
+* @param compare predicate for < comparison (defaulted to std::less<void>)
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
-It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator comp = Comparator{}) noexcept
+It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
     if (it_begin == it_end)
     {
@@ -190,7 +194,7 @@ It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator comp 
     for (size_t len = it_end - it_begin; len > 1; )
     {
         It mid = it_begin + (std::rand() % len);
-        if (!comp(*mid, value))
+        if (!compare(*mid, value))
         {
             it_end = mid + 1;
         }
@@ -200,7 +204,7 @@ It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator comp 
         }
     }
 
-    return comp(*it_begin, value) ? it_end : it_begin;
+    return compare(*it_begin, value) ? it_end : it_begin;
 }
 
 /*
@@ -216,12 +220,13 @@ It FindLowerBoundRandom(It it_begin, It it_end, const K& value, Comparator comp 
 * @param p_start pointer to container address or start
 * @param p_end pointer to container end address
 * @param key value to be found
+* @param compare predicate for < comparison (defaulted to std::less<void>)
 * @return iterator to lower bound position for value
 */
 template<typename It, typename K, typename Comparator = std::less<void>>
-It FindLowerBound(It it_begin, It it_end, const K& value, Comparator comparator = Comparator{}) noexcept
+It FindLowerBound(It it_begin, It it_end, const K& value, Comparator compare = Comparator{}) noexcept
 {
-    return FindLowerBoundEytzinger(it_begin, it_end, value, comparator);
+    return FindLowerBoundEytzinger(it_begin, it_end, value, compare);
 }
 
 
