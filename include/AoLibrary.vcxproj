@@ -227,6 +227,8 @@
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
+    <ClInclude Include="aol\internal\algorithm-find-impl.h" />
+    <ClInclude Include="aol\internal\algorithm-sort-impl.h" />
     <ClInclude Include="aol\internal\algorithm.h" />
     <ClInclude Include="aol\internal\allocators.h" />
     <ClInclude Include="aol\internal\config.h" />

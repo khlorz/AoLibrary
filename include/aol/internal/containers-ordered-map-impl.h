@@ -28,6 +28,23 @@ struct KeyValuePairEx
 	{
 		return this->first <=> other.first;
 	}
+
+	constexpr auto operator == (const KeyValuePairEx& other) const noexcept
+	{
+		return this->first == other.first;
+	}
+};
+
+template<typename P>
+struct PairLessComparator
+{
+	using pair_type = P;
+
+	template<typename T>
+	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, const T& rhs) noexcept
+	{
+		return lhs.first < rhs;
+	}
 };
 
 /**
@@ -47,9 +64,10 @@ struct KeyValuePairEx
 * @tparam A allocator type
 * @tparam C map container type
 */
-template<typename K, typename V, typename P, typename A>
+template<typename K, typename V, typename P, typename C, typename A>
 struct KeyOrderMapEx
 {
+public:
 	using container_type = AoL::Vector<P, A>;
 	using container_tag = AoL::Internal::ContainerTag;
 
@@ -64,13 +82,20 @@ struct KeyOrderMapEx
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
+private:
+	using less_than_comp_type = C;
+
+	less_than_comp_type less_than_comp;
+
+public:
 	container_type container_obj;
 #ifndef NDEBUG
 	bool build_flag;
 #endif
 
 	KeyOrderMapEx() noexcept :
-		container_obj{ }
+		container_obj{ },
+		less_than_comp{ }
 #ifndef NDEBUG
 		, build_flag{ false }
 #endif
@@ -105,7 +130,7 @@ struct KeyOrderMapEx
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
@@ -114,7 +139,7 @@ struct KeyOrderMapEx
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	template<typename It>
@@ -125,7 +150,7 @@ struct KeyOrderMapEx
 #endif
 	{
 		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>, "Invalid iterator type!");
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	constexpr void build_start() noexcept
@@ -142,7 +167,7 @@ struct KeyOrderMapEx
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
 #ifndef NDEBUG
 		const InKey& ref_key = key;
-		auto it = std::find(container_obj.begin(), container_obj.end(), ref_key);
+		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
 		assert(it == container_obj.end() && "Key already exists!");
 #endif
 		container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -154,7 +179,7 @@ struct KeyOrderMapEx
 #ifndef NDEBUG
 		build_flag = false;
 #endif
-		Sort(container_obj);
+		Sort(container_obj.begin(), container_obj.end());
 	}
 
 	template<typename InKey, typename InValue>
@@ -162,7 +187,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret >= container_obj.data() + container_obj.size())
 		{
 			container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -183,7 +208,7 @@ struct KeyOrderMapEx
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
 #else
-		return LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
 #endif // !NDEBUG
 	}
 
@@ -196,7 +221,7 @@ struct KeyOrderMapEx
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
 #else
-		return LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key))->second;
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
 #endif // !NDEBUG
 	}
 
@@ -205,7 +230,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret->second;
@@ -222,7 +247,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret->second;
@@ -253,7 +278,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret;
@@ -269,7 +294,7 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = LowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val);
+		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
 		{
 			return p_ret;
