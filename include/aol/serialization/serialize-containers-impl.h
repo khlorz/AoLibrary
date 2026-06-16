@@ -229,22 +229,21 @@ void load(Archive& archive, AoL::PartitionVector<T, A>& pv)
 		new_vector,
 		sub_partitions_size
 	);
-
-	AoL::PartitionVector<T,A> new_partition{ std::move(new_vector) };
+	
+	pv.assign(std::move(new_vector));
 	for (AoL::SizeT i = 0; i < sub_partitions_size - 1; ++i)
 	{
 		archive(
 			max_size,
 			current_size
 		);
-		auto& sub_partition = new_partition.create_partition(max_size, false);
+		auto& sub_partition = pv.create_partition(max_size, false);
 		auto empty_size = max_size - current_size;
 		if (empty_size > 0)
 		{
 			sub_partition.erase(current_size, empty_size);
 		}
 	}
-	pv = std::move(new_partition);
 }
 
 template<
@@ -252,15 +251,15 @@ template<
 	typename T,
 	AoL::SizeT S
 >
-void save(Archive& archive, const AoL::PartitionArray<T, S>& pv)
+void save(Archive& archive, const AoL::PartitionArray<T, S>& pa)
 {
 	archive(
-		pv.container_obj
+		pa.container_obj
 	);
-	archive(pv.number_of_partitions());
-	for (AoL::SizeT i = 0; i < pv.number_of_partitions(); ++i)
+	archive(pa.number_of_partitions());
+	for (AoL::SizeT i = 0; i < pa.number_of_partitions(); ++i)
 	{
-		auto& sub_partition = pv.get_partition(i);
+		auto& sub_partition = pa.get_partition(i);
 		archive(
 			sub_partition.max_size(),
 			sub_partition.size()
@@ -273,33 +272,32 @@ template<
 	typename T,
 	AoL::SizeT S
 >
-void load(Archive& archive, AoL::PartitionArray<T, S>& pv)
+void load(Archive& archive, AoL::PartitionArray<T, S>& pa)
 {
-	typename AoL::PartitionArray<T, S>::container_type new_vector;
+	typename AoL::PartitionArray<T, S>::container_type new_array;
 	AoL::SizeT sub_partitions_size;
 	AoL::SizeT max_size;
 	AoL::SizeT current_size;
 
 	archive(
-		new_vector,
+		new_array,
 		sub_partitions_size
 	);
 
-	AoL::PartitionArray<T, S> new_partition{ std::move(new_vector) };
+	pa.assign(std::move(new_array));
 	for (AoL::SizeT i = 0; i < sub_partitions_size - 1; ++i)
 	{
 		archive(
 			max_size,
 			current_size
 		);
-		auto& sub_partition = new_partition.create_partition(max_size, false);
+		auto& sub_partition = pa.create_partition(max_size, false);
 		auto empty_size = max_size - current_size;
 		if (empty_size > 0)
 		{
 			sub_partition.erase(current_size, empty_size);
 		}
 	}
-	pv = std::move(new_partition);
 }
 
 }

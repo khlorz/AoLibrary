@@ -908,6 +908,28 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 	}
 
+	constexpr PartitionVectorEx& assign(const container_type& new_vector) noexcept
+	{
+		container_obj = new_vector;
+		sub_partitions.clear();
+		sub_partitions.emplace_back(
+			sub_partition_type{ container_obj, 0, container_obj.size() }
+		);
+
+		return *this;
+	}
+
+	constexpr PartitionVectorEx& assign(container_type&& new_vector) noexcept
+	{
+		container_obj = std::move(new_vector);
+		sub_partitions.clear();
+		sub_partitions.emplace_back(
+			sub_partition_type{ container_obj, 0, container_obj.size() }
+		);
+
+		return *this;
+	}
+
 	/*
 	* @details Increases the capacity
 	* 
@@ -1123,6 +1145,28 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		container_obj{std::forward<Args>(args)...},
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{
+	}
+
+	constexpr PartitionArrayEx& assign(const container_type& new_array) noexcept
+	{
+		container_obj = new_array;
+		sub_partitions.clear();
+		sub_partitions.emplace_back(
+			sub_partition_type{ container_obj, 0, container_obj.size() }
+		);
+
+		return *this;
+	}
+
+	constexpr PartitionArrayEx& assign(container_type&& new_array) noexcept
+	{
+		container_obj = std::move(new_array);
+		sub_partitions.clear();
+		sub_partitions.emplace_back(
+			sub_partition_type{ container_obj, 0, container_obj.size() }
+		);
+
+		return *this;
 	}
 };
 
