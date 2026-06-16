@@ -780,6 +780,12 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		return *this;
 	}
 
+	explicit constexpr PartitionVectorEx(container_type&& old_vector, allocator_type allocator = allocator_type{}) noexcept :
+		base{ },
+		container_obj{ std::forward<container_type>(old_vector), allocator },
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{}
+
 	/*
 	* @details Copying/moving by iterator
 	*
