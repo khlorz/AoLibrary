@@ -69,4 +69,36 @@ void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, C, A>& c)
 	archive(c.container_obj);
 }
 
+
+/****************************************
+* ArrayNamed# containers
+****************************************/
+
+#define AOL_SERIALIZATION_HELPER_NAMED_ARRAY(size) \
+template<															\
+	typename Archive,												\
+	typename T														\
+>																	\
+void save(Archive& archive, const AoL::ArrayNamed##size##<T>& arr)	\
+{																	\
+	archive(														\
+		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
+	);																\
+}																	\
+																	\
+template<															\
+	typename Archive,												\
+	typename T														\
+>																	\
+void load(Archive& archive, AoL::ArrayNamed##size##<T>& arr)		\
+{																	\
+	archive(														\
+		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
+	);																\
+}																	
+
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(2)
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(3)
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(4)
+
 }
