@@ -147,6 +147,44 @@ void SerializationTests() noexcept
 			);
 			fmt::print("\n");
 		}
+		{
+			AoL::CyclicBufferF<int, 8> cbf{};
+			for (AoL::SizeT i = 0; i < cbf.size() + 4; ++i)
+			{
+				cbf.push_back(static_cast<int>(i));
+			}
+			SerializeThis(
+				cbf,
+				[](const auto& cbf)
+				{
+					fmt::print("CyclicBufferF:\n");
+					for (AoL::SizeT i = 0; i < cbf.size(); ++i)
+					{
+						fmt::print("[{}] = {}\n", i, cbf[i]);
+					}
+				}
+			);
+			fmt::print("\n");
+		}
+		{
+			AoL::CyclicBufferD<int> cbd(8);
+			for (AoL::SizeT i = 0; i < cbd.size() + 4; ++i)
+			{
+				cbd.push_back(static_cast<int>(i));
+			}
+			SerializeThis(
+				cbd,
+				[](const auto& cbd)
+				{
+					fmt::print("CyclicBufferD:\n");
+					for (AoL::SizeT i = 0; i < cbd.size(); ++i)
+					{
+						fmt::print("[{}] = {}\n", i, cbd[i]);
+					}
+				}
+			);
+			fmt::print("\n");
+		}
 	}
 	fmt::print("\n");
 	{

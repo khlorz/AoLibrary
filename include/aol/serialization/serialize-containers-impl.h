@@ -101,4 +101,91 @@ AOL_SERIALIZATION_HELPER_NAMED_ARRAY(2)
 AOL_SERIALIZATION_HELPER_NAMED_ARRAY(3)
 AOL_SERIALIZATION_HELPER_NAMED_ARRAY(4)
 
+
+/****************************************
+* CyclicBuffer containers
+****************************************/
+
+template<
+	typename Archive,
+	typename D,
+	typename T,
+	typename A,
+	AoL::SizeT S
+>
+void save(Archive& archive, const AoL::Internal::CyclicBufferBase<D, T, A, S>& cbb)
+{
+	archive(
+		cbb.container_obj,
+		cbb.head,
+		cbb.item_count,
+		cbb.mask
+	);
+}
+
+template<
+	typename Archive,
+	typename D,
+	typename T,
+	typename A,
+	AoL::SizeT S
+>
+void load(Archive& archive, AoL::Internal::CyclicBufferBase<D, T, A, S>& cbb)
+{
+	archive(
+		cbb.container_obj,
+		cbb.head,
+		cbb.item_count,
+		cbb.mask
+	);
+}
+
+template<
+	typename Archive,
+	typename T,
+	typename A
+>
+void save(Archive& archive, const AoL::CyclicBufferD<T, A>& cbd)
+{
+	archive(
+		cereal::base_class<AoL::Internal::CyclicBufferBase<AoL::CyclicBufferD<T, A>, T, A, 0>>(&cbd)
+	);
+}
+
+template<
+	typename Archive,
+	typename T,
+	typename A
+>
+void load(Archive& archive, AoL::CyclicBufferD<T, A>& cbd)
+{
+	archive(
+		cereal::base_class<AoL::Internal::CyclicBufferBase<AoL::CyclicBufferD<T, A>, T, A, 0>>(&cbd)
+	);
+}
+
+template<
+	typename Archive,
+	typename T,
+	AoL::SizeT S
+>
+void save(Archive& archive, const AoL::CyclicBufferF<T, S>& cbb)
+{
+	archive(
+		cereal::base_class<AoL::Internal::CyclicBufferBase<AoL::CyclicBufferF<T, S>, T, void, S>>(&cbb)
+	);
+}
+
+template<
+	typename Archive,
+	typename T,
+	AoL::SizeT S
+>
+void load(Archive& archive, AoL::CyclicBufferF<T, S>& cbb)
+{
+	archive(
+		cereal::base_class<AoL::Internal::CyclicBufferBase<AoL::CyclicBufferF<T, S>, T, void, S>>(&cbb)
+	);
+}
+
 }
