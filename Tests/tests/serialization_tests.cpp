@@ -11,6 +11,8 @@
 
 #include "all_tests.h"
 #include "aol/aol.h"
+#include "aol/data_components/profiles.h"
+#include "aol/data_components/managers.h"
 #include "aol/serialization/serialize.h"
 
 #include "cereal/archives/binary.hpp"
@@ -63,11 +65,11 @@ void SerializationTests() noexcept
 	{
 		AoL::FlatKeyOrderMap<int, int> map{};
 		map.build_start();
+		map.build_add(214712047, 1279);
 		map.build_add(1, 2);
 		map.build_add(100, 50);
-		map.build_add(40, 199);
 		map.build_add(50123, 824);
-		map.build_add(214712047, 1279);
+		map.build_add(40, 199);
 		map.build_end();
 		SerializeThis(
 			map,
@@ -80,6 +82,53 @@ void SerializationTests() noexcept
 			}
 		);
 	}
+	{
+		fmt::print("*****Data Components*****\n");
+		{
+			struct DataSample1 : public AoL::DataBasic<DataSample1>
+			{
+				using AoL::DataBasic<DataSample1>::DataBasic;
+			};
+			DataSample1 sample;
+			sample.name = "SampleName";
+			sample.short_name = "Sample";
+			sample.description = "A sample description for a sample object";
+			sample.id = static_cast<DataSample1::IDT>(1);
+
+			SerializeThis(
+				sample,
+				[](const DataSample1& data_sample)
+				{
+					fmt::print("DataSample1 derived from DataBasic\n");
+					fmt::print("name: {}\n", data_sample.name);
+					fmt::print("short_name: {}\n", data_sample.short_name);
+					fmt::print("description: {}\n", data_sample.description);
+					fmt::print("id: {}\n", static_cast<SizeT>(data_sample.id));
+				}
+			);
+		}
+		{
+			struct DataSample2 : public AoL::DataMinimal<DataSample2>
+			{
+				using AoL::DataMinimal<DataSample2>::DataMinimal;
+			};
+
+			DataSample2 sample;
+			sample.name = "SampleName";
+			sample.id = static_cast<DataSample2::IDT>(2);
+
+			SerializeThis(
+				sample,
+				[](const DataSample2& data_sample)
+				{
+					fmt::print("DataSample2 derived from DataMinimal\n");
+					fmt::print("name: {}\n", data_sample.name);
+					fmt::print("id: {}\n", static_cast<SizeT>(data_sample.id));
+				}
+			);
+		}
+	}
+
 }
 
 }

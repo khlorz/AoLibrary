@@ -46,17 +46,17 @@ void load(Archive& archive, AoL::DataBasic<Derived>& data)
 		data.id
 	);
 
-	if (data.name.size() > DataBasic::Default::Name)
+	if (data.name.size() > DataBasic::Default::NameLength)
 	{
 		data.name.resize(DataBasic::Default::NameLength);
 	}
 
-	if (data.description.size() > DataBasic::Default::Description)
+	if (data.description.size() > DataBasic::Default::DescriptionLength)
 	{
 		data.description.resize(DataBasic::Default::DescriptionLength);
 	}
 
-	if (data.short_name.size() > DataBasic::Default::ShortName)
+	if (data.short_name.size() > DataBasic::Default::ShortNameLength)
 	{
 		data.short_name.resize(DataBasic::Default::ShortNameLength);
 	}
@@ -85,7 +85,7 @@ void load(Archive& archive, AoL::DataMinimal<Derived>& data)
 		data.id
 	);
 
-	if (data.name.size() > DataBasic::Default::Name)
+	if (data.name.size() > DataBasic::Default::NameLength)
 	{
 		data.name.resize(DataBasic::Default::NameLength);
 	}
