@@ -780,9 +780,16 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		return *this;
 	}
 
+	explicit constexpr PartitionVectorEx(const container_type& old_vector, allocator_type allocator = allocator_type{}) noexcept :
+		base{ },
+		container_obj{ old_vector, allocator },
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{
+	}
+
 	explicit constexpr PartitionVectorEx(container_type&& old_vector, allocator_type allocator = allocator_type{}) noexcept :
 		base{ },
-		container_obj{ std::forward<container_type>(old_vector), allocator },
+		container_obj{ std::move(old_vector), allocator },
 		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
 	{}
 
@@ -1060,6 +1067,19 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 
 		return *this;
+	}
+
+	explicit constexpr PartitionArrayEx(const container_type& old_array) noexcept :
+		base{ },
+		container_obj{ old_array },
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{}
+
+	explicit constexpr PartitionArrayEx(container_type&& old_array) noexcept :
+		base{ },
+		container_obj{ std::move(old_array) },
+		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+	{
 	}
 
 	/*

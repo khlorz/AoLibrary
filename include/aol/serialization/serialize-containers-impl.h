@@ -247,4 +247,59 @@ void load(Archive& archive, AoL::PartitionVector<T, A>& pv)
 	pv = std::move(new_partition);
 }
 
+template<
+	typename Archive,
+	typename T,
+	AoL::SizeT S
+>
+void save(Archive& archive, const AoL::PartitionArray<T, S>& pv)
+{
+	archive(
+		pv.container_obj
+	);
+	archive(pv.number_of_partitions());
+	for (AoL::SizeT i = 0; i < pv.number_of_partitions(); ++i)
+	{
+		auto& sub_partition = pv.get_partition(i);
+		archive(
+			sub_partition.max_size(),
+			sub_partition.size()
+		);
+	}
+}
+
+template<
+	typename Archive,
+	typename T,
+	AoL::SizeT S
+>
+void load(Archive& archive, AoL::PartitionArray<T, S>& pv)
+{
+	typename AoL::PartitionArray<T, S>::container_type new_vector;
+	AoL::SizeT sub_partitions_size;
+	AoL::SizeT max_size;
+	AoL::SizeT current_size;
+
+	archive(
+		new_vector,
+		sub_partitions_size
+	);
+
+	AoL::PartitionArray<T, S> new_partition{ std::move(new_vector) };
+	for (AoL::SizeT i = 0; i < sub_partitions_size - 1; ++i)
+	{
+		archive(
+			max_size,
+			current_size
+		);
+		auto& sub_partition = new_partition.create_partition(max_size, false);
+		auto empty_size = max_size - current_size;
+		if (empty_size > 0)
+		{
+			sub_partition.erase(current_size, empty_size);
+		}
+	}
+	pv = std::move(new_partition);
+}
+
 }

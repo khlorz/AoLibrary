@@ -207,6 +207,31 @@ void SerializationTests() noexcept
 					}
 				}
 			);
+			fmt::print("\n");
+		}
+		{
+			AoL::PartitionArray<int, 16> pv{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
+			auto& sp = pv.create_partition(5, false);
+			sp.erase(1, 2);
+			sp.pop_back();
+			pv.create_partition([](int v) { return v % 2 == 0; });
+			SerializeThis(
+				pv,
+				[](const auto& pv)
+				{
+					fmt::print("PartitionArray:\n");
+					for (int i = 0; i < pv.number_of_partitions(); ++i)
+					{
+						fmt::print("Partition {}\n", i);
+						const auto& sub_partition = pv.get_partition(i);
+						for (int j = 0; j < sub_partition.size(); ++j)
+						{
+							fmt::print("[{}] = {}\n", j, sub_partition[j]);
+						}
+					}
+				}
+			);
+			fmt::print("\n");
 		}
 	}
 	fmt::print("\n");
