@@ -1106,9 +1106,10 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	explicit constexpr PartitionArrayEx(Traits::ConstRefOrCopyType<value_type> fill_value) noexcept :
 		base{ },
 		container_obj{},
-		sub_partitions{ sub_partition_type{container_obj, 0, container_obj.size()} }
+		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 		std::fill(container_obj.begin(), container_obj.end(), fill_value);
+		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
 	}
 
 	template<typename... Args>
