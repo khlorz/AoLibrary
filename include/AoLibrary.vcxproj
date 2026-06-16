@@ -227,6 +227,8 @@
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
+    <ClInclude Include="aol\internal\algorithm-find-impl.h" />
+    <ClInclude Include="aol\internal\algorithm-sort-impl.h" />
     <ClInclude Include="aol\internal\algorithm.h" />
     <ClInclude Include="aol\internal\allocators.h" />
     <ClInclude Include="aol\internal\config.h" />
@@ -248,7 +250,9 @@
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
-    <ClInclude Include="aol\serialization\serialization.h" />
+    <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
+    <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
+    <ClInclude Include="aol\serialization\serialize.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />
     <ClInclude Include="aol\third-party\fmt\chrono.h" />
