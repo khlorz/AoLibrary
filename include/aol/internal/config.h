@@ -247,4 +247,30 @@
 */
 #define AOL_USE_UNORDERED_DENSE_HASH
 
+
+/*********************************************************************
+* RANDOM
+/********************************************************************/
+
+/**
+* This makes the default random number generator be from the standard library
+*
+* - By default, the library uses xoshiro
+*/
+//#define AOL_USE_STD_RNG
+
+/**
+* This makes the default random number generator be from xoshiro implementation by nessan
+* 
+* - By default, the library uses xoshiro
+*/
+#define AOL_USE_XOSHIRO_NESSAN_RNG
+
+/**
+* This makes the default random number generator be from pcg cpp library
+* 
+* - By default, the library uses xoshiro
+*/
+//#define AOL_USE_PCG_CPP_RNG
+
 #endif // AOL_INTERNAL_CONFIG_H
