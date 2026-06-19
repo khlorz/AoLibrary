@@ -25,10 +25,13 @@
 namespace AoL
 {
 
+namespace Rand
+{
+
 /**
 * @details The 64 bit random number generator
 */
-using RandGen64
+using Gen64
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 = xso::rng64;
 #elif defined(AOL_USE_PCG_CPP_RNG)
@@ -42,7 +45,7 @@ using RandGen64
 /**
 * @details The 32 bit random number generator
 */
-using RandGen32
+using Gen32
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 = xso::rng32;
 #elif defined(AOL_USE_PCG_CPP_RNG)
@@ -60,7 +63,9 @@ using RandGen32
 *
 * - The library can also use pcg-cpp implementation as well
 */
-using RandGen = RandGen64;
+using DefaultGen = Gen64;
+
+} // Rand namespace
 
 } // AoL namespace
 
