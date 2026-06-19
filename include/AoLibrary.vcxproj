@@ -246,6 +246,7 @@
     <ClInclude Include="aol\internal\logging.h" />
     <ClInclude Include="aol\internal\macros.h" />
     <ClInclude Include="aol\internal\math.h" />
+    <ClInclude Include="aol\internal\random.h" />
     <ClInclude Include="aol\internal\strings.h" />
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
