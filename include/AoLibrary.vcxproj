@@ -243,6 +243,7 @@
     <ClInclude Include="aol\internal\dynamic_types.h" />
     <ClInclude Include="aol\internal\exceptions.h" />
     <ClInclude Include="aol\internal\hashes.h" />
+    <ClInclude Include="aol\internal\random-globals.h" />
     <ClInclude Include="aol\internal\random-rng-chance-impl.h" />
     <ClInclude Include="aol\internal\logging.h" />
     <ClInclude Include="aol\internal\macros.h" />

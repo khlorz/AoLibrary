@@ -12,9 +12,11 @@
 
 #include "types.h"
 #include "traits.h"
+#include "hashes.h"
 
 #include <random>
 #include <chrono>
+#include <thread>
 
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 #include "xoshiro/xoshiro.h"
@@ -28,6 +30,7 @@
 
 #include "random-generators-impl.h"
 #include "random-rng-pool-impl.h"
+#include "random-globals.h"
 #include "random-rng-chance-impl.h"
 
 #endif // AOL_INTERNAL_RANDOM_H
