@@ -10,6 +10,9 @@
 
 #include "config.h"
 
+#include "types.h"
+#include "traits.h"
+
 #include <random>
 
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
