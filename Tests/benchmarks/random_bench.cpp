@@ -68,6 +68,26 @@ static void BM_RANDOM_COINFLIP6(benchmark::State& state)
 	}
 }
 
+static void BM_RANDOM_RollInt(benchmark::State& state)
+{
+	AoL::Rand::PoolBit16 pool(gen);
+
+	for (auto _ : state)
+	{
+		AoL::Rand::RollChance(2525, gen, pool);
+	}
+}
+
+static void BM_RANDOM_RollFloat(benchmark::State& state)
+{
+	AoL::Rand::PoolBit16 pool(gen);
+
+	for (auto _ : state)
+	{
+		AoL::Rand::RollChance(25.25f, gen, pool);
+	}
+}
+
 }
 
 BENCHMARK(AoL::Benchmark::BM_RANDOM_COINFLIP1);
@@ -76,6 +96,8 @@ BENCHMARK(AoL::Benchmark::BM_RANDOM_COINFLIP3);
 BENCHMARK(AoL::Benchmark::BM_RANDOM_COINFLIP4);
 BENCHMARK(AoL::Benchmark::BM_RANDOM_COINFLIP5);
 BENCHMARK(AoL::Benchmark::BM_RANDOM_COINFLIP6);
+BENCHMARK(AoL::Benchmark::BM_RANDOM_RollInt);
+BENCHMARK(AoL::Benchmark::BM_RANDOM_RollFloat);
 
 #endif // AOL_BENCHMARK_FLAG(RANDOM)
 #endif // BENCHMARK_CONFIG_ON

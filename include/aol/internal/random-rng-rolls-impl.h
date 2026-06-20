@@ -67,11 +67,18 @@ constexpr const auto& GetThresholdTable() noexcept
 *
 * @return true if the roll succeeded
 */
-template<AoL::SizeT ChanceScale = 10000, typename RNG, typename Pool>
-constexpr bool RollChance(AoL::SizeT chance, RNG& rng, Pool& pool) noexcept
+template<AoL::SizeT ChanceScale = 10000, typename IntType, typename RNG, typename Pool> requires std::integral<IntType>
+constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 {
 	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::pool_bit_size>();
 	return pool.Next(rng) < threshold_table[chance];
+}
+
+template<AoL::SizeT ChanceScale = 10000, typename FloatType, typename RNG, typename Pool> requires std::floating_point<FloatType>
+constexpr bool RollChance(FloatType chance, RNG& rng, Pool& pool) noexcept
+{
+	AoL::U64 chance_int = static_cast<AoL::U64>(chance * static_cast<FloatType>(ChanceScale / 100));
+	return RollChance<ChanceScale>(chance_int, rng, pool);
 }
 
 /**
