@@ -246,6 +246,8 @@
     <ClInclude Include="aol\internal\logging.h" />
     <ClInclude Include="aol\internal\macros.h" />
     <ClInclude Include="aol\internal\math.h" />
+    <ClInclude Include="aol\internal\random-generators-impl.h" />
+    <ClInclude Include="aol\internal\random-rng-pool-impl.h" />
     <ClInclude Include="aol\internal\random.h" />
     <ClInclude Include="aol\internal\strings.h" />
     <ClInclude Include="aol\internal\traits.h" />
