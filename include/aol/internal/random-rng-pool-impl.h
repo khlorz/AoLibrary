@@ -30,6 +30,7 @@ struct PoolBit
 
 	static constexpr const rng_size_type mask = (static_cast<rng_size_type>(1) << BitSize) - 1;
 	static constexpr const AoL::U8 max_count = static_cast<AoL::U8>(64 / BitSize);
+	static constexpr const AoL::U64 pool_bit_size = BitSize;
 
 	rng_size_type rand_pool;
 	AoL::U8 counter;
@@ -78,6 +79,7 @@ struct PoolBit<I, 1>
 	using rng_size_type = I;
 
 	static constexpr const rng_size_type sentinel_mask = static_cast<rng_size_type>(1) << (sizeof(rng_size_type) * 8 - 1);
+	static constexpr const AoL::U64 pool_bit_size = 1;
 
 	rng_size_type rand_pool;
 
