@@ -1,4 +1,11 @@
+/********************************************************************
+* Container benchmarks
+********************************************************************/
+
 #ifdef BENCHMARK_CONFIG_ON
+
+#include "config.h"
+#if AOL_BENCHMARK_FLAG(CONTAINERS)
 
 #include "all_benchmarks.h"
 
@@ -289,11 +296,12 @@ BENCHMARK(function)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000)
 //ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_STDMap);
 //ROTLIB_BENCHMARK_CREATE_CONTAINER_BENCHMARK(AoL::Benchmark::BM_RotLibMap);
 
-BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_INT);
-BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_DOUBLE);
-BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_FLOAT);
-BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_INT);
-BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_DOUBLE);
-BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_FLOAT);
+//BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_INT);
+//BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_DOUBLE);
+//BENCHMARK(AoL::Benchmark::BM_FMT_TO_STRING_FLOAT);
+//BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_INT);
+//BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_DOUBLE);
+//BENCHMARK(AoL::Benchmark::BM_ABSL_TO_STRING_FLOAT);
 
-#endif
+#endif // AOL_BENCHMARK_FLAG(CONTAINERS)
+#endif // BENCHMARK_CONFIG_ON

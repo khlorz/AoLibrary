@@ -33,6 +33,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="benchmarks\random_bench.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tests\all_tests.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
@@ -56,6 +57,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="benchmarks\config.h" />
     <ClInclude Include="tests\all_tests.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Benchmarking|Win32'">true</ExcludedFromBuild>

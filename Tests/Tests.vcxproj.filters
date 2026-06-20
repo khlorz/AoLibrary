@@ -20,6 +20,9 @@
     <ClCompile Include="tests\serialization_tests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="benchmarks\random_bench.cpp">
+      <Filter>benchmarks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmarks\all_benchmarks.h">
@@ -30,6 +33,9 @@
     </ClInclude>
     <ClInclude Include="tests\config.h">
       <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="benchmarks\config.h">
+      <Filter>benchmarks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
