@@ -850,7 +850,7 @@
     <ClInclude Include="aol\internal\random-rng-pool-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\random-rng-chance-impl.h">
+    <ClInclude Include="aol\internal\random-rng-rolls-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\random-globals.h">

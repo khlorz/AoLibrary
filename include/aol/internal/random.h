@@ -28,9 +28,9 @@
 // Do nothing
 #endif
 
-#include "random-generators-impl.h"
+#include "random-generators-impl.h"s
 #include "random-rng-pool-impl.h"
 #include "random-globals.h"
-#include "random-rng-chance-impl.h"
+#include "random-rng-rolls-impl.h"
 
 #endif // AOL_INTERNAL_RANDOM_H
