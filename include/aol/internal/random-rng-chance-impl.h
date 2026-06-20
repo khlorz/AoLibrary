@@ -12,7 +12,7 @@ namespace Internal
 {
 
 template<AoL::SizeT ChanceScale, AoL::SizeT BitSize>
-consteval auto MakeThresholdTable()
+consteval auto MakeThresholdTable() noexcept
 {
 	static_assert(ChanceScale % 10 == 0, "Must be divisible by 10!");
 	static_assert(BitSize >= 2 && BitSize <= 32, "BitSize must be between 2 and 32!");
@@ -35,6 +35,13 @@ consteval auto MakeThresholdTable()
 	}
 
 	return table;
+}
+
+template<AoL::SizeT ChanceScale, AoL::SizeT BitSize>
+constexpr const auto& GetThresholdTable() noexcept
+{
+	static constexpr auto threshold_table = MakeThresholdTable<ChanceScale, BitSize>();
+	return threshold_table;
 }
 
 } // Internal namespace
@@ -63,8 +70,7 @@ consteval auto MakeThresholdTable()
 template<AoL::SizeT ChanceScale = 10000, typename RNG, typename Pool>
 constexpr bool RollChance(AoL::SizeT chance, RNG& rng, Pool& pool) noexcept
 {
-	static constexpr auto threshold_table = Internal::MakeThresholdTable<ChanceScale, Pool::pool_bit_size>();
-
+	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::pool_bit_size>();
 	return pool.Next(rng) < threshold_table[chance];
 }
 
