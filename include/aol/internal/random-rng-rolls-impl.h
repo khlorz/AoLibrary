@@ -610,6 +610,93 @@ constexpr SignedType RollRangeSlow(SignedType min, SignedType max, RNG& rng, Poo
 	return static_cast<signed_t>(static_cast<signed_t>(min) + static_cast<signed_t>(result));
 }
 
+
+/*********************************************************************************************
+* RollRange helpers
+* - Helpers for using the RollRange functions
+* - Designed for most STL types
+*********************************************************************************************/
+
+/***************************************************
+* Dice rollings
+***************************************************/
+
+template<typename IntType, typename RNG, typename Pool>
+constexpr auto RollDiceN(IntType sides, RNG& rng, Pool& pool) noexcept
+{
+	return RollRange(static_cast<IntType>(1), sides, rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice6(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(6)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice8(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(8)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice10(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(10)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice12(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(12)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice14(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(14)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice16(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(16)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice18(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(18)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice20(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(20)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice22(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(22)>(rng, pool);
+}
+
+template<typename RNG, typename Pool>
+constexpr AoL::U8 RollDice20(RNG& rng, Pool& pool) noexcept
+{
+	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(24)>(rng, pool);
+}
+
+/***************************************************
+* Index rollings
+***************************************************/
+
+template<typename RNG, typename Pool>
+constexpr AoL::SizeT RollIndex(AoL::SizeT size, RNG& rng, Pool& pool) noexcept
+{
+	return RollRange(static_cast<AoL::SizeT>(0), size, rng, pool));
+}
+
 } // Rand namespace
 
 } // AoL namespace
