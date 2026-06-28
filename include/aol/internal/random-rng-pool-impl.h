@@ -48,7 +48,7 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit : public Internal::PoolBit_Constants<
 	static constexpr const AoL::U64 RNGBitSize = sizeof(RNGSizeType) * 8;
 	static constexpr const AoL::U64 OutputBitSize = BitSize;
 
-	static_assert(OutputBitSize >= 1 && OutputBitSize <= (RNGBitSize / 8), "BitSize must be between one and half the total bit size of the RNGSizeType!");
+	static_assert(OutputBitSize >= 1 && OutputBitSize <= (RNGBitSize / 2), "BitSize must be between one and half the total bit size of the RNGSizeType!");
 	static_assert(RNGBitSize % OutputBitSize == 0, "BitSize must divide RNGBitSize evenly!");
 
 	static constexpr const RNGSizeType mask = (static_cast<RNGSizeType>(1) << OutputBitSize) - 1;
