@@ -26,6 +26,9 @@ public:
 
 }
 
+template<typename RNGSizeT, AoL::U64 BitSize>
+struct PoolBit;
+
 /**
 * @details RNG Pooling
 *
@@ -45,7 +48,6 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit : public Internal::PoolBit_Constants<
 	static constexpr const AoL::U64 RNGBitSize = sizeof(RNGSizeType) * 8;
 	static constexpr const AoL::U64 OutputBitSize = BitSize;
 
-	static_assert(RNGBitSize == 64, "PoolBit currently assumes a 64-bit RNG word type!");
 	static_assert(OutputBitSize >= 1 && OutputBitSize <= (RNGBitSize / 8), "BitSize must be between one and half the total bit size of the RNGSizeType!");
 	static_assert(RNGBitSize % OutputBitSize == 0, "BitSize must divide RNGBitSize evenly!");
 
