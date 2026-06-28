@@ -16,27 +16,29 @@ namespace Rand
 * @tparam I RNG size type
 * @tparam BitSize bit size for pooling the RNG (i.e. 2, 4, 8, etc.)
 */
-template<typename I, AoL::U64 BitSize>
+template<typename RNGSizeT, AoL::U64 BitSize>
 struct PoolBit
 {
-	using rng_size_type = I;
-	using output_type = std::conditional_t<BitSize <= 8, AoL::U8,
-						std::conditional_t<BitSize <= 16, AoL::U16,
-						std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
+	using RNGSizeType = RNGSizeT;
+	using OutputType = std::conditional_t<BitSize <= 8, AoL::U8,
+					   std::conditional_t<BitSize <= 16, AoL::U16,
+					   std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
 
-	static_assert(sizeof(rng_size_type) * 8 == 64, "PoolBit currently assumes a 64-bit RNG word type!");
-	static_assert(BitSize >= 1 && BitSize <= 32, "BitSize must be between 1 and 32!");
-	static_assert(64 % BitSize == 0, "BitSize must divide 64 evenly!");
+	static constexpr const AoL::U64 RNGBitSize = sizeof(RNGSizeType) * 8;
+	static constexpr const AoL::U64 OutputBitSize = BitSize;
 
-	static constexpr const rng_size_type mask = (static_cast<rng_size_type>(1) << BitSize) - 1;
-	static constexpr const AoL::U8 max_count = static_cast<AoL::U8>(64 / BitSize);
-	static constexpr const AoL::U64 pool_bit_size = BitSize;
+	static_assert(RNGBitSize == 64, "PoolBit currently assumes a 64-bit RNG word type!");
+	static_assert(OutputBitSize >= 1 && OutputBitSize <= (RNGBitSize / 8), "BitSize must be between one and half the total bit size of the RNGSizeType!");
+	static_assert(RNGBitSize % OutputBitSize == 0, "BitSize must divide RNGBitSize evenly!");
 
-	rng_size_type rand_pool;
+	static constexpr const RNGSizeType mask = (static_cast<RNGSizeType>(1) << OutputBitSize) - 1;
+	static constexpr const AoL::U8 max_count = static_cast<AoL::U8>(RNGBitSize / OutputBitSize);
+
+	RNGSizeType rand_pool;
 	AoL::U8 counter;
 
 	PoolBit() :
-		rand_pool{ static_cast<rng_size_type>(0) },
+		rand_pool{ static_cast<RNGSizeType>(0) },
 		counter{ max_count }
 	{}
 
@@ -45,13 +47,13 @@ struct PoolBit
 		rand_pool{ rng() },
 		counter{ 0 }
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, rng_size_type>, "RNG::operator() must return rng_size_type!");
+		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 	}
 
 	template<typename RNG>
-	output_type Next(RNG& rng) noexcept
+	OutputType Next(RNG& rng) noexcept
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, rng_size_type>, "RNG::operator() must return rng_size_type!");
+		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 
 		if (counter == max_count) [[unlikely]]
 		{
@@ -59,8 +61,8 @@ struct PoolBit
 			counter = 0;
 		}
 
-		const output_type ret_val = static_cast<output_type>(rand_pool & mask);
-		rand_pool >>= BitSize;
+		const OutputType ret_val = static_cast<OutputType>(rand_pool & mask);
+		rand_pool >>= OutputBitSize;
 		++counter;
 		return ret_val;
 	}
@@ -76,12 +78,12 @@ struct PoolBit
 template<typename I>
 struct PoolBit<I, 1>
 {
-	using rng_size_type = I;
+	using RNGSizeType = I;
 
-	static constexpr const rng_size_type sentinel_mask = static_cast<rng_size_type>(1) << (sizeof(rng_size_type) * 8 - 1);
-	static constexpr const AoL::U64 pool_bit_size = 1;
+	static constexpr const RNGSizeType sentinel_mask = static_cast<RNGSizeType>(1) << (sizeof(RNGSizeType) * 8 - 1);
+	static constexpr const AoL::U64 OutputBitSize = 1;
 
-	rng_size_type rand_pool;
+	RNGSizeType rand_pool;
 
 	PoolBit() :
 		rand_pool{ sentinel_mask }
@@ -91,13 +93,13 @@ struct PoolBit<I, 1>
 	PoolBit(RNG& rng) :
 		rand_pool{ rng() | sentinel_mask }
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, rng_size_type>, "RNG::operator() must return rng_size_type!");
+		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 	}
 
 	template<typename RNG>
 	bool Next(RNG& rng) noexcept
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, rng_size_type>, "RNG::operator() must return rng_size_type!");
+		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 
 		if (rand_pool == 1) [[unlikely]]
 		{

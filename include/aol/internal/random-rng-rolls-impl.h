@@ -79,7 +79,7 @@ constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 {
 	assert(chance >= 0 && chance <= ChanceScale && "Invalid chance value! The chance value should be 0 to ChanceScale!");
 
-	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::pool_bit_size>();
+	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::OutputBitSize>();
 	return pool.Next(rng) < threshold_table[chance];
 }
 
@@ -292,7 +292,7 @@ constexpr auto RollRange(RNG& rng, Pool& pool) noexcept
 	using float_t = std::common_type_t<decltype(Min), decltype(Max)>;
 	static_assert(Min < Max, "Min must be less than Max!");
 
-	using draw_t = typename Pool::output_type;
+	using draw_t = typename Pool::OutputType;
 	constexpr auto draw_bits = sizeof(draw_t) * 8;
 	constexpr float_t max_draw_plus_one = static_cast<float_t>(static_cast<AoL::U64>(1) << draw_bits);
 
@@ -322,7 +322,7 @@ constexpr auto RollRange(RNG& rng, Pool& pool) noexcept
 template<typename RangeType, typename RNG, typename Pool> requires std::floating_point<RangeType>
 constexpr auto RollRange(RangeType min, RangeType max, RNG& rng, Pool& pool) noexcept
 {
-	using draw_t = typename Pool::output_type;
+	using draw_t = typename Pool::OutputType;
 
 	constexpr auto draw_bits = sizeof(draw_t) * 8;
 	constexpr RangeType max_draw_plus_one = static_cast<RangeType>(static_cast<AoL::U64>(1) << draw_bits);
@@ -373,7 +373,7 @@ constexpr auto RollRangeSlow(RNG& rng, Pool& pool) noexcept
 					std::conditional_t<(Max <= std::numeric_limits<AoL::U32>::max()), AoL::U32, AoL::U64>>>;
 
 	static_assert(Min < Max, "Min must be less than Max!");
-	static_assert(sizeof(typename Pool::output_type) >= sizeof(value_t), "Pool's output_type must be at least as wide as the range's value type!");
+	static_assert(sizeof(typename Pool::OutputType) >= sizeof(value_t), "Pool's OutputType must be at least as wide as the range's value type!");
 
 	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16, std::conditional_t<sizeof(value_t) <= 2, AoL::U32, AoL::U64>>;
 
@@ -422,8 +422,8 @@ template<typename RangeType, typename RNG, typename Pool>
 	requires std::unsigned_integral<RangeType>
 constexpr RangeType RollRangeSlow(RangeType min, RangeType max, RNG& rng, Pool& pool) noexcept
 {
-	static_assert(sizeof(typename Pool::output_type) >= sizeof(RangeType),
-		"Pool's output_type must be at least as wide as RangeType!");
+	static_assert(sizeof(typename Pool::OutputType) >= sizeof(RangeType),
+		"Pool's OutputType must be at least as wide as RangeType!");
 
 	using value_t = RangeType;
 	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16, std::conditional_t<sizeof(value_t) <= 2, AoL::U32, AoL::U64>>;
@@ -489,8 +489,8 @@ constexpr auto RollRangeSlow(RNG& rng, Pool& pool) noexcept
 					std::conditional_t<sizeof(signed_t) <= 2, AoL::U16,
 					std::conditional_t<sizeof(signed_t) <= 4, AoL::U32, AoL::U64>>>;
 
-	static_assert(sizeof(typename Pool::output_type) >= sizeof(value_t),
-		"Pool's output_type must be at least as wide as the range's value type!");
+	static_assert(sizeof(typename Pool::OutputType) >= sizeof(value_t),
+		"Pool's OutputType must be at least as wide as the range's value type!");
 
 	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16,
 		std::conditional_t<sizeof(value_t) <= 2, AoL::U32, AoL::U64>>;
@@ -548,8 +548,8 @@ constexpr SignedType RollRangeSlow(SignedType min, SignedType max, RNG& rng, Poo
 					std::conditional_t<sizeof(signed_t) <= 2, AoL::U16,
 					std::conditional_t<sizeof(signed_t) <= 4, AoL::U32, AoL::U64>>>;
 
-	static_assert(sizeof(typename Pool::output_type) >= sizeof(value_t),
-		"Pool's output_type must be at least as wide as the range's value type!");
+	static_assert(sizeof(typename Pool::OutputType) >= sizeof(value_t),
+		"Pool's OutputType must be at least as wide as the range's value type!");
 
 	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16,
 		std::conditional_t<sizeof(value_t) <= 2, AoL::U32, AoL::U64>>;
