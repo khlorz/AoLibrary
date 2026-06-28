@@ -655,7 +655,7 @@ constexpr AoL::U8 RollDice22(RNG& rng, Pool& pool) noexcept
 }
 
 template<typename RNG, typename Pool>
-constexpr AoL::U8 RollDice20(RNG& rng, Pool& pool) noexcept
+constexpr AoL::U8 RollDice24(RNG& rng, Pool& pool) noexcept
 {
 	return RollRange<static_cast<AoL::U8>(1), static_cast<AoL::U8>(24)>(rng, pool);
 }
@@ -667,7 +667,7 @@ constexpr AoL::U8 RollDice20(RNG& rng, Pool& pool) noexcept
 template<typename RNG, typename Pool>
 constexpr AoL::SizeT RollIndex(AoL::SizeT size, RNG& rng, Pool& pool) noexcept
 {
-	return RollRange(static_cast<AoL::SizeT>(0), size, rng, pool));
+	return RollRange(static_cast<AoL::SizeT>(0), size, rng, pool);
 }
 
 } // Rand namespace
