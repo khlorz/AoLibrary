@@ -132,18 +132,49 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit<RNGSizeT, 1> : public Internal::PoolB
 	}
 };
 
-template<typename I = AoL::U64>
-using PoolBit1 = PoolBit<I, 1>;
-template<typename I = AoL::U64>
-using PoolBit2 = PoolBit<I, 2>;
-template<typename I = AoL::U64>
-using PoolBit4 = PoolBit<I, 4>;
-template<typename I = AoL::U64>
-using PoolBit8 = PoolBit<I, 8>;
-template<typename I = AoL::U64>
-using PoolBit16 = PoolBit<I, 16>;
-template<typename I = AoL::U64>
-using PoolBit32 = PoolBit<I, 32>;
+/**************************************************************************
+* Helper types for PoolBit
+**************************************************************************/
+
+/****************************************
+* For templated RNG Size Type
+****************************************/
+
+template<typename RNGSizeT>
+using PoolBit1 = PoolBit<RNGSizeT, 1>;
+template<typename RNGSizeT>
+using PoolBit2 = PoolBit<RNGSizeT, 2>;
+template<typename RNGSizeT>
+using PoolBit4 = PoolBit<RNGSizeT, 4>;
+template<typename RNGSizeT>
+using PoolBit8 = PoolBit<RNGSizeT, 8>;
+template<typename RNGSizeT>
+using PoolBit16 = PoolBit<RNGSizeT, 16>;
+template<typename RNGSizeT>
+using PoolBit32 = PoolBit<RNGSizeT, 32>;
+template<typename RNGSizeT>
+using PoolBit64 = PoolBit<RNGSizeT, 64>;
+
+/****************************************
+* For 64-bit RNGs
+****************************************/
+
+using PoolBit64_1 = PoolBit<AoL::U64, 1>;
+using PoolBit64_2 = PoolBit<AoL::U64, 2>;
+using PoolBit64_4 = PoolBit<AoL::U64, 4>;
+using PoolBit64_8 = PoolBit<AoL::U64, 8>;
+using PoolBit64_16 = PoolBit<AoL::U64, 16>;
+using PoolBit64_32 = PoolBit<AoL::U64, 32>;
+
+/****************************************
+* For 32-bit RNGs
+****************************************/
+
+using PoolBit32_1 = PoolBit<AoL::U32, 1>;
+using PoolBit32_2 = PoolBit<AoL::U32, 2>;
+using PoolBit32_4 = PoolBit<AoL::U32, 4>;
+using PoolBit32_8 = PoolBit<AoL::U32, 8>;
+using PoolBit32_16 = PoolBit<AoL::U32, 16>;
 
 } // Rand namespace
 
