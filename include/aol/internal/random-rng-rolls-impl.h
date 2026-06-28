@@ -156,7 +156,7 @@ constexpr bool RollChance(AoL::SizeT chance) noexcept
 * @return true if the roll succeeded
 */
 template<typename RNG>
-constexpr bool FlipCoin(RNG& rng, PoolBit1<decltype(std::declval<RNG&>()())>& pool) noexcept
+constexpr bool FlipCoin(RNG& rng, PoolBit<decltype(std::declval<RNG&>()()), 1>& pool) noexcept
 {
 	return pool.Next(rng);
 }

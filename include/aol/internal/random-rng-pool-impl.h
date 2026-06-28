@@ -139,25 +139,6 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit<RNGSizeT, 1> : public Internal::PoolB
 **************************************************************************/
 
 /****************************************
-* For templated RNG Size Type
-****************************************/
-
-template<typename RNGSizeT>
-using PoolBit1 = PoolBit<RNGSizeT, 1>;
-template<typename RNGSizeT>
-using PoolBit2 = PoolBit<RNGSizeT, 2>;
-template<typename RNGSizeT>
-using PoolBit4 = PoolBit<RNGSizeT, 4>;
-template<typename RNGSizeT>
-using PoolBit8 = PoolBit<RNGSizeT, 8>;
-template<typename RNGSizeT>
-using PoolBit16 = PoolBit<RNGSizeT, 16>;
-template<typename RNGSizeT>
-using PoolBit32 = PoolBit<RNGSizeT, 32>;
-template<typename RNGSizeT>
-using PoolBit64 = PoolBit<RNGSizeT, 64>;
-
-/****************************************
 * For 64-bit RNGs
 ****************************************/
 
