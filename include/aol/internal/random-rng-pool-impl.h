@@ -8,6 +8,24 @@ namespace AoL
 namespace Rand
 {
 
+namespace Internal
+{
+
+template<AoL::U64 BitSize>
+struct PoolBit_Constants
+{
+private:
+	using SizeType = std::conditional_t<BitSize <= 8, AoL::U8,
+					 std::conditional_t<BitSize <= 16, AoL::U16,
+					 std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
+
+public:
+	static constexpr SizeType min = std::numeric_limits<SizeType>::min();
+	static constexpr SizeType max = std::numeric_limits<SizeType>::max();
+};
+
+}
+
 /**
 * @details RNG Pooling
 *
@@ -17,7 +35,7 @@ namespace Rand
 * @tparam BitSize bit size for pooling the RNG (i.e. 2, 4, 8, etc.)
 */
 template<typename RNGSizeT, AoL::U64 BitSize>
-struct PoolBit
+struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit : public Internal::PoolBit_Constants<BitSize>
 {
 	using RNGSizeType = RNGSizeT;
 	using OutputType = std::conditional_t<BitSize <= 8, AoL::U8,
@@ -75,13 +93,15 @@ struct PoolBit
 *
 * @tparam I RNG size type
 */
-template<typename I>
-struct PoolBit<I, 1>
+template<typename RNGSizeT>
+struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit<RNGSizeT, 1> : public Internal::PoolBit_Constants<1>
 {
-	using RNGSizeType = I;
+	using RNGSizeType = RNGSizeT;
+	using OutputType = bool;
 
-	static constexpr const RNGSizeType sentinel_mask = static_cast<RNGSizeType>(1) << (sizeof(RNGSizeType) * 8 - 1);
+	static constexpr const AoL::U64 RNGBitSize = sizeof(RNGSizeType) * 8;
 	static constexpr const AoL::U64 OutputBitSize = 1;
+	static constexpr const RNGSizeType sentinel_mask = static_cast<RNGSizeType>(1) << (sizeof(RNGSizeType) * 8 - 1);
 
 	RNGSizeType rand_pool;
 
