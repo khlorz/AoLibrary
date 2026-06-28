@@ -77,6 +77,8 @@ constexpr const auto& GetThresholdTable() noexcept
 template<AoL::SizeT ChanceScale = 10000, typename IntType, typename RNG, typename Pool> requires std::integral<IntType>
 constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 {
+	assert(chance >= 0 && chance <= ChanceScale && "Invalid chance value! The chance value should be 0 to ChanceScale!");
+
 	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::pool_bit_size>();
 	return pool.Next(rng) < threshold_table[chance];
 }
