@@ -429,9 +429,8 @@ include/aol/third-party/**
 #benchmark builds
 [Bb]enchmarking/
 
-#Cursor Files
-.cursor/
-.cursorignore
-
 #Github files
 .github
+
+#OpenCode files
+opencode.*
