@@ -80,7 +80,7 @@ static void BM_RANDOM_RollFloat(benchmark::State& state)
 
 	for (auto _ : state)
 	{
-		AoL::Rand::RollChance(25.25f, gen, pool);
+		AoL::Rand::RollChance(0.2525f, gen, pool);
 	}
 }
 

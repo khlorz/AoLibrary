@@ -90,7 +90,7 @@ constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 *
 * - 'chance' is still expressed on a scale of ChanceScale
 * 
-* - 'chance' is passed as float in this overload so 50.25 would equate to 5025 on a ChanceScale of 10000
+* - 'chance' is passed as float in this overload so 0.5025f would equate to 5025 on a ChanceScale of 10000
 *
 * - The higher the ChanceScale, the more strict the threshold will be
 *
@@ -107,7 +107,9 @@ constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 template<AoL::SizeT ChanceScale = 10000, typename FloatType, typename RNG, typename Pool> requires std::floating_point<FloatType>
 constexpr bool RollChance(FloatType chance, RNG& rng, Pool& pool) noexcept
 {
-	AoL::U64 chance_int = static_cast<AoL::U64>(chance * static_cast<FloatType>(ChanceScale / 100));
+	assert(chance >= static_cast<FloatType>(0) && chance <= static_cast<FloatType>(1) && "Invalid chance value! Chance should be greater than or equal to 0 and less than or equal to 1");
+
+	AoL::U64 chance_int = static_cast<AoL::U64>(chance * static_cast<FloatType>(ChanceScale));
 	return RollChance<ChanceScale>(chance_int, rng, pool);
 }
 
