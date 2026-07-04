@@ -168,7 +168,7 @@ constexpr bool FlipCoin(RNG& rng, PoolBit<Internal::RNGReturnType<RNG>, 1>& pool
 template<typename RNG>
 constexpr bool FlipCoin(RNG& rng) noexcept
 {
-	return Internal::DefaultPool<1>(rng).Next(rng);
+	return RollChance<100>(50, rng);
 }
 
 /**
@@ -182,7 +182,7 @@ constexpr bool FlipCoin(RNG& rng) noexcept
 */
 inline bool FlipCoin() noexcept
 {
-	return Internal::DefaultPool<1, DefaultGen>().Next(Internal::DefaultRNG());
+	return RollChance<100>(50, Internal::DefaultRNG());
 }
 
 
