@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="random">
+      <UniqueIdentifier>{0f368760-21e0-4df9-9953-9cc221e75544}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="random\rolls-tests.h">
+      <Filter>random</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
