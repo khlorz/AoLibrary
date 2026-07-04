@@ -432,3 +432,6 @@ include/aol/third-party/**
 #Cursor Files
 .cursor/
 .cursorignore
+
+#Github files
+.github
