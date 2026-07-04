@@ -7,10 +7,16 @@
     <Filter Include="random">
       <UniqueIdentifier>{0f368760-21e0-4df9-9953-9cc221e75544}</UniqueIdentifier>
     </Filter>
+    <Filter Include="containers">
+      <UniqueIdentifier>{8cf268da-d774-4c4b-bf57-eeb1b3a92a9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="random\rolls-tests.h">
       <Filter>random</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\containers-test.h">
+      <Filter>containers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
