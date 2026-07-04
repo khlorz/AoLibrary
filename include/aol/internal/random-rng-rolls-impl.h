@@ -11,38 +11,92 @@ namespace Rand
 namespace Internal
 {
 
-template<AoL::SizeT ChanceScale, AoL::SizeT BitSize>
-consteval auto MakeThresholdTable() noexcept
+template<AoL::SizeT TableSize, AoL::SizeT BitSize, bool CompileTime>
+struct ThresholdTableImpl;
+
+template<AoL::SizeT TableSize, AoL::SizeT BitSize>
+struct ThresholdTableImpl<TableSize, BitSize, true>
 {
-	static_assert(ChanceScale % 10 == 0, "Must be divisible by 10!");
+	static_assert(TableSize >= 10, "TableSize must be more than or equal 10");
+	static_assert(TableSize % 10 == 0, "TableSize must be divisible by 10!");
 	static_assert(BitSize >= 2 && BitSize <= 32, "BitSize must be between 2 and 32!");
 	static_assert(64 % BitSize == 0, "BitSize must divide 64 evenly!");
 
 	using table_value_t = std::conditional_t<BitSize <= 8, AoL::U8,
-						  std::conditional_t<BitSize <= 16, AoL::U16,
-						  std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
+		std::conditional_t<BitSize <= 16, AoL::U16,
+		std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
 
 	using wide_table_value_t = std::conditional_t<BitSize <= 8, AoL::U16,
-							   std::conditional_t<BitSize <= 16, AoL::U32, AoL::U64>>;
+		std::conditional_t<BitSize <= 16, AoL::U32, AoL::U64>>;
 
-	std::array<table_value_t, ChanceScale + 1> table{};
+	using container_type = AoL::Array<table_value_t, TableSize + 1>;
 
-	constexpr AoL::U64 max_rng_value = (1ull << BitSize) - 1ull;
-
-	for (AoL::SizeT i = 0; i <= ChanceScale; ++i)
+	static consteval auto MakeTable() noexcept
 	{
-		table[i] = static_cast<table_value_t>((static_cast<wide_table_value_t>(i) * (static_cast<wide_table_value_t>(max_rng_value) + 1)) / ChanceScale);
+		container_type table{};
+
+		constexpr AoL::U64 max_rng_value = (1ull << BitSize) - 1ull;
+
+		for (AoL::SizeT i = 0; i <= TableSize; ++i)
+		{
+			table[i] = static_cast<table_value_t>((static_cast<wide_table_value_t>(i) * (static_cast<wide_table_value_t>(max_rng_value) + 1)) / TableSize);
+		}
+
+		return table;
 	}
 
-	return table;
-}
+	static constexpr auto table = MakeTable();
 
-template<AoL::SizeT ChanceScale, AoL::SizeT BitSize>
-constexpr const auto& GetThresholdTable() noexcept
+	static constexpr table_value_t GetThresholdValue(AoL::SizeT val) noexcept
+	{
+		return table[val];
+	}
+};
+
+template<AoL::SizeT TableSize, AoL::SizeT BitSize>
+struct ThresholdTableImpl<TableSize, BitSize, false>
 {
-	static constexpr auto threshold_table = MakeThresholdTable<ChanceScale, BitSize>();
-	return threshold_table;
-}
+	static_assert(TableSize >= 10, "TableSize must be more than or equal 10");
+	static_assert(TableSize % 10 == 0, "TableSize must be divisible by 10!");
+	static_assert(BitSize >= 2 && BitSize <= 32, "BitSize must be between 2 and 32!");
+	static_assert(64 % BitSize == 0, "BitSize must divide 64 evenly!");
+
+	using table_value_t = std::conditional_t<BitSize <= 8, AoL::U8,
+		std::conditional_t<BitSize <= 16, AoL::U16,
+		std::conditional_t<BitSize <= 32, AoL::U32, AoL::U64>>>;
+
+	using wide_table_value_t = std::conditional_t<BitSize <= 8, AoL::U16,
+		std::conditional_t<BitSize <= 16, AoL::U32, AoL::U64>>;
+
+	using container_type = AoL::Vector<table_value_t>;
+
+	static constexpr auto MakeTable() noexcept
+	{
+		container_type table(TableSize + 1);
+
+		constexpr AoL::U64 max_rng_value = (1ull << BitSize) - 1ull;
+
+		for (AoL::SizeT i = 0; i <= TableSize; ++i)
+		{
+			table[i] = static_cast<table_value_t>((static_cast<wide_table_value_t>(i) * (static_cast<wide_table_value_t>(max_rng_value) + 1)) / TableSize);
+		}
+
+		return table;
+	}
+
+	inline static const auto table = MakeTable();
+
+	static constexpr table_value_t GetThresholdValue(AoL::SizeT val) noexcept
+	{
+		return table[val];
+	}
+};
+
+template<
+	AoL::SizeT TableSize,
+	AoL::SizeT BitSize
+>
+using ThresholdTable = ThresholdTableImpl<TableSize, BitSize, TableSize <= 100'000>;
 
 } // Internal namespace
 
@@ -79,8 +133,7 @@ constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 {
 	assert(chance >= 0 && chance <= ChanceScale && "Invalid chance value! The chance value should be 0 to ChanceScale!");
 
-	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::OutputBitSize>();
-	return chance == ChanceScale || pool.Next(rng) < threshold_table[chance];
+	return chance == ChanceScale || pool.Next(rng) < Internal::ThresholdTable<ChanceScale, Pool::OutputBitSize>::GetThresholdValue(chance);
 }
 
 /**
