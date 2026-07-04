@@ -80,7 +80,7 @@ constexpr bool RollChance(IntType chance, RNG& rng, Pool& pool) noexcept
 	assert(chance >= 0 && chance <= ChanceScale && "Invalid chance value! The chance value should be 0 to ChanceScale!");
 
 	const auto& threshold_table = Internal::GetThresholdTable<ChanceScale, Pool::OutputBitSize>();
-	return pool.Next(rng) < threshold_table[chance];
+	return chance == ChanceScale || pool.Next(rng) < threshold_table[chance];
 }
 
 /**
