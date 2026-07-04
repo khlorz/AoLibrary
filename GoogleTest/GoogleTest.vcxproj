@@ -118,6 +118,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm\algorithm-test.h" />
     <ClInclude Include="containers\containers-test.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="random\rolls-tests.h" />

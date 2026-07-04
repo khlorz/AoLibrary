@@ -10,6 +10,9 @@
     <Filter Include="containers">
       <UniqueIdentifier>{8cf268da-d774-4c4b-bf57-eeb1b3a92a9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="algorithm">
+      <UniqueIdentifier>{dd11ae74-ca5a-4ae8-ab5a-2813a37d3701}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="random\rolls-tests.h">
@@ -17,6 +20,9 @@
     </ClInclude>
     <ClInclude Include="containers\containers-test.h">
       <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm\algorithm-test.h">
+      <Filter>algorithm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
