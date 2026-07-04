@@ -24,6 +24,9 @@ public:
 	static constexpr SizeType max = std::numeric_limits<SizeType>::max();
 };
 
+template<typename RNG>
+using RNGReturnType = std::remove_cvref_t<decltype(std::declval<RNG&>()())>;
+
 }
 
 template<typename RNGSizeT, AoL::U64 BitSize>
@@ -67,13 +70,13 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit : public Internal::PoolBit_Constants<
 		rand_pool{ rng() },
 		counter{ 0 }
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
+		static_assert(std::is_same_v<Internal::RNGReturnType<RNG>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 	}
 
 	template<typename RNG>
 	OutputType Next(RNG& rng) noexcept
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
+		static_assert(std::is_same_v<Internal::RNGReturnType<RNG>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 
 		if (counter == max_count) [[unlikely]]
 		{
@@ -115,13 +118,13 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PoolBit<RNGSizeT, 1> : public Internal::PoolB
 	PoolBit(RNG& rng) :
 		rand_pool{ rng() | sentinel_mask }
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
+		static_assert(std::is_same_v<Internal::RNGReturnType<RNG>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 	}
 
 	template<typename RNG>
 	bool Next(RNG& rng) noexcept
 	{
-		static_assert(std::is_same_v<std::remove_cvref_t<decltype(rng())>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
+		static_assert(std::is_same_v<Internal::RNGReturnType<RNG>, RNGSizeType>, "RNG::operator() must return RNGSizeType!");
 
 		if (rand_pool == 1) [[unlikely]]
 		{
