@@ -125,24 +125,19 @@ constexpr bool RollChance(FloatType chance, RNG& rng, Pool& pool) noexcept
 template<AoL::SizeT ChanceScale = 10000, typename RNG>
 constexpr bool RollChance(AoL::SizeT chance, RNG& rng) noexcept
 {
-	return RollChance<ChanceScale>(chance, rng, Internal::DefaultPool<16>(rng));
-}
-
-/**
-* @details Rolls a chance-based RNG check using a precomputed threshold table
-* 
-* - A convenience function for users who just wants a simple roll
-* 
-* - Notably slower than if you pass your own rng and pool object, but it's just for convenience, not for hot paths
-*
-* @tparam ChanceScale the denominator that defines the granularity of the chance scale
-* @param chance the chance value with respect to the ChanceScale
-* @return true if the roll succeeded
-*/
-template<AoL::SizeT ChanceScale = 10000>
-constexpr bool RollChance(AoL::SizeT chance) noexcept
-{
-	return RollChance<ChanceScale>(chance, Internal::DefaultRNG(), Internal::DefaultPool<16, DefaultGen>());
+	if (chance == 0)
+	{
+		return false;
+	}
+	else if (chance == ChanceScale)
+	{
+		return true;
+	}
+	else
+	{
+		constexpr auto rng_max = std::numeric_limits<Internal::RNGReturnType<RNG>>::max();
+		return static_cast<AoL::U128>(rng()) * ChanceScale < static_cast<AoL::U128>(chance) * rng_max;
+	}
 }
 
 /**
