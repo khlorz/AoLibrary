@@ -614,9 +614,19 @@ constexpr AoL::SizeT RollDice(RNG& rng, Pool& pool) noexcept
 ***************************************************/
 
 template<typename RNG, typename Pool>
-constexpr AoL::SizeT RollIndex(AoL::SizeT size, RNG& rng, Pool& pool) noexcept
+constexpr AoL::SizeT RollIndex(AoL::SizeT max_size, RNG& rng, Pool& pool) noexcept
 {
-	return RollRange(static_cast<AoL::SizeT>(0), size, rng, pool);
+	assert(max_size > 1 && "size should be more than 0");
+
+	return RollRange(static_cast<AoL::SizeT>(0), max_size, rng, pool);
+}
+
+template<AoL::SizeT MaxSize, typename RNG, typename Pool>
+constexpr AoL::SizeT RollIndex(RNG& rng, Pool& pool) noexcept
+{
+	static_assert(MaxSize > 1, "MaxSides should be more than 0!");
+
+	return RollRange(static_cast<AoL::SizeT>(0), MaxSize, rng, pool);
 }
 
 } // Rand namespace
