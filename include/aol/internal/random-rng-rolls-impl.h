@@ -933,22 +933,70 @@ constexpr AoL::SizeT RollIndex(RNG& rng) noexcept
 * @param pool the pool object
 * @return iterator to the randomly selected element
 */
-template<std::random_access_iterator It, typename RNG, typename Pool>
-constexpr It RollElement(It begin, It end, RNG& rng, Pool& pool) noexcept
+template<std::input_or_output_iterator It, typename RNG, typename Pool>
+constexpr It RollIterator(It begin, It end, RNG& rng, Pool& pool) noexcept
 {
-	auto dist = static_cast<AoL::SizeT>(end - begin);
-	assert(dist > 0 && "Range must be non-empty!");
-	auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng, pool);
-	return begin + offset;
+	static_assert(std::equality_comparable<It>, "Iterator must be compared by equality!");
+
+	if constexpr (std::random_access_iterator<It>)
+	{
+		auto dist = static_cast<AoL::SizeT>(end - begin);
+		assert(dist > 0 && "Range must be non-empty!");
+		auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng, pool);
+		return begin + offset;
+	}
+	else
+	{
+		assert(begin != end && "Range must be non-empty!");
+		auto result = begin;
+		AoL::SizeT n = 1;
+		for (auto it = std::next(begin); it != end; ++it)
+		{
+			++n;
+			auto roll = RollRange(static_cast<AoL::SizeT>(0), n - 1, rng, pool);
+			if (roll == 0) { result = it; }
+		}
+		return result;
+	}
 }
 
-template<std::random_access_iterator It, typename RNG>
-constexpr It RollElement(It begin, It end, RNG& rng) noexcept
+template<std::input_or_output_iterator It, typename RNG>
+constexpr It RollIterator(It begin, It end, RNG& rng) noexcept
 {
-	auto dist = static_cast<AoL::SizeT>(end - begin);
-	assert(dist > 0 && "Range must be non-empty!");
-	auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng);
-	return begin + offset;
+	static_assert(std::equality_comparable<It>, "Iterator must be compared by equality!");
+
+	if constexpr (std::random_access_iterator<It>)
+	{
+		auto dist = static_cast<AoL::SizeT>(end - begin);
+		assert(dist > 0 && "Range must be non-empty!");
+		auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng);
+		return begin + offset;
+	}
+	else
+	{
+		assert(begin != end && "Range must be non-empty!");
+		auto result = begin;
+		AoL::SizeT n = 1;
+		for (auto it = std::next(begin); it != end; ++it)
+		{
+			++n;
+			auto roll = RollRange(static_cast<AoL::SizeT>(0), n - 1, rng);
+			if (roll == 0) { result = it; }
+		}
+		return result;
+	}
+}
+
+template<std::input_or_output_iterator It, typename RNG, typename Pool>
+constexpr decltype(auto) RollElement(It begin, It end, RNG& rng, Pool& pool) noexcept
+{
+	return *RollIterator(begin, end, rng, pool);
+}
+
+template<std::input_or_output_iterator It, typename RNG>
+constexpr decltype(auto) RollElement(It begin, It end, RNG& rng) noexcept
+{
+	return *RollIterator(begin, end, rng);
 }
 
 /***************************************************

@@ -357,3 +357,125 @@ TEST(RollRangeSlow_NoPool_Signed, CompileTimeBoundsRespectedAcrossZero)
 		EXPECT_LE(v, 50);
 	}
 }
+
+/*********************************************************************************************
+* RollIterator
+*********************************************************************************************/
+
+#include <list>
+
+TEST(RollIterator, RandomAccessReturnsIteratorInRange)
+{
+	auto rng = AoLRng(42);
+	Pool32 pool;
+
+	std::array<int, 10> v = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (int i = 0; i < 100; ++i)
+	{
+		auto it = AoL::Rand::RollIterator(v.begin(), v.end(), rng, pool);
+		EXPECT_GE(*it, 0);
+		EXPECT_LE(*it, 9);
+	}
+}
+
+TEST(RollIterator, ForwardIteratorListWorks)
+{
+	auto rng = AoLRng(42);
+	Pool32 pool;
+
+	std::list<int> lst = { 10, 20, 30, 40, 50 };
+	for (int i = 0; i < 100; ++i)
+	{
+		auto it = AoL::Rand::RollIterator(lst.begin(), lst.end(), rng, pool);
+		EXPECT_EQ(*it % 10, 0);
+		EXPECT_GE(*it, 10);
+		EXPECT_LE(*it, 50);
+	}
+}
+
+TEST(RollIterator_NoPool, RandomAccessReturnsIteratorInRange)
+{
+	auto rng = AoLRng(42);
+
+	std::array<int, 10> v = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (int i = 0; i < 100; ++i)
+	{
+		auto it = AoL::Rand::RollIterator(v.begin(), v.end(), rng);
+		EXPECT_GE(*it, 0);
+		EXPECT_LE(*it, 9);
+	}
+}
+
+TEST(RollIterator_NoPool, ForwardIteratorListWorks)
+{
+	auto rng = AoLRng(42);
+
+	std::list<int> lst = { 10, 20, 30, 40, 50 };
+	for (int i = 0; i < 100; ++i)
+	{
+		auto it = AoL::Rand::RollIterator(lst.begin(), lst.end(), rng);
+		EXPECT_EQ(*it % 10, 0);
+		EXPECT_GE(*it, 10);
+		EXPECT_LE(*it, 50);
+	}
+}
+
+/*********************************************************************************************
+* RollElement
+*********************************************************************************************/
+
+TEST(RollElement, RandomAccessReturnsElementInRange)
+{
+	auto rng = AoLRng(42);
+	Pool32 pool;
+
+	std::array<int, 10> v = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (int i = 0; i < 100; ++i)
+	{
+		int val = AoL::Rand::RollElement(v.begin(), v.end(), rng, pool);
+		EXPECT_GE(val, 0);
+		EXPECT_LE(val, 9);
+	}
+}
+
+TEST(RollElement, ForwardIteratorListWorks)
+{
+	auto rng = AoLRng(42);
+	Pool32 pool;
+
+	std::list<int> lst = { 10, 20, 30, 40, 50 };
+	for (int i = 0; i < 100; ++i)
+	{
+		int val = AoL::Rand::RollElement(lst.begin(), lst.end(), rng, pool);
+		EXPECT_EQ(val % 10, 0);
+		EXPECT_GE(val, 10);
+		EXPECT_LE(val, 50);
+	}
+}
+
+TEST(RollElement_NoPool, RandomAccessReturnsElementInRange)
+{
+	auto rng = AoLRng(42);
+
+	std::array<int, 10> v = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (int i = 0; i < 100; ++i)
+	{
+		int val = AoL::Rand::RollElement(v.begin(), v.end(), rng);
+		EXPECT_GE(val, 0);
+		EXPECT_LE(val, 9);
+	}
+}
+
+TEST(RollElement_NoPool, ForwardIteratorListWorks)
+{
+	auto rng = AoLRng(42);
+
+	std::list<int> lst = { 10, 20, 30, 40, 50 };
+	for (int i = 0; i < 100; ++i)
+	{
+		int val = AoL::Rand::RollElement(lst.begin(), lst.end(), rng);
+		EXPECT_EQ(val % 10, 0);
+		EXPECT_GE(val, 10);
+		EXPECT_LE(val, 50);
+	}
+}
