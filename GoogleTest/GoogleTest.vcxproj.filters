@@ -1,7 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="algorithm\algorithm-find-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithm\algorithm-sort-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollchance-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollrange-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rolldice-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollindex-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-uniform-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-array-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-vector-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-map-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-set-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-cyclicbuffer-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-query-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-flatkeyordermap-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="random">
@@ -15,14 +57,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="random\rolls-tests.h">
-      <Filter>random</Filter>
-    </ClInclude>
-    <ClInclude Include="containers\containers-test.h">
-      <Filter>containers</Filter>
-    </ClInclude>
-    <ClInclude Include="algorithm\algorithm-test.h">
-      <Filter>algorithm</Filter>
-    </ClInclude>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
