@@ -20,7 +20,7 @@
 *
 * - By default we will be using mimalloc
 */
-#define AOL_USE_MIMALLOC_NEW_DELETE
+#define AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE
 
 
 /***************************************
@@ -34,7 +34,7 @@
 *
 * - However, by default, we will use std::allocator since the overridden new/delete already come from mimalloc
 */
-//#define AOL_USE_MIMALLOCATOR_ALLOCATOR
+//#define AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR
 
 
 /***************************************
@@ -46,22 +46,22 @@
 *
 * - By default, the library will be using mimalloc library for pool allocators
 *
-* - Do make sure that AOL_USE_BOOST_POOL_ALLOCATOR is undefined before defining this
+* - Do make sure that AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR is undefined before defining this
 *
 * - Allocators can still be customized per container; this is the default allocator when unspecified
 */
-#define AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR
+#define AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR
 
 /**
 * This makes the whole AoLibrary use boost library for pool allocators
 *
-* - Do make sure that AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR is undefined before defining this
+* - Do make sure that AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR is undefined before defining this
 *
 * - Allocators can still be customized per container; this is the default allocator when unspecified
 */
-//#define AOL_USE_BOOST_POOL_ALLOCATOR
+//#define AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR
 
-#if defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR) == defined(AOL_USE_BOOST_POOL_ALLOCATOR)
+#if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR) == defined(AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR)
 #error "You must define one pool allocator type!"
 #endif
 
@@ -75,7 +75,7 @@
 * 
 * - By default, we use the default allocator, std::allocator<char>
 */
-//#define AOL_USE_MIMALLOCATOR_STRING_ALLOCATOR
+//#define AOL_CONFIG_FLAG_USE_MIMALLOCATOR_STRING_ALLOCATOR
 
 
 /*********************************************************************
@@ -83,7 +83,7 @@
 /********************************************************************/
 
 /***************************************
-* Custom Vector Types
+* Custom Array Types
 ****************************************/
 
 /**
@@ -91,7 +91,7 @@
 *
 * - By default, the library uses std::array
 */
-#define AOL_USE_STD_ARRAY
+#define AOL_CONFIG_FLAG_USE_STD_ARRAY
 
 
 /***************************************
@@ -103,7 +103,7 @@
 *
 * - By default, the library uses std::vector
 */
-#define AOL_USE_STD_VECTOR
+#define AOL_CONFIG_FLAG_USE_STD_VECTOR
 
 
 /***************************************
@@ -115,14 +115,14 @@
 *
 * - By default, the library already uses ankerl::unordered_dense::map
 */
-//#define AOL_USE_STD_UNORDERED_MAP
+//#define AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP
 
 /**
 * This makes all AoLibrary containers using HashMap use a ankerl::unordered_dense::map
 *
 * - By default, the library already uses ankerl::unordered_dense::map
 */
-#define AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP
+#define AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP
 
 
 /***************************************
@@ -134,14 +134,14 @@
 *
 * - By default, the library already uses ankerl::unordered_dense::map
 */
-//#define AOL_USE_STD_UNORDERED_SET
+//#define AOL_CONFIG_FLAG_USE_STD_UNORDERED_SET
 
 /**
 * This makes all AoLibrary containers using HashSet use a custom hash set
 *
 * - By default, the library already uses ankerl::unordered_dense::set
 */
-#define AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET
+#define AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_SET
 
 
 /***************************************
@@ -153,23 +153,23 @@
 *
 * - By default, the library uses absl::btree_map
 */
-//#define AOL_USE_STD_KEYORDERED_MAP
+//#define AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP
 
 /**
 * This makes all AoLibrary containers using KeyOrderMap use the Boost container key ordered map implementation
 *
 * - By default, the library uses absl::btree_map
 */
-//#define AOL_USE_BOOST_KEYORDERED_MAP
+//#define AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP
 
 /**
 * This makes all AoLibrary containers using KeyOrderMap use absl::btree_map
 *
 * - By default, the library uses absl::btree_map
 */
-#define AOL_USE_ABSEIL_KEYORDERED_MAP
+#define AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP
 
-#if defined(AOL_USE_STD_KEYORDERED_MAP) && defined(AOL_USE_BOOST_KEYORDERED_MAP) && defined(AOL_USE_ABSEIL_KEYORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP) && defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP) && defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 #error "Only define one key ordered map type!"
 #endif
 
@@ -183,7 +183,7 @@
 *
 * - By default, the library already uses tsl::ordered_map
 */
-#define AOL_USE_TSL_INSERTORDERED_MAP
+#define AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP
 
 
 /***************************************
@@ -195,7 +195,7 @@
 *
 * - By default, the library already uses tsl::ordered_set
 */
-#define AOL_USE_TSL_INSERTORDERED_SET
+#define AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_SET
 
 
 /***************************************
@@ -207,14 +207,14 @@
 *
 * - By default, the library already uses absl::btree_set
 */
-//#define AOL_USE_STD_KEYORDERED_SET
+//#define AOL_CONFIG_FLAG_USE_STD_KEYORDERED_SET
 
 /**
 * This makes all AoLibrary containers using KeyOrderSet use absl::btree_set
 *
 * - By default, the library already uses absl::btree_set
 */
-#define AOL_USE_ABSEIL_KEYORDERED_SET
+#define AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_SET
 
 
 /***************************************
@@ -226,9 +226,9 @@
 * 
 * - By default, the library uses the custom subrange
 */
-//#define AOL_USE_STD_SUBRANGE
+//#define AOL_CONFIG_FLAG_USE_STD_SUBRANGE
 
-#if defined(AOL_USE_STD_SUBRANGE)
+#if defined(AOL_CONFIG_FLAG_USE_STD_SUBRANGE)
 #define AOL_USE_STD_RANGES
 #endif
 
@@ -245,7 +245,7 @@
 *
 * - By default, the library already uses ankerl::unordered_dense::hash
 */
-#define AOL_USE_UNORDERED_DENSE_HASH
+#define AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 
 
 /*********************************************************************
@@ -257,20 +257,20 @@
 *
 * - By default, the library uses xoshiro
 */
-//#define AOL_USE_STD_RNG
+//#define AOL_CONFIG_FLAG_USE_STD_RNG
 
 /**
 * This makes the default random number generator be from xoshiro implementation by nessan
 * 
 * - By default, the library uses xoshiro
 */
-#define AOL_USE_XOSHIRO_NESSAN_RNG
+#define AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG
 
 /**
 * This makes the default random number generator be from pcg cpp library
 * 
 * - By default, the library uses xoshiro
 */
-//#define AOL_USE_PCG_CPP_RNG
+//#define AOL_CONFIG_FLAG_USE_PCG_CPP_RNG
 
 #endif // AOL_INTERNAL_CONFIG_H

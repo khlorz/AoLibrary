@@ -11,11 +11,11 @@
 
 #include "config.h"
 
-#if defined(AOL_USE_MIMALLOCATOR_ALLOCATOR) || defined(AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR)
+#if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR) || defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR)
 #include "mimalloc/mimalloc.h"
 #endif
 
-#ifdef AOL_USE_BOOST_POOL_ALLOCATOR
+#ifdef AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR
 #include "boost/pool/pool_alloc.hpp"
 #endif
 
@@ -37,7 +37,7 @@ namespace AoL::Internal
 */
 template<typename T>
 using DefaultAllocator
-#ifdef AOL_USE_MIMALLOCATOR_ALLOCATOR
+#ifdef AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR
 = mi_stl_allocator<T>;
 #else
 = std::allocator<T>;
@@ -58,9 +58,9 @@ using DefaultAllocator
 */
 template<typename T>
 using DefaultPoolAllocator
-#ifdef AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR
+#ifdef AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR
 = mi_heap_stl_allocator<T>;
-#elif AOL_USE_BOOST_POOL_ALLOCATOR
+#elif AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR
 = boost::pool_allocator<T>;
 #else
 #error "#define a different pool allocator!"
@@ -76,7 +76,7 @@ using DefaultPoolAllocator
 * - No need to change this allocator unless for some reason, the performance degrades
 */
 using DefaultStringAllocator
-#ifdef AOL_USE_MIMALLOCATOR_STRING_ALLOCATOR
+#ifdef AOL_CONFIG_FLAG_USE_MIMALLOCATOR_STRING_ALLOCATOR
 = mi_stl_allocator<char>;
 #else
 = std::allocator<char>;
@@ -92,9 +92,9 @@ using DefaultStringAllocator
 * - No need to change this allocator unless for some reason, the performance degrades
 */
 using DefaultStringPoolAllocator
-#ifdef AOL_USE_MIMALLOCATOR_POOL_ALLOCATOR
+#ifdef AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR
 = mi_heap_stl_allocator<char>;
-#elif AOL_USE_BOOST_POOL_ALLOCATOR
+#elif AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR
 = boost::pool_allocator<char>;
 #else
 #error "#define a different pool allocator!"

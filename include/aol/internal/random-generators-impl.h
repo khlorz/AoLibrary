@@ -12,11 +12,11 @@ namespace Rand
 * @details The 64 bit random number generator
 */
 using Gen64
-#if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
+#if defined(AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG)
 = xso::rng64;
-#elif defined(AOL_USE_PCG_CPP_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_PCG_CPP_RNG)
 = pcg64;
-#elif defined(AOL_USE_STD_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_STD_RNG)
 = std::mt19937_64;
 #else
 #error "No custom random number generator!"
@@ -26,11 +26,11 @@ using Gen64
 * @details The 32 bit random number generator
 */
 using Gen32
-#if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
+#if defined(AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG)
 = xso::rng32;
-#elif defined(AOL_USE_PCG_CPP_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_PCG_CPP_RNG)
 = pcg32;
-#elif defined(AOL_USE_STD_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_STD_RNG)
 = std::mt19937;
 #else
 #error "No custom random number generator!"

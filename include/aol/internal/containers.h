@@ -29,7 +29,7 @@
 * Array includes
 *************************************************/
 
-#if defined(AOL_USE_STD_ARRAY)
+#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
 #include <array>
 #endif
 
@@ -38,7 +38,7 @@
 * Vector includes
 *************************************************/
 
-#if defined(AOL_USE_STD_VECTOR)
+#if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
 #include <vector>
 #endif
 
@@ -47,15 +47,15 @@
 * Hash/Unordered map/set includes
 *************************************************/
 
-#if defined(AOL_USE_STD_UNORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
 #include <unordered_map>
-#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP)
 #include "unordered_dense/unordered_dense.h"
 #endif
 
-#if defined(AOL_USE_STD_UNORDERED_SET)
+#if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_SET)
 #include <unordered_set>
-#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_SET)
+#elif defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_SET)
 #include "unordered_dense/unordered_dense.h"
 #endif
 
@@ -64,11 +64,11 @@
 * Key-ordered map includes
 *************************************************/
 
-#if defined(AOL_USE_STD_KEYORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP)
 #include <map>
-#elif defined(AOL_USE_BOOST_KEYORDERED_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
 #include "boost/container/map.hpp"
-#elif defined(AOL_USE_ABSEIL_KEYORDERED_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 #include "absl/container/btree_map.h"
 #endif
 
@@ -76,7 +76,7 @@
 /*************************************************
 * Insert-ordered map includes
 *************************************************/
-#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
 #include "tsl/ordered_map.h"
 #endif
 
@@ -85,9 +85,9 @@
 * Key-ordered set includes
 *************************************************/
 
-#if defined(AOL_USE_STD_KEYORDERED_SET)
+#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_SET)
 #include <set>
-#elif defined(AOL_USE_ABSEIL_KEYORDERED_SET)
+#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_SET)
 #include "absl/container/btree_set.h"
 #endif
 
@@ -96,7 +96,7 @@
 * Insert-ordered Map includes
 *************************************************/
 
-#if defined(AOL_USE_TSL_INSERTORDERED_SET)
+#if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_SET)
 #include "tsl/ordered_set.h"
 #endif
 
@@ -213,7 +213,7 @@ template<
 	SizeT S
 >
 using Array
-#if defined(AOL_USE_STD_ARRAY)
+#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
 = std::array<T, S>;
 #else
 #error "No custom array yet!"
@@ -256,7 +256,7 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using Vector
-#if defined(AOL_USE_STD_VECTOR)
+#if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
 = std::vector<T, A>;
 #else
 #error "No custom vector yet!"
@@ -302,9 +302,9 @@ template<
 	typename V
 >
 using KeyOrderMapPair
-#if defined(AOL_USE_STD_KEYORDERED_MAP) || defined(AOL_USE_ABSEIL_KEYORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP) || defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 = std::pair<const K, V>;
-#elif defined(AOL_USE_BOOST_KEYORDERED_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
 = std::pair<K, V>;
 #else
 = Internal::KeyValuePairEx<K, V>;
@@ -335,11 +335,11 @@ template<
 	typename A = Internal::DefaultAllocator<P>
 >
 using KeyOrderMap
-#if defined(AOL_USE_STD_KEYORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP)
 = std::map<K, V>;
-#elif defined(AOL_USE_BOOST_KEYORDERED_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
 = boost::container::map<K, V, std::less<K>, A>;
-#elif defined(AOL_USE_ABSEIL_KEYORDERED_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 = absl::btree_map<K, V, std::less<K>, A>;
 #else
 = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
@@ -446,7 +446,7 @@ template<
 	typename V
 >
 using InsertOrderMapPair
-#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
 = std::pair<K, V>;
 #else
 #error "No custom insert ordered map pair yet!"
@@ -479,7 +479,7 @@ template<
 	typename A = Internal::DefaultAllocator<P>
 >
 using InsertOrderMap
-#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_map<K, V, H, std::equal_to<K>, A>;
 #else
 #error "No custom insert ordered map yet!"
@@ -529,9 +529,9 @@ template<
 	typename V
 >
 using HashMapPair
-#if defined(AOL_USE_STD_UNORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
 = std::pair<const K, V>;
-#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP)
 = std::pair<K, V>;
 #else
 #error "No custom hash map pair yet!"
@@ -564,9 +564,9 @@ template<
 	typename A = Internal::DefaultAllocator<P>
 >
 using HashMap
-#if defined(AOL_USE_STD_UNORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
 = std::unordered_map<K, V, ankerl::unordered_dense::hash<K>, std::equal_to<K>, A>;
-#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP)
 = ankerl::unordered_dense::map<K, V, H, std::equal_to<K>, A>;
 #else
 #error "No custom hash map yet!"
@@ -624,7 +624,7 @@ template<
 using KeyOrderSet
 #if defined(AOL_USE_STD_ORDERED_SET)
 = std::set<T, std::less<T>, A>;
-#elif defined(AOL_USE_ABSEIL_KEYORDERED_SET)
+#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_SET)
 = absl::btree_set<T, std::less<T>, A>;
 #else
 #error "No custom key ordered set yet!"
@@ -671,7 +671,7 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using InsertOrderSet
-#if defined(AOL_USE_TSL_INSERTORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
 = tsl::ordered_set<T, H, std::equal_to<T>, A>;
 #else
 #error "No custom insert ordered map set yet!"
@@ -723,9 +723,9 @@ template<
 	typename A = Internal::DefaultAllocator<T>
 >
 using HashSet
-#if defined(AOL_USE_STD_UNORDERED_MAP)
+#if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
 = std::unordered_set<T, ankerl::unordered_dense::hash<T>, std::equal_to<T>, A>;
-#elif defined(AOL_USE_ROBINHOOD_UNORDERED_DENSE_MAP)
+#elif defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP)
 = ankerl::unordered_dense::set<T, H, std::equal_to<T>, A>;
 #else
 #error "No custom hash set yet!"
@@ -799,7 +799,7 @@ using CyclicBufferD = Internal::CyclicBufferDynamic<T, A>;
 * Subrange
 *************************************************/
 
-#if defined(AOL_USE_STD_SUBRANGE)
+#if defined(AOL_CONFIG_FLAG_USE_STD_SUBRANGE)
 template<
 	typename It,
 	typename Sentinel = It,
