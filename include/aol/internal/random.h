@@ -13,11 +13,12 @@
 #include "types.h"
 #include "traits.h"
 #include "hashes.h"
+#include "containers.h"
+#include "algorithm.h"
 
 #include <random>
 #include <chrono>
 #include <thread>
-#include <iterator>
 
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 #include "xoshiro/xoshiro.h"

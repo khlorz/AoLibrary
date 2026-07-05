@@ -50,6 +50,15 @@
     <ClCompile Include="containers\containers-partition-tests.cpp">
       <Filter>containers</Filter>
     </ClCompile>
+    <ClCompile Include="random\rolls-rollweighted-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\algorithms-shuffle-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="random\algorithms-partition-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="random">

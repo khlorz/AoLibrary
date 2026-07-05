@@ -91,6 +91,92 @@ TEST(RollRange_Float, CompileTimeBoundsRespected)
 }
 
 /*********************************************************************************************
+* RollRange bias / chi-squared tests
+*********************************************************************************************/
+
+namespace
+{
+
+double ChiSquaredCritical(int df, double alpha)
+{
+	if (df == 2)  return alpha < 0.001 ? 13.82 : 9.21;
+	// Wilson–Hilferty approximation for larger df
+	double const z = alpha < 0.001 ? 3.09 : 2.33;
+	double const x = z * sqrt(2.0 * df) + 2.0 * (z * z - 1.0) / 3.0;
+	return df + x;
+}
+
+double ChiSquared(std::vector<int> const& hist, double expected)
+{
+	double cs = 0.0;
+	for (int c : hist)
+	{
+		double d = static_cast<double>(c) - expected;
+		cs += d * d / expected;
+	}
+	return cs;
+}
+
+}
+
+TEST(RollRange_Bias, SmallRange_0_2)
+{
+	auto rng = AoLRng(12345);
+	Pool32 pool;
+	AoL::U32 const min = 0, max = 2;
+	int const range = static_cast<int>(max - min + 1);
+	std::vector<int> hist(range, 0);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng, pool);
+		++hist[static_cast<int>(v)];
+	}
+
+	double expected = static_cast<double>(many_trials) / range;
+	double cs = ChiSquared(hist, expected);
+	EXPECT_LT(cs, ChiSquaredCritical(2, 0.001));
+}
+
+TEST(RollRange_Bias, MediumRange_half_of_U16)
+{
+	auto rng = AoLRng(12345);
+	Pool32 pool;
+	AoL::U32 const min = 0, max = 32767;
+	int const range = static_cast<int>(max - min + 1);
+	std::vector<int> hist(range, 0);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng, pool);
+		++hist[static_cast<int>(v)];
+	}
+
+	double expected = static_cast<double>(many_trials) / range;
+	double cs = ChiSquared(hist, expected);
+	EXPECT_LT(cs, ChiSquaredCritical(range - 1, 0.001));
+}
+
+TEST(RollRange_Bias, LargeRange_full_U16)
+{
+	auto rng = AoLRng(12345);
+	Pool32 pool;
+	AoL::U32 const min = 0, max = 65535;
+	int const range = static_cast<int>(max - min + 1);
+	std::vector<int> hist(range, 0);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng, pool);
+		++hist[static_cast<int>(v)];
+	}
+
+	double expected = static_cast<double>(many_trials) / range;
+	double cs = ChiSquared(hist, expected);
+	EXPECT_LT(cs, ChiSquaredCritical(range - 1, 0.001));
+}
+
+/*********************************************************************************************
 * RollRangeSlow
 *********************************************************************************************/
 
