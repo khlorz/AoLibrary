@@ -61,8 +61,8 @@
 */
 //#define AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR
 
-#if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR) == defined(AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR)
-#error "You must define one pool allocator type!"
+#if (defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR) + defined(AOL_CONFIG_FLAG_USE_BOOST_POOL_ALLOCATOR)) > 1
+#error "Define only one Pool Allocator config flag!"
 #endif
 
 
@@ -124,6 +124,9 @@
 */
 #define AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP
 
+#if (defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP) + defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_MAP)) > 1
+#error "Define only one HashMap config flag!"
+#endif
 
 /***************************************
 * Custom HashSet Types
@@ -143,6 +146,9 @@
 */
 #define AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_SET
 
+#if (defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_SET) + defined(AOL_CONFIG_FLAG_USE_ANKERL_UNORDERED_DENSE_SET)) > 1
+#error "Define only one HashSet config flag!"
+#endif
 
 /***************************************
 * Custom KeyOrderMap Types
@@ -169,8 +175,8 @@
 */
 #define AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP
 
-#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP) && defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP) && defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
-#error "Only define one key ordered map type!"
+#if (defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP) + defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP) + defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)) > 1
+#error "Define only one KeyOrderMap config flag!"
 #endif
 
 
@@ -216,6 +222,9 @@
 */
 #define AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_SET
 
+#if (defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_SET) + defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_SET)) > 1
+#error "Define only one KeyOrderSet config flag!"
+#endif
 
 /***************************************
 * Custom Subrange Types
@@ -272,5 +281,9 @@
 * - By default, the library uses xoshiro
 */
 //#define AOL_CONFIG_FLAG_USE_PCG_CPP_RNG
+
+#if (defined(AOL_CONFIG_FLAG_USE_STD_RNG) + defined(AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG) + defined(AOL_CONFIG_FLAG_USE_PCG_CPP_RNG)) > 1
+#error "Define only one RNG config flag!"
+#endif
 
 #endif // AOL_INTERNAL_CONFIG_H
