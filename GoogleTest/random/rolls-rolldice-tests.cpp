@@ -41,3 +41,21 @@ TEST(RollDice, RuntimeSidesProducesValuesInOneToMaxSidesInclusive)
 		EXPECT_TRUE(b);
 	}
 }
+
+TEST(RollDice_NoPool, RuntimeSidesProducesValuesInOneToMaxSidesInclusive)
+{
+	auto rng = AoLRng(12345);
+
+	std::array<bool, 6> seen{};
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollDice(Cs(6), rng);
+		ASSERT_GE(v, 1u);
+		ASSERT_LE(v, 6u);
+		seen[v - 1] = true;
+	}
+	for (bool b : seen)
+	{
+		EXPECT_TRUE(b);
+	}
+}

@@ -206,3 +206,154 @@ TEST(RollRangeSlow_Signed, RegressionCaseDoesNotHang)
 		EXPECT_LE(v, max);
 	}
 }
+
+/*********************************************************************************************
+* No-pool RollRange
+*********************************************************************************************/
+
+TEST(RollRange_NoPool_Unsigned, RuntimeBoundsRespected)
+{
+	auto rng = AoLRng(12345);
+
+	AoL::U32 const min = 100, max = 200;
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng);
+		EXPECT_GE(v, min);
+		EXPECT_LE(v, max);
+	}
+}
+
+TEST(RollRange_NoPool_Unsigned, CompileTimeBoundsRespected)
+{
+	auto rng = AoLRng(12345);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<static_cast<AoL::U32>(5), static_cast<AoL::U32>(15)>(rng);
+		EXPECT_GE(v, 5u);
+		EXPECT_LE(v, 15u);
+	}
+}
+
+TEST(RollRange_NoPool_Signed, RuntimeBoundsRespectedAcrossZero)
+{
+	auto rng = AoLRng(12345);
+
+	AoL::I32 const min = -500, max = -100;
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::I32>(min, max, rng);
+		EXPECT_GE(v, min);
+		EXPECT_LE(v, max);
+	}
+}
+
+TEST(RollRange_NoPool_Signed, CompileTimeBoundsRespectedAcrossZero)
+{
+	auto rng = AoLRng(12345);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<static_cast<AoL::I32>(-10), static_cast<AoL::I32>(10)>(rng);
+		EXPECT_GE(v, -10);
+		EXPECT_LE(v, 10);
+	}
+}
+
+TEST(RollRange_NoPool, WideRangeU64DoesNotOverflow)
+{
+	auto rng = AoLRng(12345);
+
+	AoL::U64 const min = 0, max = 1'000'000;
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U64>(min, max, rng);
+		EXPECT_GE(v, min);
+		EXPECT_LE(v, max);
+	}
+}
+
+TEST(RollRange_NoPool_Bias, SmallRange_0_2)
+{
+	auto rng = AoLRng(12345);
+	AoL::U32 const min = 0, max = 2;
+	int const range = static_cast<int>(max - min + 1);
+	std::vector<int> hist(range, 0);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng);
+		++hist[static_cast<int>(v)];
+	}
+
+	double expected = static_cast<double>(many_trials) / range;
+	double cs = ChiSquared(hist, expected);
+	EXPECT_LT(cs, ChiSquaredCritical(2, 0.001));
+}
+
+/*********************************************************************************************
+* No-pool RollRangeSlow
+*********************************************************************************************/
+
+TEST(RollRangeSlow_NoPool, HandlesFullSpanOfU8WithoutHanging)
+{
+	auto rng = AoLRng(12345);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRangeSlow<AoL::U8>(
+			static_cast<AoL::U8>(0), static_cast<AoL::U8>(255), rng);
+		EXPECT_LE(v, 255);
+	}
+}
+
+TEST(RollRangeSlow_NoPool_Signed, RegressionCaseDoesNotHang)
+{
+	auto rng = AoLRng(12345);
+
+	AoL::I16 const min = -32768, max = 12379;
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRangeSlow<AoL::I16>(min, max, rng);
+		EXPECT_GE(v, min);
+		EXPECT_LE(v, max);
+	}
+}
+
+TEST(RollRangeSlow_NoPool, WideRangeU64DoesNotUnderflow)
+{
+	auto rng = AoLRng(12345);
+
+	AoL::U64 const min = 0, max = 4'000'000'000;
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRangeSlow<AoL::U64>(min, max, rng);
+		EXPECT_GE(v, min);
+		EXPECT_LE(v, max);
+	}
+}
+
+TEST(RollRangeSlow_NoPool_Unsigned, CompileTimeBoundsRespected)
+{
+	auto rng = AoLRng(12345);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRangeSlow<static_cast<AoL::U16>(10), static_cast<AoL::U16>(100)>(rng);
+		EXPECT_GE(v, 10);
+		EXPECT_LE(v, 100);
+	}
+}
+
+TEST(RollRangeSlow_NoPool_Signed, CompileTimeBoundsRespectedAcrossZero)
+{
+	auto rng = AoLRng(12345);
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollRangeSlow<static_cast<AoL::I16>(-50), static_cast<AoL::I16>(50)>(rng);
+		EXPECT_GE(v, -50);
+		EXPECT_LE(v, 50);
+	}
+}

@@ -307,3 +307,36 @@ TEST(RollWeighted, DeterministicSeedRepeatableResults)
 
 	EXPECT_EQ(results_a, results_b);
 }
+
+/*********************************************************************************************
+* RollWeighted no-pool
+*********************************************************************************************/
+
+TEST(RollWeighted_NoPool, SingleElementAlwaysReturnsZero)
+{
+	auto rng = AoLRng(42);
+
+	std::array<AoL::U32, 1> weights = { 5 };
+	for (int i = 0; i < 100; ++i)
+	{
+		EXPECT_EQ(AoL::Rand::RollWeighted(weights.begin(), weights.end(), rng), 0u);
+	}
+}
+
+TEST(RollWeighted_NoPool, EqualWeightsAreUniform)
+{
+	auto rng = AoLRng(12345);
+
+	std::array<AoL::U32, 2> weights = { 1, 1 };
+	int counts[2] = {};
+
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto idx = AoL::Rand::RollWeighted(weights.begin(), weights.end(), rng);
+		ASSERT_LT(idx, 2u);
+		++counts[idx];
+	}
+
+	double ratio = static_cast<double>(counts[0]) / many_trials;
+	EXPECT_NEAR(ratio, 0.5, 0.01);
+}

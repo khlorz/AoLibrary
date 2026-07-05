@@ -40,3 +40,20 @@ TEST(RollIndex, RuntimeMaxSizeProducesValuesInZeroToMaxSizeInclusive)
 		EXPECT_TRUE(b);
 	}
 }
+
+TEST(RollIndex_NoPool, RuntimeMaxSizeProducesValuesInZeroToMaxSizeInclusive)
+{
+	auto rng = AoLRng(12345);
+
+	std::array<bool, 11> seen{};
+	for (int i = 0; i < many_trials; ++i)
+	{
+		auto v = AoL::Rand::RollIndex(Cs(10), rng);
+		ASSERT_LE(v, 10u);
+		seen[v] = true;
+	}
+	for (bool b : seen)
+	{
+		EXPECT_TRUE(b);
+	}
+}

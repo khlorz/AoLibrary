@@ -280,6 +280,29 @@ constexpr RangeType RollRange(RangeType min, RangeType max, RNG& rng, Pool& pool
 	return static_cast<RangeType>(wide_t(min) + val);
 }
 
+template<typename RangeType, typename RNG>
+	requires std::unsigned_integral<RangeType>
+constexpr RangeType RollRange(RangeType min, RangeType max, RNG& rng) noexcept
+{
+	using wide_t = std::conditional_t<sizeof(RangeType) <= 4, AoL::U64, AoL::U128>;
+	const wide_t range = wide_t(max) - wide_t(min) + 1;
+	const wide_t val = static_cast<wide_t>(rng()) % range;
+	return static_cast<RangeType>(wide_t(min) + val);
+}
+
+template<auto Min, auto Max, typename RNG>
+	requires std::unsigned_integral<std::common_type_t<decltype(Min), decltype(Max)>>
+constexpr auto RollRange(RNG& rng) noexcept
+{
+	using RangeType = std::common_type_t<decltype(Min), decltype(Max)>;
+	using wide_t = std::conditional_t<sizeof(RangeType) <= 4, AoL::U64, AoL::U128>;
+	constexpr wide_t min_v = static_cast<wide_t>(Min);
+	constexpr wide_t max_v = static_cast<wide_t>(Max);
+	constexpr wide_t range = (max_v - min_v) + 1;
+	const wide_t val = static_cast<wide_t>(rng()) % range;
+	return static_cast<RangeType>(min_v + val);
+}
+
 /***************************************************
 * Signed integer RollRange
 ***************************************************/
@@ -314,6 +337,33 @@ constexpr RangeType RollRange(RangeType min, RangeType max, RNG& rng, Pool& pool
 	const wide_t val = wide_t(pool.Next(rng)) % range;
 
 	return static_cast<RangeType>(signed_wide_t(a + val));
+}
+
+template<typename SignedType, typename RNG>
+	requires std::signed_integral<SignedType>
+constexpr SignedType RollRange(SignedType min, SignedType max, RNG& rng) noexcept
+{
+	using wide_t = std::conditional_t<sizeof(SignedType) <= 4, AoL::U64, AoL::U128>;
+	using signed_wide_t = std::conditional_t<sizeof(SignedType) <= 4, AoL::I64, AoL::I128>;
+	const wide_t a = static_cast<wide_t>(signed_wide_t(min));
+	const wide_t b = static_cast<wide_t>(signed_wide_t(max));
+	const wide_t range = (b - a) + 1;
+	const wide_t val = static_cast<wide_t>(rng()) % range;
+	return static_cast<SignedType>(signed_wide_t(a + val));
+}
+
+template<auto Min, auto Max, typename RNG>
+	requires std::signed_integral<std::common_type_t<decltype(Min), decltype(Max)>>
+constexpr auto RollRange(RNG& rng) noexcept
+{
+	using RangeType = std::common_type_t<decltype(Min), decltype(Max)>;
+	using wide_t = std::conditional_t<sizeof(RangeType) <= 4, AoL::U64, AoL::U128>;
+	using signed_wide_t = std::conditional_t<sizeof(RangeType) <= 4, AoL::I64, AoL::I128>;
+	constexpr wide_t min_v = static_cast<wide_t>(static_cast<signed_wide_t>(Min));
+	constexpr wide_t max_v = static_cast<wide_t>(static_cast<signed_wide_t>(Max));
+	constexpr wide_t range = (max_v - min_v) + 1;
+	const wide_t val = static_cast<wide_t>(rng()) % range;
+	return static_cast<RangeType>(static_cast<signed_wide_t>(min_v + val));
 }
 
 /***************************************************
@@ -381,6 +431,33 @@ constexpr auto RollRange(RangeType min, RangeType max, RNG& rng, Pool& pool) noe
 	const RangeType normalized = static_cast<RangeType>(draw) / max_draw_plus_one; // in [0, 1)
 
 	return min + normalized * (max - min);
+}
+
+template<typename RangeType, typename RNG> requires std::floating_point<RangeType>
+constexpr auto RollRange(RangeType min, RangeType max, RNG& rng) noexcept
+{
+	using rng_t = Internal::RNGReturnType<RNG>;
+	constexpr auto rng_bits = sizeof(rng_t) * 8;
+	constexpr RangeType max_draw_plus_one = static_cast<RangeType>(rng_bits < 64
+		? static_cast<AoL::U64>(1) << rng_bits
+		: static_cast<AoL::U128>(1) << rng_bits);
+	const rng_t draw = rng();
+	const RangeType normalized = static_cast<RangeType>(draw) / max_draw_plus_one;
+	return min + normalized * (max - min);
+}
+
+template<auto Min, auto Max, typename RNG> requires std::floating_point<std::common_type_t<decltype(Min), decltype(Max)>>
+constexpr auto RollRange(RNG& rng) noexcept
+{
+	using float_t = std::common_type_t<decltype(Min), decltype(Max)>;
+	using rng_t = Internal::RNGReturnType<RNG>;
+	constexpr auto rng_bits = sizeof(rng_t) * 8;
+	constexpr float_t max_draw_plus_one = static_cast<float_t>(rng_bits < 64
+		? static_cast<AoL::U64>(1) << rng_bits
+		: static_cast<AoL::U128>(1) << rng_bits);
+	const rng_t draw = rng();
+	const float_t normalized = static_cast<float_t>(draw) / max_draw_plus_one;
+	return static_cast<float_t>(Min) + normalized * (static_cast<float_t>(Max) - static_cast<float_t>(Min));
 }
 
 
@@ -498,6 +575,65 @@ constexpr RangeType RollRangeSlow(RangeType min, RangeType max, RNG& rng, Pool& 
 		while (static_cast<wide_t>(low_part) < threshold) [[unlikely]]
 		{
 			draw = static_cast<value_t>(pool.Next(rng));
+			wide_product = static_cast<wide_t>(draw) * range_size;
+			low_part = static_cast<value_t>(wide_product);
+		}
+	}
+
+	const value_t result = static_cast<value_t>(wide_product >> (sizeof(value_t) * 8));
+	return static_cast<value_t>(min + result);
+}
+
+template<auto Min, auto Max, typename RNG>
+	requires std::unsigned_integral<std::common_type_t<decltype(Min), decltype(Max)>>
+constexpr auto RollRangeSlow(RNG& rng) noexcept
+{
+	using value_t = std::conditional_t<(Max <= std::numeric_limits<AoL::U8>::max()), AoL::U8,
+		std::conditional_t<(Max <= std::numeric_limits<AoL::U16>::max()), AoL::U16,
+		std::conditional_t<(Max <= std::numeric_limits<AoL::U32>::max()), AoL::U32, AoL::U64>>>;
+	static_assert(Min < Max, "Min must be less than Max!");
+	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16, std::conditional_t<sizeof(value_t) <= 2, AoL::U32, std::conditional_t<sizeof(value_t) <= 4, AoL::U64, AoL::U128>>>;
+	constexpr wide_t range_size = static_cast<wide_t>(static_cast<value_t>(Max)) - static_cast<wide_t>(static_cast<value_t>(Min)) + 1;
+
+	value_t draw = static_cast<value_t>(rng());
+	wide_t wide_product = static_cast<wide_t>(draw) * range_size;
+	value_t low_part = static_cast<value_t>(wide_product);
+
+	if (static_cast<wide_t>(low_part) < range_size) [[unlikely]]
+	{
+		constexpr wide_t two_to_the_n = (sizeof(value_t) * 8 >= sizeof(wide_t) * 8) ? wide_t{ 0 } : (static_cast<wide_t>(1) << (sizeof(value_t) * 8));
+		constexpr wide_t threshold = two_to_the_n % range_size;
+		while (static_cast<wide_t>(low_part) < threshold) [[unlikely]]
+		{
+			draw = static_cast<value_t>(rng());
+			wide_product = static_cast<wide_t>(draw) * range_size;
+			low_part = static_cast<value_t>(wide_product);
+		}
+	}
+
+	const value_t result = static_cast<value_t>(wide_product >> (sizeof(value_t) * 8));
+	return static_cast<value_t>(static_cast<value_t>(Min) + result);
+}
+
+template<typename RangeType, typename RNG>
+	requires std::unsigned_integral<RangeType>
+constexpr RangeType RollRangeSlow(RangeType min, RangeType max, RNG& rng) noexcept
+{
+	using value_t = RangeType;
+	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16, std::conditional_t<sizeof(value_t) <= 2, AoL::U32, std::conditional_t<sizeof(value_t) <= 4, AoL::U64, AoL::U128>>>;
+	const wide_t range_size = static_cast<wide_t>(max) - static_cast<wide_t>(min) + 1;
+
+	value_t draw = static_cast<value_t>(rng());
+	wide_t wide_product = static_cast<wide_t>(draw) * range_size;
+	value_t low_part = static_cast<value_t>(wide_product);
+
+	if (static_cast<wide_t>(low_part) < range_size) [[unlikely]]
+	{
+		const wide_t two_to_the_n = (sizeof(value_t) * 8 >= sizeof(wide_t) * 8) ? wide_t{ 0 } : (static_cast<wide_t>(1) << (sizeof(value_t) * 8));
+		const wide_t threshold = two_to_the_n % range_size;
+		while (static_cast<wide_t>(low_part) < threshold) [[unlikely]]
+		{
+			draw = static_cast<value_t>(rng());
 			wide_product = static_cast<wide_t>(draw) * range_size;
 			low_part = static_cast<value_t>(wide_product);
 		}
@@ -635,6 +771,75 @@ constexpr SignedType RollRangeSlow(SignedType min, SignedType max, RNG& rng, Poo
 	return static_cast<signed_t>(static_cast<signed_t>(min) + static_cast<signed_t>(result));
 }
 
+template<auto Min, auto Max, typename RNG>
+	requires std::signed_integral<std::common_type_t<decltype(Min), decltype(Max)>>
+constexpr auto RollRangeSlow(RNG& rng) noexcept
+{
+	static_assert(Min < Max, "Min must be less than Max!");
+	using signed_t = std::common_type_t<decltype(Min), decltype(Max)>;
+	using value_t = std::conditional_t<sizeof(signed_t) <= 1, AoL::U8,
+		std::conditional_t<sizeof(signed_t) <= 2, AoL::U16,
+		std::conditional_t<sizeof(signed_t) <= 4, AoL::U32, AoL::U64>>>;
+	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16,
+		std::conditional_t<sizeof(value_t) <= 2, AoL::U32,
+		std::conditional_t<sizeof(value_t) <= 4, AoL::U64, AoL::U128>>>;
+	constexpr value_t diff_wrapped = static_cast<value_t>(static_cast<value_t>(Max) - static_cast<value_t>(Min));
+	constexpr wide_t range_size = static_cast<wide_t>(diff_wrapped) + 1;
+
+	value_t draw = static_cast<value_t>(rng());
+	wide_t wide_product = static_cast<wide_t>(draw) * range_size;
+	value_t low_part = static_cast<value_t>(wide_product);
+
+	if (static_cast<wide_t>(low_part) < range_size) [[unlikely]]
+	{
+		constexpr wide_t two_to_the_n = (sizeof(value_t) * 8 >= sizeof(wide_t) * 8) ? wide_t{ 0 } : (static_cast<wide_t>(1) << (sizeof(value_t) * 8));
+		constexpr wide_t threshold = two_to_the_n % range_size;
+		while (static_cast<wide_t>(low_part) < threshold) [[unlikely]]
+		{
+			draw = static_cast<value_t>(rng());
+			wide_product = static_cast<wide_t>(draw) * range_size;
+			low_part = static_cast<value_t>(wide_product);
+		}
+	}
+
+	const value_t result = static_cast<value_t>(wide_product >> (sizeof(value_t) * 8));
+	return static_cast<signed_t>(static_cast<signed_t>(Min) + static_cast<signed_t>(result));
+}
+
+template<typename SignedType, typename RNG>
+	requires std::signed_integral<SignedType>
+constexpr SignedType RollRangeSlow(SignedType min, SignedType max, RNG& rng) noexcept
+{
+	using signed_t = SignedType;
+	using value_t = std::conditional_t<sizeof(signed_t) <= 1, AoL::U8,
+		std::conditional_t<sizeof(signed_t) <= 2, AoL::U16,
+		std::conditional_t<sizeof(signed_t) <= 4, AoL::U32, AoL::U64>>>;
+	using wide_t = std::conditional_t<sizeof(value_t) <= 1, AoL::U16,
+		std::conditional_t<sizeof(value_t) <= 2, AoL::U32,
+		std::conditional_t<sizeof(value_t) <= 4, AoL::U64, AoL::U128>>>;
+	const value_t diff_wrapped = static_cast<value_t>(static_cast<value_t>(max) - static_cast<value_t>(min));
+	const wide_t range_size = static_cast<wide_t>(diff_wrapped) + 1;
+
+	value_t draw = static_cast<value_t>(rng());
+	wide_t wide_product = static_cast<wide_t>(draw) * range_size;
+	value_t low_part = static_cast<value_t>(wide_product);
+
+	if (static_cast<wide_t>(low_part) < range_size) [[unlikely]]
+	{
+		const wide_t two_to_the_n = (sizeof(value_t) * 8 >= sizeof(wide_t) * 8) ? wide_t{ 0 } : (static_cast<wide_t>(1) << (sizeof(value_t) * 8));
+		const wide_t threshold = two_to_the_n % range_size;
+		while (static_cast<wide_t>(low_part) < threshold) [[unlikely]]
+		{
+			draw = static_cast<value_t>(rng());
+			wide_product = static_cast<wide_t>(draw) * range_size;
+			low_part = static_cast<value_t>(wide_product);
+		}
+	}
+
+	const value_t result = static_cast<value_t>(wide_product >> (sizeof(value_t) * 8));
+	return static_cast<signed_t>(static_cast<signed_t>(min) + static_cast<signed_t>(result));
+}
+
 
 /*********************************************************************************************
 * Utility roll functions
@@ -660,6 +865,20 @@ constexpr AoL::SizeT RollDice(RNG& rng, Pool& pool) noexcept
 	return RollRange(static_cast<SizeT>(1), MaxSides, rng, pool);
 }
 
+template<typename RNG>
+constexpr AoL::SizeT RollDice(AoL::SizeT max_sides, RNG& rng) noexcept
+{
+	assert(max_sides > 1 && "max_sides should be more than 1");
+	return RollRange(static_cast<AoL::SizeT>(1), max_sides, rng);
+}
+
+template<AoL::SizeT MaxSides, typename RNG>
+constexpr AoL::SizeT RollDice(RNG& rng) noexcept
+{
+	static_assert(MaxSides > 1, "MaxSides should be more than 1!");
+	return RollRange(static_cast<SizeT>(1), MaxSides, rng);
+}
+
 /***************************************************
 * Index rollings
 ***************************************************/
@@ -675,9 +894,23 @@ constexpr AoL::SizeT RollIndex(AoL::SizeT max_size, RNG& rng, Pool& pool) noexce
 template<AoL::SizeT MaxSize, typename RNG, typename Pool>
 constexpr AoL::SizeT RollIndex(RNG& rng, Pool& pool) noexcept
 {
-	static_assert(MaxSize > 1, "MaxSides should be more than 0!");
+	static_assert(MaxSize > 1, "MaxSize should be more than 0!");
 
 	return RollRange(static_cast<AoL::SizeT>(0), MaxSize, rng, pool);
+}
+
+template<typename RNG>
+constexpr AoL::SizeT RollIndex(AoL::SizeT max_size, RNG& rng) noexcept
+{
+	assert(max_size > 1 && "size should be more than 0");
+	return RollRange(static_cast<AoL::SizeT>(0), max_size, rng);
+}
+
+template<AoL::SizeT MaxSize, typename RNG>
+constexpr AoL::SizeT RollIndex(RNG& rng) noexcept
+{
+	static_assert(MaxSize > 1, "MaxSize should be more than 0!");
+	return RollRange(static_cast<AoL::SizeT>(0), MaxSize, rng);
 }
 
 /***************************************************
@@ -706,6 +939,15 @@ constexpr It RollElement(It begin, It end, RNG& rng, Pool& pool) noexcept
 	auto dist = static_cast<AoL::SizeT>(end - begin);
 	assert(dist > 0 && "Range must be non-empty!");
 	auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng, pool);
+	return begin + offset;
+}
+
+template<std::random_access_iterator It, typename RNG>
+constexpr It RollElement(It begin, It end, RNG& rng) noexcept
+{
+	auto dist = static_cast<AoL::SizeT>(end - begin);
+	assert(dist > 0 && "Range must be non-empty!");
+	auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng);
 	return begin + offset;
 }
 
@@ -756,13 +998,38 @@ constexpr AoL::SizeT RollWeighted(It begin, It end, RNG& rng, Pool& pool) noexce
 	for (auto it = begin; it != end; ++it, ++idx)
 	{
 		sum += *it;
-
 		if (roll < sum)
 		{
 			return idx;
 		}
 	}
 
+	return idx - 1;
+}
+
+template<std::forward_iterator It, typename RNG>
+	requires std::unsigned_integral<typename std::iterator_traits<It>::value_type>
+constexpr AoL::SizeT RollWeighted(It begin, It end, RNG& rng) noexcept
+{
+	assert(begin != end && "Weight range must be non-empty!");
+	using WeightType = typename std::iterator_traits<It>::value_type;
+
+	WeightType total = 0;
+	for (auto it = begin; it != end; ++it) { total += *it; }
+	assert(total > 0 && "Sum of weights must be greater than zero!");
+
+	auto roll = RollRange(static_cast<WeightType>(0), static_cast<WeightType>(total - 1), rng);
+
+	WeightType sum = 0;
+	AoL::SizeT idx = 0;
+	for (auto it = begin; it != end; ++it, ++idx)
+	{
+		sum += *it;
+		if (roll < sum)
+		{
+			return idx;
+		}
+	}
 	return idx - 1;
 }
 
