@@ -19,6 +19,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <bit>
 
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 #include "xoshiro/xoshiro.h"
