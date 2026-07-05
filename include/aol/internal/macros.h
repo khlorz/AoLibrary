@@ -21,9 +21,10 @@
 /**
 * Attributes used throughout the library
 */
-#define AOL_NO_DISCARD [[nodiscard]]
-#define AOL_BRANCH_UNLIKELY [[unlikely]]
-#define AOL_BRANCH_LIKELY [[likely]]
+#define AOL_ATTRIB_NO_DISCARD [[nodiscard]]
+#define AOL_ATTRIB_BRANCH_UNLIKELY [[unlikely]]
+#define AOL_ATTRIB_BRANCH_LIKELY [[likely]]
+#define AOL_ATTRIB_NO_UNQ_ADDRESS [[no_unique_address]]
 
 /**
 * We use each platform's prefetch function

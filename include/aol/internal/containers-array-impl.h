@@ -43,12 +43,12 @@ struct ArrayIterator
         ptr{ arr_ptr + offset }
     {}
 
-    AOL_NO_DISCARD constexpr reference operator*() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator*() const noexcept
     {
         return *ptr;
     }
 
-    AOL_NO_DISCARD constexpr pointer operator->() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr pointer operator->() const noexcept
     {
         return ptr;
     }
@@ -91,22 +91,22 @@ struct ArrayIterator
         return *this;
     }
 
-    AOL_NO_DISCARD constexpr difference_type operator-(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr difference_type operator-(const ArrayIterator& other) const noexcept
     {
         return ptr - other.ptr;
     }
 
-    AOL_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
     {
         return ptr[offset];
     }
 
-    AOL_NO_DISCARD constexpr bool operator==(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr bool operator==(const ArrayIterator& other) const noexcept
     {
         return ptr == other.ptr;
     }
 
-    AOL_NO_DISCARD constexpr std::strong_ordering operator<=>(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr std::strong_ordering operator<=>(const ArrayIterator& other) const noexcept
     {
         return ptr <=> other.ptr;
     }
@@ -127,12 +127,12 @@ struct ArrayIterator
         assert(idx <= Size && "Invalid offset! Offset is way beyond the array size!");
     }
 
-    AOL_NO_DISCARD constexpr reference operator*() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator*() const noexcept
     {
         return *operator->();
     }
 
-    AOL_NO_DISCARD constexpr pointer operator->() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr pointer operator->() const noexcept
     {
         assert(ptr && "Invalid operation! Cannot dereference nullptr array iterator!");
         assert(idx < Size && "Invalid operation! Cannot dereference out of range array iterator!");
@@ -181,24 +181,24 @@ struct ArrayIterator
         return *this += -offset;
     }
 
-    AOL_NO_DISCARD constexpr difference_type operator-(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr difference_type operator-(const ArrayIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return static_cast<difference_type>(idx - other.idx);
     }
 
-    AOL_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
     {
         return *(*this + offset);
     }
 
-    AOL_NO_DISCARD constexpr bool operator==(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr bool operator==(const ArrayIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return idx == other.idx;
     }
 
-    AOL_NO_DISCARD constexpr std::strong_ordering operator<=>(const ArrayIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr std::strong_ordering operator<=>(const ArrayIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return idx <=> other.idx;
@@ -227,21 +227,21 @@ struct ArrayIterator
 public:
 #endif
 
-    AOL_NO_DISCARD constexpr ArrayIterator operator+(const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr ArrayIterator operator+(const difference_type offset) const noexcept
     {
         ArrayIterator tmp = *this;
         tmp += offset;
         return tmp;
     }
 
-    AOL_NO_DISCARD constexpr ArrayIterator operator-(const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr ArrayIterator operator-(const difference_type offset) const noexcept
     {
         ArrayIterator tmp = *this;
         tmp -= offset;
         return tmp;
     }
 
-    AOL_NO_DISCARD friend constexpr ArrayIterator operator+(const difference_type offset, ArrayIterator next) noexcept
+    AOL_ATTRIB_NO_DISCARD friend constexpr ArrayIterator operator+(const difference_type offset, ArrayIterator next) noexcept
     {
         next += offset;
         return next;
@@ -276,79 +276,79 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedBase : public ArrayNamedSize<S>
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-	AOL_NO_DISCARD constexpr reference operator [] (SizeT idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reference operator [] (SizeT idx) noexcept
 	{
 		assert(idx < S && "Invalid array access!");
 		return static_cast<Derived*>(this)->data_arr[idx];
 	}
 
-    AOL_NO_DISCARD constexpr const_reference operator [] (SizeT idx) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const_reference operator [] (SizeT idx) const noexcept
 	{
 		assert(idx < S && "Invalid array access!");
 		return static_cast<Derived*>(this)->data_arr[idx];
 	}
 
-    AOL_NO_DISCARD constexpr auto begin() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto begin() noexcept
     {
         return iterator{ static_cast<Derived*>(this)->data_arr };
     }
 
-    AOL_NO_DISCARD constexpr auto begin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
     {
         return const_iterator{ static_cast<Derived*>(this)->data_arr };
     }
 
-    AOL_NO_DISCARD constexpr auto cbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
     {
         return const_iterator{ static_cast<Derived*>(this)->data_arr };
     }
 
-    AOL_NO_DISCARD constexpr auto end() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto end() noexcept
     {
         return iterator{ static_cast<Derived*>(this)->data_arr, S };
     }
 
-    AOL_NO_DISCARD constexpr auto end() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
     {
         return const_iterator{ static_cast<Derived*>(this)->data_arr, S };
     }
 
-    AOL_NO_DISCARD constexpr auto cend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
     {
         return const_iterator{ static_cast<Derived*>(this)->data_arr, S };
     }
 
-    AOL_NO_DISCARD constexpr auto rbegin() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() noexcept
     {
         return reverse_iterator{ this->end() };
     }
 
-    AOL_NO_DISCARD constexpr auto rbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() const noexcept
     {
         return const_reverse_iterator{ this->cend };
     }
 
-    AOL_NO_DISCARD constexpr auto crbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto crbegin() const noexcept
     {
         return const_reverse_iterator{ this->cend };
     }
 
-    AOL_NO_DISCARD constexpr auto rend() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rend() noexcept
     {
         return reverse_iterator{ this->begin() };
     }
 
-    AOL_NO_DISCARD constexpr auto rend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rend() const noexcept
     {
         return const_reverse_iterator{ this->cbegin() };
     }
 
-    AOL_NO_DISCARD constexpr auto crend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto crend() const noexcept
     {
         return const_reverse_iterator{ this->cbegin() };
     }
 
-    AOL_NO_DISCARD constexpr auto size() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto size() const noexcept
     {
         return S;
     }

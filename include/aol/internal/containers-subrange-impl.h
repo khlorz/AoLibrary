@@ -22,22 +22,22 @@ struct SubrangeExBase
 	{
 	}
 	
-	AOL_NO_DISCARD constexpr iterator begin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
 		return start;
 	}
 	
-	AOL_NO_DISCARD constexpr iterator begin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() const noexcept
 	{
 		return start;
 	}
 
-	AOL_NO_DISCARD constexpr iterator end() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
 	{
 		return finish;
 	}
 
-	AOL_NO_DISCARD constexpr iterator end() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator end() const noexcept
 	{
 		return finish;
 	}
@@ -56,23 +56,23 @@ struct SubrangeEx<It> : SubrangeExBase<It>
 	using value_type = typename SubrangeExBase<It>::value_type;
 	using size_type = SizeT;
 
-	AOL_NO_DISCARD size_type constexpr size() const noexcept
+	AOL_ATTRIB_NO_DISCARD size_type constexpr size() const noexcept
 	{
 		return static_cast<size_type>(this->finish - this->start);
 	}
 
-	AOL_NO_DISCARD auto constexpr empty() const noexcept
+	AOL_ATTRIB_NO_DISCARD auto constexpr empty() const noexcept
 	{
 		return this->start == this->finish;
 	}
 
-	AOL_NO_DISCARD constexpr value_type& operator [] (size_type idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr value_type& operator [] (size_type idx) noexcept
 	{
 		assert(idx < this->size() && "Invalid index!");
 		return *(this->start + idx);
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& operator [] (size_type idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const value_type& operator [] (size_type idx) const noexcept
 	{
 		assert(idx < this->size() && "Invalid index!");
 		return *(this->start + idx);

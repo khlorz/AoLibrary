@@ -311,87 +311,87 @@ public:
 		return this->find(std::forward<InKey>(key)) != nullptr;
 	}
 
-	AOL_NO_DISCARD constexpr void clear() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr void clear() noexcept
 	{
 		return container_obj.clear();
 	}
 
-	AOL_NO_DISCARD constexpr P* data() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr P* data() noexcept
 	{
 		return container_obj.data();
 	}
 
-	AOL_NO_DISCARD constexpr const P* data() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const P* data() const noexcept
 	{
 		return container_obj.data();
 	}
 
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return container_obj.empty();
 	}
 
-	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return container_obj.size();
 	}
 
-	AOL_NO_DISCARD constexpr iterator begin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
 		return container_obj.begin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator begin() const noexcept
 	{
 		return container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cbegin() const noexcept
 	{
 		return container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr iterator end() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
 	{
 		return container_obj.end();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator end() const noexcept
 	{
 		return container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cend() const noexcept
 	{
 		return container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
 	{
 		return container_obj.rbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rend() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rend() noexcept
 	{
 		return container_obj.rend();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
 	{
 		return container_obj.crend();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
 		return container_obj.crend();
 	}
