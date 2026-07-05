@@ -44,6 +44,12 @@
     <ClCompile Include="containers\containers-flatkeyordermap-tests.cpp">
       <Filter>containers</Filter>
     </ClCompile>
+    <ClCompile Include="containers\containers-subrange-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-partition-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="random">

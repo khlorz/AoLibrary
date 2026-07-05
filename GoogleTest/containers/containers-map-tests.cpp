@@ -25,6 +25,8 @@ protected:
     }
 };
 
+}
+
 TEST_F(KeyOrderMapTest, InsertAndFind)
 {
     TestMap map;
@@ -71,6 +73,59 @@ TEST_F(KeyOrderMapTest, Erase)
     map.erase(2);
     EXPECT_EQ(AoL::GetContainerSize(map), 2);
     EXPECT_EQ(map.find(2), AoL::GetEndIt(map));
+}
+
+TEST_F(KeyOrderMapTest, ClearAndEmpty)
+{
+    TestMap map;
+    EXPECT_TRUE(AoL::IsContainerEmpty(map));
+
+    map[1] = "one";
+    EXPECT_FALSE(AoL::IsContainerEmpty(map));
+
+    map.clear();
+    EXPECT_TRUE(AoL::IsContainerEmpty(map));
+    EXPECT_EQ(AoL::GetContainerSize(map), 0);
+}
+
+TEST_F(KeyOrderMapTest, ConstFind)
+{
+    TestMap map;
+    map[10] = "ten";
+
+    const TestMap& const_map = map;
+    auto it = const_map.find(10);
+    EXPECT_NE(it, const_map.end());
+    EXPECT_EQ(it->second, "ten");
+}
+
+TEST_F(KeyOrderMapTest, OperatorBracket)
+{
+    TestMap map;
+    map[1] = "one";
+    map[2] = "two";
+
+    EXPECT_EQ(map[1], "one");
+    EXPECT_EQ(map[2], "two");
+}
+
+TEST_F(KeyOrderMapTest, ForwardIteration)
+{
+    TestMap map;
+    map[3] = "three";
+    map[1] = "one";
+    map[2] = "two";
+
+    std::vector<int> keys;
+
+    for (auto& pair : map)
+    {
+        keys.push_back(pair.first);
+    }
+
+    EXPECT_EQ(keys[0], 1);
+    EXPECT_EQ(keys[1], 2);
+    EXPECT_EQ(keys[2], 3);
 }
 
 // ===================================================================
@@ -139,6 +194,55 @@ TEST_F(HashMapTest, Erase)
     EXPECT_EQ(map.find(20), AoL::GetEndIt(map));
 }
 
+TEST_F(HashMapTest, OperatorBracketAccess)
+{
+    TestMap map;
+    map[5] = "five";
+
+    EXPECT_EQ(map[5], "five");
+}
+
+TEST_F(HashMapTest, AtAccess)
+{
+    TestMap map;
+    map[100] = "hundred";
+
+    EXPECT_EQ(map.at(100), "hundred");
+
+    map.at(100) = "HUNDRED";
+    EXPECT_EQ(map[100], "HUNDRED");
+}
+
+TEST_F(HashMapTest, ForwardIteration)
+{
+    TestMap map;
+    map[1] = "one";
+    map[2] = "two";
+    map[3] = "three";
+
+    int count = 0;
+
+    for (auto it = map.begin(); it != map.end(); ++it)
+    {
+        count++;
+    }
+
+    EXPECT_EQ(count, 3);
+}
+
+TEST_F(HashMapTest, Reserve)
+{
+    TestMap map;
+    map.reserve(50);
+
+    for (int i = 0; i < 25; ++i)
+    {
+        map[i] = "val_" + std::to_string(i);
+    }
+
+    EXPECT_EQ(AoL::GetContainerSize(map), 25);
+}
+
 // ===================================================================
 // INSERT-ORDERED MAP TESTS
 // ===================================================================
@@ -182,4 +286,57 @@ TEST_F(InsertOrderMapTest, Find)
     EXPECT_EQ(it->second, "answer");
 }
 
-} // namespace
+TEST_F(InsertOrderMapTest, OperatorBracketAccess)
+{
+    TestMap map;
+    map[1] = "one";
+    map[2] = "two";
+
+    EXPECT_EQ(map[1], "one");
+    EXPECT_EQ(map[2], "two");
+}
+
+TEST_F(InsertOrderMapTest, Erase)
+{
+    TestMap map;
+    map[1] = "one";
+    map[2] = "two";
+    map[3] = "three";
+
+    map.erase(2);
+    EXPECT_EQ(AoL::GetContainerSize(map), 2);
+    EXPECT_EQ(map.find(2), AoL::GetEndIt(map));
+}
+
+TEST_F(InsertOrderMapTest, ClearAndEmpty)
+{
+    TestMap map;
+    EXPECT_TRUE(AoL::IsContainerEmpty(map));
+
+    map[42] = "answer";
+    EXPECT_FALSE(AoL::IsContainerEmpty(map));
+
+    map.clear();
+    EXPECT_TRUE(AoL::IsContainerEmpty(map));
+    EXPECT_EQ(AoL::GetContainerSize(map), 0);
+}
+
+TEST_F(InsertOrderMapTest, ForwardIteration)
+{
+    TestMap map;
+    map[3] = "three";
+    map[1] = "one";
+    map[2] = "two";
+
+    std::vector<int> keys;
+
+    for (auto& pair : map)
+    {
+        keys.push_back(pair.first);
+    }
+
+    EXPECT_EQ(keys[0], 3);
+    EXPECT_EQ(keys[1], 1);
+    EXPECT_EQ(keys[2], 2);
+}
+
