@@ -8,6 +8,22 @@
 #define AOL_INTERNAL_MACROS_H
 
 /**
+* Portable C++ standard version
+* - MSVC defines __cplusplus as 199711L unless /Zc:__cplusplus is set
+* - _MSVC_LANG always reflects the actual standard
+* - GCC/Clang define __cplusplus correctly
+*/
+#if defined(_MSC_VER) && !defined(__clang__)
+#define AOL_CXX_STANDARD _MSVC_LANG
+#else
+#define AOL_CXX_STANDARD __cplusplus
+#endif
+
+#define AOL_CXX17_OR_LATER  (AOL_CXX_STANDARD >= 201703L)
+#define AOL_CXX20_OR_LATER  (AOL_CXX_STANDARD >= 202002L)
+#define AOL_CXX23_OR_LATER  (AOL_CXX_STANDARD >= 202302L)
+
+/**
 * Empty base optimization
 * - To fix the MSVC's problem with EBO
 * - Always use this on every empty class to keep the EBO working across compilers
