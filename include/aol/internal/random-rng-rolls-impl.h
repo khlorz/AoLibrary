@@ -2,6 +2,8 @@
 * RNG rolls implementations
 ***************************************************************************************/
 
+#include <iterator>
+
 namespace AoL
 {
 
@@ -637,9 +639,7 @@ constexpr SignedType RollRangeSlow(SignedType min, SignedType max, RNG& rng, Poo
 
 
 /*********************************************************************************************
-* RollRange helpers
-* - Helpers for using the RollRange functions
-* - Designed for most STL types
+* Utility roll functions
 *********************************************************************************************/
 
 /***************************************************
@@ -680,6 +680,92 @@ constexpr AoL::SizeT RollIndex(RNG& rng, Pool& pool) noexcept
 	static_assert(MaxSize > 1, "MaxSides should be more than 0!");
 
 	return RollRange(static_cast<AoL::SizeT>(0), MaxSize, rng, pool);
+}
+
+/***************************************************
+* Random element pick
+***************************************************/
+
+/**
+* @details Picks a random element from a range.
+* 
+* - Returns an iterator to the randomly selected element.
+* 
+* - The range must be non-empty.
+* 
+* @tparam It the random access iterator type
+* @tparam RNG the random number generator type
+* @tparam Pool the pool type used for pooling the rng bits
+* @param begin iterator to the beginning of the range
+* @param end iterator to the end of the range
+* @param rng the random number generator object
+* @param pool the pool object
+* @return iterator to the randomly selected element
+*/
+template<std::random_access_iterator It, typename RNG, typename Pool>
+constexpr It RollElement(It begin, It end, RNG& rng, Pool& pool) noexcept
+{
+	auto dist = static_cast<AoL::SizeT>(end - begin);
+	assert(dist > 0 && "Range must be non-empty!");
+	auto offset = RollRange(static_cast<AoL::SizeT>(0), dist - 1, rng, pool);
+	return begin + offset;
+}
+
+/***************************************************
+* Weighted random index selection
+***************************************************/
+
+/**
+* @details Selects an index based on a set of unsigned integral weights.
+* 
+* - Each weight represents the relative probability of that index being chosen.
+* 
+* - Single-pass linear scan with O(n) time and O(1) extra space (no heap alloc).
+* 
+* - All weights must be non-negative and their sum must be > 0.
+* 
+* @tparam It the forward iterator type
+* @tparam RNG the random number generator type
+* @tparam Pool the pool type used for pooling the rng bits
+* @param begin iterator to the beginning of the weights range
+* @param end iterator to the end of the weights range
+* @param rng the random number generator object
+* @param pool the pool object
+* @return the selected index in [0, distance(begin, end))
+*/
+template<std::forward_iterator It, typename RNG, typename Pool>
+	requires std::unsigned_integral<typename std::iterator_traits<It>::value_type>
+constexpr AoL::SizeT RollWeighted(It begin, It end, RNG& rng, Pool& pool) noexcept
+{
+	assert(begin != end && "Weight range must be non-empty!");
+
+	using WeightType = typename std::iterator_traits<It>::value_type;
+
+	WeightType total = 0;
+
+	for (auto it = begin; it != end; ++it)
+	{
+		total += *it;
+	}
+
+	assert(total > 0 && "Sum of weights must be greater than zero!");
+
+	auto roll = RollRange(static_cast<WeightType>(0), static_cast<WeightType>(total - 1), rng, pool);
+
+	WeightType sum = 0;
+	AoL::SizeT idx = 0;
+
+	for (auto it = begin; it != end; ++it, ++idx)
+	{
+		sum += *it;
+
+		if (roll < sum)
+		{
+			return idx;
+		}
+	}
+
+	return idx - 1;
 }
 
 } // Rand namespace
