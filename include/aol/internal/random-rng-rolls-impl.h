@@ -226,20 +226,6 @@ constexpr bool FlipCoin(RNG& rng) noexcept
 	return RollChance<100>(50, rng);
 }
 
-/**
-* @details Flip a flippin coin
-*
-* - 50% chance to land on heads or tails
-* 
-* - Notably slower than if you pass your own rng and pool object, but it's just for convenience, not for hot paths
-*
-* @return true if the roll succeeded
-*/
-inline bool FlipCoin() noexcept
-{
-	return RollChance<100>(50, Internal::DefaultRNG());
-}
-
 
 /*********************************************************************************************
 * Default RollRange functions

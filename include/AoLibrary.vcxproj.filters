@@ -853,9 +853,6 @@
     <ClInclude Include="aol\internal\random-rng-rolls-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\random-globals.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\random-algorithms-impl.h">
       <Filter>internal</Filter>
     </ClInclude>

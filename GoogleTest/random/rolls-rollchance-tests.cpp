@@ -114,10 +114,11 @@ TEST(RollChance_Float, ZeroAndFull)
 
 TEST(FlipCoin, NoArgConvenienceOverloadRunsAndIsRoughlyUniform)
 {
+	auto rng = AoLRng(12345);
 	int heads = 0;
 	for (int i = 0; i < many_trials; ++i)
 	{
-		if (AoL::Rand::FlipCoin())
+		if (AoL::Rand::FlipCoin(rng))
 		{
 			++heads;
 		}
