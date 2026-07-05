@@ -17,6 +17,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <iterator>
 
 #if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
 #include "xoshiro/xoshiro.h"
@@ -32,5 +33,6 @@
 #include "random-rng-pool-impl.h"
 #include "random-globals.h"
 #include "random-rng-rolls-impl.h"
+#include "random-algorithms-impl.h"
 
 #endif // AOL_INTERNAL_RANDOM_H

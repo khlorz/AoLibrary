@@ -2,8 +2,6 @@
 * RNG rolls implementations
 ***************************************************************************************/
 
-#include <iterator>
-
 namespace AoL
 {
 
