@@ -4,12 +4,13 @@
 
 #include "pch.h"
 
-namespace {
+namespace
+{
 
 using AoLRng = AoL::Rand::DefaultGen;
 using Pool32 = AoL::Rand::PoolBit<AoL::U64, 32>;
 
-constexpr int kManyTrials = 200'000;
+constexpr int many_trials = 200'000;
 
 }
 
@@ -26,15 +27,17 @@ TEST(RollRange_Uniformity, UnsignedSmallRange)
 	int const range_size = static_cast<int>(max - min + 1);
 	std::vector<int> histogram(range_size, 0);
 
-	for (int i = 0; i < kManyTrials; ++i)
+	for (int i = 0; i < many_trials; ++i)
 	{
 		auto v = AoL::Rand::RollRange<AoL::U32>(min, max, rng, pool);
 		histogram[static_cast<int>(v - min)]++;
 	}
 
-	double const expected = static_cast<double>(kManyTrials) / range_size;
+	double const expected = static_cast<double>(many_trials) / range_size;
 	for (int count : histogram)
+	{
 		EXPECT_NEAR(static_cast<double>(count) / expected, 1.0, 0.05);
+	}
 }
 
 TEST(RollRange_Uniformity, SignedRangeAcrossZero)
@@ -46,15 +49,17 @@ TEST(RollRange_Uniformity, SignedRangeAcrossZero)
 	int const range_size = static_cast<int>(max - min + 1);
 	std::vector<int> histogram(range_size, 0);
 
-	for (int i = 0; i < kManyTrials; ++i)
+	for (int i = 0; i < many_trials; ++i)
 	{
 		auto v = AoL::Rand::RollRange<AoL::I32>(min, max, rng, pool);
 		histogram[static_cast<int>(v - min)]++;
 	}
 
-	double const expected = static_cast<double>(kManyTrials) / range_size;
+	double const expected = static_cast<double>(many_trials) / range_size;
 	for (int count : histogram)
+	{
 		EXPECT_NEAR(static_cast<double>(count) / expected, 1.0, 0.08);
+	}
 }
 
 TEST(RollRange_Uniformity, FloatUnitInterval)
@@ -65,15 +70,20 @@ TEST(RollRange_Uniformity, FloatUnitInterval)
 	int const bucket_count = 100;
 	std::vector<int> buckets(bucket_count, 0);
 
-	for (int i = 0; i < kManyTrials; ++i)
+	for (int i = 0; i < many_trials; ++i)
 	{
 		auto v = AoL::Rand::RollRange<double>(0.0, 1.0, rng, pool);
 		int bucket = static_cast<int>(v * bucket_count);
-		if (bucket >= bucket_count) bucket = bucket_count - 1;
+		if (bucket >= bucket_count)
+	{
+		bucket = bucket_count - 1;
+	}
 		buckets[bucket]++;
 	}
 
-	double const expected = static_cast<double>(kManyTrials) / bucket_count;
+	double const expected = static_cast<double>(many_trials) / bucket_count;
 	for (int count : buckets)
+	{
 		EXPECT_NEAR(static_cast<double>(count) / expected, 1.0, 0.12);
+	}
 }

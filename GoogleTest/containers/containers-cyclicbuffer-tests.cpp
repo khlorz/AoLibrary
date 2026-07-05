@@ -4,22 +4,30 @@
 
 #include "pch.h"
 
-namespace {
+namespace
+{
 
 // ===================================================================
 // CYCLIC BUFFER FIXED TESTS
 // ===================================================================
 
-class CyclicBufferFixedTest : public ::testing::Test {
+class CyclicBufferFixedTest : public ::testing::Test
+{
 protected:
-    static constexpr AoL::SizeT BUFFER_SIZE = 8;
-    using TestBuffer = AoL::CyclicBufferF<int, BUFFER_SIZE>;
+    static constexpr AoL::SizeT buffer_size = 8;
+    using TestBuffer = AoL::CyclicBufferF<int, buffer_size>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(CyclicBufferFixedTest, PushAndSize) {
+TEST_F(CyclicBufferFixedTest, PushAndSize)
+{
     TestBuffer buf;
     buf.push_back(10);
     buf.push_back(20);
@@ -28,7 +36,8 @@ TEST_F(CyclicBufferFixedTest, PushAndSize) {
     EXPECT_EQ(buf.size(), 3);
 }
 
-TEST_F(CyclicBufferFixedTest, FIFOOrder) {
+TEST_F(CyclicBufferFixedTest, FIFOOrder)
+{
     TestBuffer buf;
     buf.push_back(1);
     buf.push_back(2);
@@ -46,9 +55,11 @@ TEST_F(CyclicBufferFixedTest, FIFOOrder) {
     EXPECT_TRUE(buf.empty());
 }
 
-TEST_F(CyclicBufferFixedTest, Overflow) {
+TEST_F(CyclicBufferFixedTest, Overflow)
+{
     TestBuffer buf;
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i)
+    {
         buf.push_back(i);
     }
     EXPECT_EQ(buf.size(), 8);
@@ -60,7 +71,8 @@ TEST_F(CyclicBufferFixedTest, Overflow) {
     EXPECT_EQ(buf.front(), 1);
 }
 
-TEST_F(CyclicBufferFixedTest, Empty) {
+TEST_F(CyclicBufferFixedTest, Empty)
+{
     TestBuffer buf;
     EXPECT_TRUE(buf.empty());
 
@@ -75,23 +87,32 @@ TEST_F(CyclicBufferFixedTest, Empty) {
 // CYCLIC BUFFER DYNAMIC TESTS
 // ===================================================================
 
-class CyclicBufferDynamicTest : public ::testing::Test {
+class CyclicBufferDynamicTest : public ::testing::Test
+{
 protected:
     using TestBuffer = AoL::CyclicBufferD<int>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(CyclicBufferDynamicTest, GrowsAsNeeded) {
+TEST_F(CyclicBufferDynamicTest, GrowsAsNeeded)
+{
     TestBuffer buf(128);
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 100; ++i)
+    {
         buf.push_back(i);
     }
     EXPECT_EQ(buf.size(), 100);
 }
 
-TEST_F(CyclicBufferDynamicTest, FIFOOrder) {
+TEST_F(CyclicBufferDynamicTest, FIFOOrder)
+{
     TestBuffer buf(16);
     buf.push_back(5);
     buf.push_back(10);

@@ -4,21 +4,29 @@
 
 #include "pch.h"
 
-namespace {
+namespace
+{
 
 // ===================================================================
 // KEY-ORDERED MAP TESTS
 // ===================================================================
 
-class KeyOrderMapTest : public ::testing::Test {
+class KeyOrderMapTest : public ::testing::Test
+{
 protected:
     using TestMap = AoL::KeyOrderMap<int, std::string>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(KeyOrderMapTest, InsertAndFind) {
+TEST_F(KeyOrderMapTest, InsertAndFind)
+{
     TestMap map;
     map[1] = "one";
     map[2] = "two";
@@ -29,7 +37,8 @@ TEST_F(KeyOrderMapTest, InsertAndFind) {
     EXPECT_EQ(map[2], "two");
 }
 
-TEST_F(KeyOrderMapTest, KeyOrdering) {
+TEST_F(KeyOrderMapTest, KeyOrdering)
+{
     TestMap map;
     map[3] = "three";
     map[1] = "one";
@@ -43,7 +52,8 @@ TEST_F(KeyOrderMapTest, KeyOrdering) {
     EXPECT_EQ(it->first, 3);
 }
 
-TEST_F(KeyOrderMapTest, Contains) {
+TEST_F(KeyOrderMapTest, Contains)
+{
     TestMap map;
     map[5] = "five";
 
@@ -51,7 +61,8 @@ TEST_F(KeyOrderMapTest, Contains) {
     EXPECT_EQ(map.find(10), AoL::GetEndIt(map));
 }
 
-TEST_F(KeyOrderMapTest, Erase) {
+TEST_F(KeyOrderMapTest, Erase)
+{
     TestMap map;
     map[1] = "one";
     map[2] = "two";
@@ -66,15 +77,22 @@ TEST_F(KeyOrderMapTest, Erase) {
 // HASH MAP TESTS
 // ===================================================================
 
-class HashMapTest : public ::testing::Test {
+class HashMapTest : public ::testing::Test
+{
 protected:
     using TestMap = AoL::HashMap<int, std::string>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(HashMapTest, InsertAndRetrieve) {
+TEST_F(HashMapTest, InsertAndRetrieve)
+{
     TestMap map;
     map[1] = "one";
     map[2] = "two";
@@ -85,7 +103,8 @@ TEST_F(HashMapTest, InsertAndRetrieve) {
     EXPECT_EQ(map[42], "answer");
 }
 
-TEST_F(HashMapTest, Find) {
+TEST_F(HashMapTest, Find)
+{
     TestMap map;
     map[100] = "hundred";
 
@@ -97,7 +116,8 @@ TEST_F(HashMapTest, Find) {
     EXPECT_EQ(it_not_found, AoL::GetEndIt(map));
 }
 
-TEST_F(HashMapTest, ClearAndEmpty) {
+TEST_F(HashMapTest, ClearAndEmpty)
+{
     TestMap map;
     map[1] = "one";
     map[2] = "two";
@@ -107,7 +127,8 @@ TEST_F(HashMapTest, ClearAndEmpty) {
     EXPECT_TRUE(AoL::IsContainerEmpty(map));
 }
 
-TEST_F(HashMapTest, Erase) {
+TEST_F(HashMapTest, Erase)
+{
     TestMap map;
     map[10] = "ten";
     map[20] = "twenty";
@@ -122,15 +143,22 @@ TEST_F(HashMapTest, Erase) {
 // INSERT-ORDERED MAP TESTS
 // ===================================================================
 
-class InsertOrderMapTest : public ::testing::Test {
+class InsertOrderMapTest : public ::testing::Test
+{
 protected:
     using TestMap = AoL::InsertOrderMap<int, std::string>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(InsertOrderMapTest, InsertionOrder) {
+TEST_F(InsertOrderMapTest, InsertionOrder)
+{
     TestMap map;
     map[3] = "three";
     map[1] = "one";
@@ -144,7 +172,8 @@ TEST_F(InsertOrderMapTest, InsertionOrder) {
     EXPECT_EQ(it->first, 2);
 }
 
-TEST_F(InsertOrderMapTest, Find) {
+TEST_F(InsertOrderMapTest, Find)
+{
     TestMap map;
     map[42] = "answer";
 

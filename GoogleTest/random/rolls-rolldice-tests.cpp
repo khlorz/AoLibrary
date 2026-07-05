@@ -4,14 +4,18 @@
 
 #include "pch.h"
 
-namespace {
+namespace
+{
 
 using AoLRng = AoL::Rand::DefaultGen;
 using Pool32 = AoL::Rand::PoolBit<AoL::U64, 32>;
 
-constexpr int kManyTrials = 200'000;
+constexpr int many_trials = 200'000;
 
-AoL::SizeT Cs(auto x) { return static_cast<AoL::SizeT>(x); }
+AoL::SizeT Cs(auto x)
+{
+	return static_cast<AoL::SizeT>(x);
+}
 
 }
 
@@ -25,7 +29,7 @@ TEST(RollDice, RuntimeSidesProducesValuesInOneToMaxSidesInclusive)
 	Pool32 pool;
 
 	std::array<bool, 6> seen{};
-	for (int i = 0; i < kManyTrials; ++i)
+	for (int i = 0; i < many_trials; ++i)
 	{
 		auto v = AoL::Rand::RollDice(Cs(6), rng, pool);
 		ASSERT_GE(v, 1u);
@@ -33,5 +37,7 @@ TEST(RollDice, RuntimeSidesProducesValuesInOneToMaxSidesInclusive)
 		seen[v - 1] = true;
 	}
 	for (bool b : seen)
+	{
 		EXPECT_TRUE(b);
+	}
 }

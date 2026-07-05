@@ -4,23 +4,32 @@
 
 #include "pch.h"
 
-namespace {
+namespace
+{
 
-class VectorTest : public ::testing::Test {
+class VectorTest : public ::testing::Test
+{
 protected:
     using TestVector = AoL::Vector<int>;
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
 };
 
-TEST_F(VectorTest, DefaultConstruction) {
+TEST_F(VectorTest, DefaultConstruction)
+{
     TestVector vec;
     EXPECT_TRUE(AoL::IsContainerEmpty(vec));
     EXPECT_EQ(AoL::GetContainerSize(vec), 0);
 }
 
-TEST_F(VectorTest, PushBackAndAccess) {
+TEST_F(VectorTest, PushBackAndAccess)
+{
     TestVector vec;
     vec.push_back(10);
     vec.push_back(20);
@@ -31,7 +40,8 @@ TEST_F(VectorTest, PushBackAndAccess) {
     EXPECT_EQ(vec[2], 30);
 }
 
-TEST_F(VectorTest, PopBack) {
+TEST_F(VectorTest, PopBack)
+{
     TestVector vec{ 1, 2, 3 };
     vec.pop_back();
 
@@ -40,7 +50,8 @@ TEST_F(VectorTest, PopBack) {
     EXPECT_EQ(vec[1], 2);
 }
 
-TEST_F(VectorTest, ClearAndEmpty) {
+TEST_F(VectorTest, ClearAndEmpty)
+{
     TestVector vec{ 1, 2, 3 };
     EXPECT_FALSE(AoL::IsContainerEmpty(vec));
 
@@ -49,25 +60,30 @@ TEST_F(VectorTest, ClearAndEmpty) {
     EXPECT_EQ(AoL::GetContainerSize(vec), 0);
 }
 
-TEST_F(VectorTest, Reserve) {
+TEST_F(VectorTest, Reserve)
+{
     TestVector vec;
     vec.reserve(100);
     EXPECT_GE(vec.capacity(), 100);
 }
 
-TEST_F(VectorTest, IterationForward) {
+TEST_F(VectorTest, IterationForward)
+{
     TestVector vec{ 1, 2, 3, 4, 5 };
     int sum = 0;
-    for (auto it = AoL::GetBeginIt(vec); it != AoL::GetEndIt(vec); ++it) {
+    for (auto it = AoL::GetBeginIt(vec); it != AoL::GetEndIt(vec); ++it)
+    {
         sum += *it;
     }
     EXPECT_EQ(sum, 15);
 }
 
-TEST_F(VectorTest, RangeIteration) {
+TEST_F(VectorTest, RangeIteration)
+{
     TestVector vec{ 10, 20, 30 };
     int count = 0;
-    for (auto& elem : vec) {
+    for (auto& elem : vec)
+    {
         count++;
     }
     EXPECT_EQ(count, 3);
