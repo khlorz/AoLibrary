@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="algorithm\algorithm-find-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithm\algorithm-sort-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollchance-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollrange-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rolldice-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollindex-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-uniform-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-array-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-vector-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-map-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-set-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-cyclicbuffer-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-query-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-flatkeyordermap-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-subrange-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="containers\containers-partition-tests.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="random\rolls-rollweighted-tests.cpp">
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\algorithms-shuffle-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="random\algorithms-partition-tests.cpp">
+      <Filter>algorithm</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="random">
+      <UniqueIdentifier>{0f368760-21e0-4df9-9953-9cc221e75544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers">
+      <UniqueIdentifier>{8cf268da-d774-4c4b-bf57-eeb1b3a92a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="algorithm">
+      <UniqueIdentifier>{dd11ae74-ca5a-4ae8-ab5a-2813a37d3701}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

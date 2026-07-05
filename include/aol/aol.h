@@ -55,3 +55,10 @@
 
 #include "internal/logging.h"
 
+
+/**********************************************
+* Random includes
+**********************************************/
+
+#include "internal/random.h"
+

@@ -366,32 +366,32 @@ public:
 		return container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr iterator rbegin() noexcept
+	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
 	{
 		return container_obj.rbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator rbegin() const noexcept
+	AOL_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator crbegin() const noexcept
+	AOL_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr iterator rend() noexcept
+	AOL_NO_DISCARD constexpr reverse_iterator rend() noexcept
 	{
 		return container_obj.rend();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator rend() const noexcept
+	AOL_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
 	{
 		return container_obj.crend();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator crend() const noexcept
+	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
 		return container_obj.crend();
 	}

@@ -322,6 +322,8 @@ struct CyclicBufferBase
         {
             item_count++;
         }
+
+        return (*this)[item_count - 1];
     }
 
     /*

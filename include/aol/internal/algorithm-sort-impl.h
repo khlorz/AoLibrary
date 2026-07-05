@@ -42,7 +42,7 @@ constexpr void Sort(E&& e, It it_begin, It it_end, F&& f) noexcept requires (!st
 template<typename It>
 constexpr void SortReverse(It it_begin, It it_end) noexcept
 {
-	std::sort(std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end));
+	std::sort(std::make_reverse_iterator(it_end), std::make_reverse_iterator(it_begin));
 }
 
 // Reverse sort the whole container with comparator
@@ -50,7 +50,7 @@ constexpr void SortReverse(It it_begin, It it_end) noexcept
 template<typename It, typename F>
 constexpr void SortReverse(It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>)
 {
-	std::sort(std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end), std::forward<F>(f));
+	std::sort(std::make_reverse_iterator(it_end), std::make_reverse_iterator(it_begin), std::forward<F>(f));
 }
 
 // Reverse sort the whole container with custom execution
@@ -58,7 +58,7 @@ constexpr void SortReverse(It it_begin, It it_end, F&& f) noexcept requires (!st
 template<typename It, typename E>
 constexpr void SortReverse(E&& e, It it_begin, It it_end) noexcept requires std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end));
+	std::sort(std::forward<E>(e), std::make_reverse_iterator(it_end), std::make_reverse_iterator(it_begin));
 }
 
 // Reverse sort the whole container with custom execution and comparator
@@ -66,7 +66,7 @@ constexpr void SortReverse(E&& e, It it_begin, It it_end) noexcept requires std:
 template<typename It, typename F, typename E>
 constexpr void SortReverse(E&& e, It it_begin, It it_end, F&& f) noexcept requires (!std::is_execution_policy_v<F>) && std::is_execution_policy_v<E>
 {
-	std::sort(std::forward<E>(e), std::make_reverse_iterator(it_begin), std::make_reverse_iterator(it_end), std::forward<F>(f));
+	std::sort(std::forward<E>(e), std::make_reverse_iterator(it_end), std::make_reverse_iterator(it_begin), std::forward<F>(f));
 }
 
 } // AoL namespace

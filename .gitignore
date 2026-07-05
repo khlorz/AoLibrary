@@ -428,3 +428,9 @@ include/aol/third-party/**
 
 #benchmark builds
 [Bb]enchmarking/
+
+#Github files
+.github
+
+#OpenCode files
+opencode.*
