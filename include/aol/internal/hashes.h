@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#ifdef AOL_USE_UNORDERED_DENSE_HASH
+#ifdef AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 #include "unordered_dense/unordered_dense.h"
 #else
 #include <memory>
@@ -31,11 +31,11 @@ namespace AoL::Internal
 */
 template<typename T>
 using DefaultHash
-#ifdef AOL_USE_UNORDERED_DENSE_HASH
+#ifdef AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 = ankerl::unordered_dense::hash<T>;
 #else
 = std::hash<T>;
-#endif // AOL_USE_UNORDERED_DENSE_HASH
+#endif // AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 
 
 } // namespace AoL::Internal

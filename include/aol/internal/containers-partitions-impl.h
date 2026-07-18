@@ -208,116 +208,116 @@ public:
 		return std::addressof(this->back());
 	}
 
-	AOL_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr value_type& operator[] (size_type idx) noexcept
 	{
 		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[begin_offset + idx];
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
 	{
 		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
 		return (*main_partition)[begin_offset + idx];
 	}
 
-	AOL_NO_DISCARD constexpr value_type& front() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr value_type& front() noexcept
 	{
 		return (*this)[0];
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& front() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const value_type& front() const noexcept
 	{
 		return (*this)[0];
 	}
 
-	AOL_NO_DISCARD constexpr value_type& back() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr value_type& back() noexcept
 	{
 		return (*this)[current_size - 1];
 	}
 
-	AOL_NO_DISCARD constexpr const value_type& back() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const value_type& back() const noexcept
 	{
 		return (*this)[current_size - 1];
 	}
 
-	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return current_size;
 	}
 
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return current_size == 0;
 	}
 
-	AOL_NO_DISCARD constexpr bool full() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool full() const noexcept
 	{
 		return this->size() == this->max_size();
 	}
 
-	AOL_NO_DISCARD constexpr size_type max_size() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type max_size() const noexcept
 	{
 		return end_offset - begin_offset;
 	}
 
-	AOL_NO_DISCARD constexpr iterator begin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
 		return main_partition->begin() + begin_offset;
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator begin() const noexcept
 	{
 		return main_partition->cbegin() + begin_offset;
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cbegin() const noexcept
 	{
 		return main_partition->cbegin() + begin_offset;
 	}
 
-	AOL_NO_DISCARD constexpr iterator end() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
 	{
 		return this->begin() + current_size;
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator end() const noexcept
 	{
 		return this->cbegin() + current_size;
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cend() const noexcept
 	{
 		return this->cbegin() + current_size;
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
 	{
 		return reverse_iterator(this->end());
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return const_reverse_iterator(this->cend());
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return const_reverse_iterator(this->cend());
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rend() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rend() noexcept
 	{
 		return reverse_iterator(this->begin());
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
 	{
 		return const_reverse_iterator(this->cbegin());
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
 		return const_reverse_iterator(this->cbegin());
 	}
@@ -412,7 +412,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Reference to the partition
 	*/
-	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return static_cast<const D*>(this)->sub_partitions[partition_idx];
@@ -426,7 +426,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Reference to the partition
 	*/
-	AOL_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return static_cast<D*>(this)->sub_partitions[partition_idx];
@@ -439,7 +439,7 @@ public:
 	* 
 	* @returns Reference to the default partition
 	*/
-	AOL_NO_DISCARD constexpr decltype(auto) get_default_partition() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_default_partition() noexcept
 	{
 		assert(this->number_of_partitions() > 0 && "This shouldn't happen but somehow it did. You done messed up.");
 		return static_cast<D*>(this)->sub_partitions.back();
@@ -453,7 +453,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Size of the partition in size_t
 	*/
-	AOL_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition index! Reminder: Partition numbering is 0-based indexing!");
 		return static_cast<const D*>(this)->sub_partitions[partition_idx].size();
@@ -465,7 +465,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Size of the partition in size_t
 	*/
-	AOL_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
 	{
 		return static_cast<const D*>(this)->sub_partitions.size();
 	}
@@ -569,102 +569,102 @@ public:
 		sub_partitions.erase(sub_partitions.begin() + idx);
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) front() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.front();
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) front() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.front();
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) back() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.back();
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) back() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.back();
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
 	{
 		return (*static_cast<D*>(this)->container_obj)[idx];
 	}
 
-	AOL_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
 	{
 		return (*static_cast<const D*>(this)->container_obj)[idx];
 	}
 
-	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.size();
 	}
 
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.empty();
 	}
 
-	AOL_NO_DISCARD constexpr auto begin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto begin() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.begin();
 	}
 
-	AOL_NO_DISCARD constexpr auto begin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr auto cbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr auto end() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto end() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.end();
 	}
 
-	AOL_NO_DISCARD constexpr auto end() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr auto cend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr auto rbegin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.rbegin();
 	}
 
-	AOL_NO_DISCARD constexpr auto rbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr auto crbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto crbegin() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr auto rend() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto rend() noexcept
 	{
 		return static_cast<D*>(this)->container_obj.rend();
 	}
 
-	AOL_NO_DISCARD constexpr auto rend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto rend() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.crend();
 	}
 
-	AOL_NO_DISCARD constexpr auto crend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto crend() const noexcept
 	{
 		return static_cast<const D*>(this)->container_obj.crend();
 	}

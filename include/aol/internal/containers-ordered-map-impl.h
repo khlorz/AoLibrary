@@ -89,14 +89,14 @@ private:
 
 public:
 	container_type container_obj;
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 	bool build_flag;
 #endif
 
 	KeyOrderMapEx() noexcept :
 		container_obj{ },
 		less_than_comp{ }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -109,7 +109,7 @@ public:
 
 	explicit KeyOrderMapEx(SizeT initial_capacity) noexcept :
 		container_obj{ }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -118,7 +118,7 @@ public:
 
 	explicit KeyOrderMapEx(const A& allocator) noexcept :
 		container_obj{ allocator }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -126,7 +126,7 @@ public:
 
 	explicit KeyOrderMapEx(const container_type& other_data) noexcept :
 		container_obj{ other_data }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -135,7 +135,7 @@ public:
 
 	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
 		container_obj{ other_data }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -145,7 +145,7 @@ public:
 	template<typename It>
 	explicit KeyOrderMapEx(It it_start, It it_end) noexcept :
 		container_obj{ it_start, it_end }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -156,7 +156,7 @@ public:
 	constexpr void build_start() noexcept
 	{
 		assert(!build_flag && "Already building! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		build_flag = true;
 #endif
 	}
@@ -165,7 +165,7 @@ public:
 	constexpr void build_add(InKey&& key, InValue&& value) noexcept requires std::is_convertible_v<InKey, key_type>&& std::is_convertible_v<InValue, mapped_type>
 	{
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		const InKey& ref_key = key;
 		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
 		assert(it == container_obj.end() && "Key already exists!");
@@ -176,7 +176,7 @@ public:
 	constexpr void build_end() noexcept
 	{
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		build_flag = false;
 #endif
 		Sort(container_obj.begin(), container_obj.end());
@@ -203,7 +203,7 @@ public:
 	constexpr mapped_type& operator[](InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		value_type* p_ret = this->find(std::forward<InKey>(key));
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
@@ -216,7 +216,7 @@ public:
 	constexpr R operator[](InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		const value_type* p_ret = this->find(std::forward<InKey>(key));
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
@@ -311,87 +311,87 @@ public:
 		return this->find(std::forward<InKey>(key)) != nullptr;
 	}
 
-	AOL_NO_DISCARD constexpr void clear() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr void clear() noexcept
 	{
 		return container_obj.clear();
 	}
 
-	AOL_NO_DISCARD constexpr P* data() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr P* data() noexcept
 	{
 		return container_obj.data();
 	}
 
-	AOL_NO_DISCARD constexpr const P* data() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const P* data() const noexcept
 	{
 		return container_obj.data();
 	}
 
-	AOL_NO_DISCARD constexpr bool empty() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
 		return container_obj.empty();
 	}
 
-	AOL_NO_DISCARD constexpr size_type size() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
 		return container_obj.size();
 	}
 
-	AOL_NO_DISCARD constexpr iterator begin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
 		return container_obj.begin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator begin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator begin() const noexcept
 	{
 		return container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cbegin() const noexcept
 	{
 		return container_obj.cbegin();
 	}
 
-	AOL_NO_DISCARD constexpr iterator end() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
 	{
 		return container_obj.end();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator end() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator end() const noexcept
 	{
 		return container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr const_iterator cend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cend() const noexcept
 	{
 		return container_obj.cend();
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
 	{
 		return container_obj.rbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
 	{
 		return container_obj.crbegin();
 	}
 
-	AOL_NO_DISCARD constexpr reverse_iterator rend() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rend() noexcept
 	{
 		return container_obj.rend();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
 	{
 		return container_obj.crend();
 	}
 
-	AOL_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
 		return container_obj.crend();
 	}

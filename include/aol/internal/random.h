@@ -21,11 +21,11 @@
 #include <thread>
 #include <bit>
 
-#if defined(AOL_USE_XOSHIRO_NESSAN_RNG)
+#if defined(AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG)
 #include "xoshiro/xoshiro.h"
-#elif defined(AOL_USE_PCG_CPP_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_PCG_CPP_RNG)
 #include "pcg-cpp/pcg_random.hpp"
-#elif defined(AOL_USE_STD_RNG)
+#elif defined(AOL_CONFIG_FLAG_USE_STD_RNG)
 // By default, <random> is included
 #else
 // Do nothing

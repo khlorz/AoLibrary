@@ -41,14 +41,14 @@ struct CyclicBufferIterator
         assert(idx <= container->size() && "Invalid offset! Offset is way beyond the array size!");
     }
 
-    AOL_NO_DISCARD constexpr reference operator*() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator*() const noexcept
     {
         assert(container && "Invalid operation! Cannot dereference nullptr array iterator!");
         assert(idx < container->size() && "Invalid operation! Cannot dereference out of range array iterator!");
         return (*container)[idx];
     }
 
-    AOL_NO_DISCARD constexpr pointer operator->() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr pointer operator->() const noexcept
     {
         return std::addressof(this->operator*());
     }
@@ -95,31 +95,31 @@ struct CyclicBufferIterator
         return *this += -offset;
     }
 
-    AOL_NO_DISCARD constexpr difference_type operator-(const CyclicBufferIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr difference_type operator-(const CyclicBufferIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return static_cast<difference_type>(idx - other.idx);
     }
 
-    AOL_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator[](const difference_type offset) const noexcept
     {
         return *(*this + offset);
     }
 
-    AOL_NO_DISCARD constexpr bool operator==(const CyclicBufferIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr bool operator==(const CyclicBufferIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return idx == other.idx;
     }
 
-    AOL_NO_DISCARD constexpr std::strong_ordering operator<=>(const CyclicBufferIterator& other) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr std::strong_ordering operator<=>(const CyclicBufferIterator& other) const noexcept
     {
         AssertCompatibility(other);
         return idx <=> other.idx;
     }
 
 private:
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
     constexpr void AssertValidOffset(const difference_type offset) const noexcept
     {
         if (offset != 0) {
@@ -152,21 +152,21 @@ private:
 #endif
 
 public:
-    AOL_NO_DISCARD constexpr CyclicBufferIterator operator+(const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr CyclicBufferIterator operator+(const difference_type offset) const noexcept
     {
         CyclicBufferIterator tmp = *this;
         tmp += offset;
         return tmp;
     }
 
-    AOL_NO_DISCARD constexpr CyclicBufferIterator operator-(const difference_type offset) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr CyclicBufferIterator operator-(const difference_type offset) const noexcept
     {
         CyclicBufferIterator tmp = *this;
         tmp -= offset;
         return tmp;
     }
 
-    AOL_NO_DISCARD friend constexpr CyclicBufferIterator operator+(const difference_type offset, CyclicBufferIterator next) noexcept
+    AOL_ATTRIB_NO_DISCARD friend constexpr CyclicBufferIterator operator+(const difference_type offset, CyclicBufferIterator next) noexcept
     {
         next += offset;
         return next;
@@ -239,7 +239,7 @@ struct CyclicBufferBase
     *
     * @returns bool true if full
     */
-    AOL_NO_DISCARD constexpr bool full() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr bool full() const noexcept
     {
         return item_count == this->capacity();
     }
@@ -251,7 +251,7 @@ struct CyclicBufferBase
     *
     * @returns SizeT maximum allowable items
     */
-    AOL_NO_DISCARD constexpr auto capacity() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto capacity() const noexcept
     {
         return container_obj.size();
     }
@@ -261,7 +261,7 @@ struct CyclicBufferBase
     *
     * @returns bool true if empty, otherwise false
     */
-    AOL_NO_DISCARD constexpr bool empty() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
     {
         return item_count == 0;
     }
@@ -273,7 +273,7 @@ struct CyclicBufferBase
     *
     * @returns SizeT current size
     */
-    AOL_NO_DISCARD constexpr auto size() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto size() const noexcept
     {
         return item_count;
     }
@@ -372,7 +372,7 @@ struct CyclicBufferBase
     *
     * - Asserts if idx is greater than or equal to item count of the vector
     */
-    AOL_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T& operator[](size_t idx) noexcept
     {
         assert(idx < item_count && "Invalid operation! Input idx out of range!");
         return container_obj[(head + idx) & mask];
@@ -383,7 +383,7 @@ struct CyclicBufferBase
     *
     * - Asserts if idx is greater than or equal item to count of the vector
     */
-    AOL_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
     {
         assert(idx < item_count && "Invalid operation! Input idx out of range!");
         return container_obj[(head + idx) & mask];
@@ -394,7 +394,7 @@ struct CyclicBufferBase
     *
     * - The same as data[0]
     */
-    AOL_NO_DISCARD constexpr T& front() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T& front() noexcept
     {
         assert(item_count > 0);
         return container_obj[head];
@@ -405,7 +405,7 @@ struct CyclicBufferBase
     *
     * - The same as data[item_count - 1]
     */
-    AOL_NO_DISCARD constexpr T& back() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T& back() noexcept
     {
         assert(item_count > 0);
         return container_obj[(head + item_count - 1) & mask];
@@ -416,7 +416,7 @@ struct CyclicBufferBase
     *
     * - The same as data[0]
     */
-    AOL_NO_DISCARD constexpr T& front() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T& front() const noexcept
     {
         assert(item_count > 0);
         return container_obj[head];
@@ -427,78 +427,78 @@ struct CyclicBufferBase
     *
     * - The same as data[item_count - 1]
     */
-    AOL_NO_DISCARD constexpr T& back() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T& back() const noexcept
     {
         assert(item_count > 0);
         return container_obj[(head + item_count - 1) & mask];
     }
 
-    AOL_NO_DISCARD constexpr T* data() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr T* data() noexcept
     {
         return container_obj.data();
     }
 
-    AOL_NO_DISCARD constexpr const T* data() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T* data() const noexcept
     {
         return container_obj.data();
     }
 
-    AOL_NO_DISCARD constexpr auto begin() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto begin() noexcept
     {
         return iterator(this, 0);
     }
 
-    AOL_NO_DISCARD constexpr auto begin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
     {
         return iterator(this, 0);
     }
 
-    AOL_NO_DISCARD constexpr auto cbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
     {
         return const_iterator(this, 0);
     }
 
-    AOL_NO_DISCARD constexpr auto end() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto end() noexcept
     {
         return iterator(this, item_count);
     }
 
-    AOL_NO_DISCARD constexpr auto end() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
     {
         return iterator(this, item_count);
     }
 
-    AOL_NO_DISCARD constexpr auto cend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
     {
         return const_iterator(this, item_count);
     }
 
-    AOL_NO_DISCARD constexpr auto rbegin() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() noexcept
     {
         return reverse_iterator(this->end());
     }
 
-    AOL_NO_DISCARD constexpr auto rbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() const noexcept
     {
         return const_reverse_iterator(this->cend());
     }
 
-    AOL_NO_DISCARD constexpr auto crbegin() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto crbegin() const noexcept
     {
         return const_reverse_iterator(this->cend());
     }
 
-    AOL_NO_DISCARD constexpr auto rend() noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rend() noexcept
     {
         return reverse_iterator(this->begin());
     }
 
-    AOL_NO_DISCARD constexpr auto rend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto rend() const noexcept
     {
         return const_reverse_iterator(this->cbegin());
     }
 
-    AOL_NO_DISCARD constexpr auto crend() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr auto crend() const noexcept
     {
         return const_reverse_iterator(this->cbegin());
     }
