@@ -55,5 +55,17 @@
 #error "No prefetch function! Create one or use a different function!"
 #endif
 
+/**
+* Debug macro for better readability in the codebase
+* Strictly for use in this library only
+*/
+#if defined(NDEBUG)
+#define AOL_DEBUG_ON 0
+#define AOL_DEBUG_OFF 1
+#else
+#define AOL_DEBUG_ON 1
+#define AOL_DEBUG_OFF 0
+#endif
+
 
 #endif // AOL_INTERNAL_MACROS_H
