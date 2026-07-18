@@ -119,7 +119,7 @@ struct CyclicBufferIterator
     }
 
 private:
-#if AOL_DEBUG_OFF
+#if AOL_DEBUG_ON
     constexpr void AssertValidOffset(const difference_type offset) const noexcept
     {
         if (offset != 0) {
