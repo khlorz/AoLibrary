@@ -863,6 +863,9 @@
     <ClInclude Include="aol\internal\macros\attributes.h">
       <Filter>internal\macros</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\macros\defines.h">
+      <Filter>internal\macros</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
