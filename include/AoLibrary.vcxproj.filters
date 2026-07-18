@@ -46,6 +46,9 @@
     <Filter Include="third-party\spdlog">
       <UniqueIdentifier>{118800bf-d4f3-4bb6-b3af-42523547af3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\macros">
+      <UniqueIdentifier>{11c3775f-3390-447e-9d0e-0e7200d644a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
@@ -71,9 +74,6 @@
       <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\hashes.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\macros.h">
       <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\math.h">
@@ -856,6 +856,10 @@
     <ClInclude Include="aol\internal\random-algorithms-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
+    <ClInclude Include="aol\internal\macros\functions.h">
+      <Filter>internal\macros</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\macros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
