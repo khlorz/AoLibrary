@@ -171,6 +171,7 @@
     <ClInclude Include="aol\internal\dynamic_types.h" />
     <ClInclude Include="aol\internal\exceptions.h" />
     <ClInclude Include="aol\internal\hashes.h" />
+    <ClInclude Include="aol\internal\macros\attributes.h" />
     <ClInclude Include="aol\internal\macros\functions.h" />
     <ClInclude Include="aol\internal\random-algorithms-impl.h" />
     <ClInclude Include="aol\internal\random-rng-rolls-impl.h" />

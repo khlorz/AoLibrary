@@ -8,6 +8,7 @@
 #define AOL_MACROS_H
 
 #include "internal/macros/functions.h"
+#include "internal/macros/attributes.h"
 
 /**
 * Portable C++ standard version
@@ -35,14 +36,6 @@
 #else
 #define AOL_EMPTY_BASE_OPTIMIZATION
 #endif
-
-/**
-* Attributes used throughout the library
-*/
-#define AOL_ATTRIB_NO_DISCARD [[nodiscard]]
-#define AOL_ATTRIB_BRANCH_UNLIKELY [[unlikely]]
-#define AOL_ATTRIB_BRANCH_LIKELY [[likely]]
-#define AOL_ATTRIB_NO_UNQ_ADDRESS [[no_unique_address]]
 
 /**
 * Debug macro for better readability in the codebase

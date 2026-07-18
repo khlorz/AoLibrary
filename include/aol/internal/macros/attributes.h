@@ -1,0 +1,16 @@
+/***************************************************************************************
+* AoLibrary Macros - Functions
+****************************************************************************************
+* - All macros that acts as functions are defined/implemented here
+***************************************************************************************/
+#ifndef AOL_INTERNAL_MACROS_ATTRIBUTES_H
+#define AOL_INTERNAL_MACROS_ATTRIBUTES_H
+
+
+#define AOL_ATTRIB_NO_DISCARD [[nodiscard]]
+#define AOL_ATTRIB_BRANCH_UNLIKELY [[unlikely]]
+#define AOL_ATTRIB_BRANCH_LIKELY [[likely]]
+#define AOL_ATTRIB_NO_UNQ_ADDRESS [[no_unique_address]]
+
+
+#endif // AOL_INTERNAL_MACROS_ATTRIBUTES_H
