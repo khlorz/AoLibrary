@@ -89,14 +89,14 @@ private:
 
 public:
 	container_type container_obj;
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 	bool build_flag;
 #endif
 
 	KeyOrderMapEx() noexcept :
 		container_obj{ },
 		less_than_comp{ }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -109,7 +109,7 @@ public:
 
 	explicit KeyOrderMapEx(SizeT initial_capacity) noexcept :
 		container_obj{ }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -118,7 +118,7 @@ public:
 
 	explicit KeyOrderMapEx(const A& allocator) noexcept :
 		container_obj{ allocator }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -126,7 +126,7 @@ public:
 
 	explicit KeyOrderMapEx(const container_type& other_data) noexcept :
 		container_obj{ other_data }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -135,7 +135,7 @@ public:
 
 	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
 		container_obj{ other_data }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -145,7 +145,7 @@ public:
 	template<typename It>
 	explicit KeyOrderMapEx(It it_start, It it_end) noexcept :
 		container_obj{ it_start, it_end }
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
@@ -156,7 +156,7 @@ public:
 	constexpr void build_start() noexcept
 	{
 		assert(!build_flag && "Already building! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		build_flag = true;
 #endif
 	}
@@ -165,7 +165,7 @@ public:
 	constexpr void build_add(InKey&& key, InValue&& value) noexcept requires std::is_convertible_v<InKey, key_type>&& std::is_convertible_v<InValue, mapped_type>
 	{
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		const InKey& ref_key = key;
 		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
 		assert(it == container_obj.end() && "Key already exists!");
@@ -176,7 +176,7 @@ public:
 	constexpr void build_end() noexcept
 	{
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		build_flag = false;
 #endif
 		Sort(container_obj.begin(), container_obj.end());
@@ -203,7 +203,7 @@ public:
 	constexpr mapped_type& operator[](InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		value_type* p_ret = this->find(std::forward<InKey>(key));
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
@@ -216,7 +216,7 @@ public:
 	constexpr R operator[](InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#ifndef NDEBUG
+#if AOL_DEBUG_ON
 		const value_type* p_ret = this->find(std::forward<InKey>(key));
 		assert(p_ret != nullptr && "Invalid key!");
 		return p_ret->second;
