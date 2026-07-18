@@ -32,7 +32,7 @@ struct ArrayIterator
 	using pointer = T*;
 	using reference = T&;
 
-#if defined(NDEBUG)
+#if AOL_DEBUG_OFF
     pointer ptr;
 
     constexpr ArrayIterator() noexcept :
