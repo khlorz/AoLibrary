@@ -1,10 +1,10 @@
 /***************************************************************************************
-* AoLibrary Macros - Functions
+* AoLibrary Macros - Attributes
 ****************************************************************************************
-* - All macros that acts as functions are defined/implemented here
+* - All macros for attributes used in the codebase
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_MACROS_ATTRIBUTES_H
-#define AOL_INTERNAL_MACROS_ATTRIBUTES_H
+#ifndef AOL_HEADER_INTERNAL_MACROS_ATTRIBUTES_H
+#define AOL_HEADER_INTERNAL_MACROS_ATTRIBUTES_H
 
 
 #define AOL_ATTRIB_NO_DISCARD [[nodiscard]]
@@ -13,4 +13,4 @@
 #define AOL_ATTRIB_NO_UNQ_ADDRESS [[no_unique_address]]
 
 
-#endif // AOL_INTERNAL_MACROS_ATTRIBUTES_H
+#endif // AOL_HEADER_INTERNAL_MACROS_ATTRIBUTES_H

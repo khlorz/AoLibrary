@@ -4,8 +4,8 @@
 * - All macros that does not fall into function or attribute category
 * - Pretty much other macros used in the code base that I cannot properly categorize
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_MACROS_DEFINES_H
-#define AOL_INTERNAL_MACROS_DEFINES_H
+#ifndef AOL_HEADER_INTERNAL_MACROS_DEFINES_H
+#define AOL_HEADER_INTERNAL_MACROS_DEFINES_H
 
 
 /**
@@ -50,4 +50,4 @@
 #endif
 
 
-#endif // AOL_INTERNAL_MACROS_DEFINES_H
+#endif // AOL_HEADER_INTERNAL_MACROS_DEFINES_H

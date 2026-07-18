@@ -3,8 +3,8 @@
 ****************************************************************************************
 * - All macros that acts as functions are defined/implemented here
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_MACROS_FUNCTION_H
-#define AOL_INTERNAL_MACROS_FUNCTION_H
+#ifndef AOL_HEADER_INTERNAL_MACROS_FUNCTION_H
+#define AOL_HEADER_INTERNAL_MACROS_FUNCTION_H
 
 
 /**
@@ -21,4 +21,4 @@
 #endif
 
 
-#endif // AOL_INTERNAL_MACROS_FUNCTION_H
+#endif // AOL_HEADER_INTERNAL_MACROS_FUNCTION_H
