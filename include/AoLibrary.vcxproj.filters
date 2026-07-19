@@ -868,6 +868,7 @@
     <ClInclude Include="aol\hash_set.h" />
     <ClInclude Include="aol\subrange.h" />
     <ClInclude Include="aol\partitions.h" />
+    <ClInclude Include="aol\utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

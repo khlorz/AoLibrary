@@ -13,6 +13,10 @@
 
 #include "internal/containers-subrange-impl.h"
 
+#if defined(AOL_CONFIG_FLAG_USE_STD_SUBRANGE)
+#include <ranges>
+#endif
+
 namespace AoL
 {
 
