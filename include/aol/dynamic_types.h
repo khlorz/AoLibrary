@@ -8,9 +8,9 @@
 #ifndef AOL_INTERNAL_DYNAMIC_TYPES_H
 #define AOL_INTERNAL_DYNAMIC_TYPES_H
 
-#include <optional>
-#include <variant>
-#include <any>
+#include <optional>	// std::optional
+#include <variant>	// std::variant
+#include <any>		// std::any
 
 namespace AoL
 {

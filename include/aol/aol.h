@@ -20,7 +20,7 @@
 
 #include "internal/types.h"
 #include "internal/typedefs.h"
-#include "internal/dynamic_types.h"
+#include "dynamic_types.h"
 #include "internal/traits.h"
 #include "internal/containers.h"
 #include "internal/strings.h"
