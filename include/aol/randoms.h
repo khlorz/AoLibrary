@@ -5,8 +5,8 @@
 * - Planned to contain anything related to randomness
 * - Also contain's the stl's random, aliased to the library for consistency
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_RANDOM_H
-#define AOL_INTERNAL_RANDOM_H
+#ifndef AOL_HEADER_RANDOMS_H
+#define AOL_HEADER_RANDOMS_H
 
 #include "configs.h"
 
@@ -36,4 +36,4 @@
 #include "internal/randoms/rolls.h"
 #include "internal/randoms/algorithms.h"
 
-#endif // AOL_INTERNAL_RANDOM_H
+#endif // AOL_HEADER_RANDOMS_H

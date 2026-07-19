@@ -1,6 +1,8 @@
 /***************************************************************************************
 * RNG rolls implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H
+#define AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H
 
 namespace AoL
 {
@@ -1070,3 +1072,5 @@ constexpr AoL::SizeT RollWeighted(It begin, It end, RNG& rng) noexcept
 } // Rand namespace
 
 } // AoL namespace
+
+#endif // AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H

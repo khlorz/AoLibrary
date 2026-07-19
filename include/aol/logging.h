@@ -4,8 +4,8 @@
 * - Logging used for AoLibrary
 * - All logging functions/objects/values will be here and can only be found here
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_LOGGING_H
-#define AOL_INTERNAL_LOGGING_H
+#ifndef AOL_HEADER_LOGGING_H
+#define AOL_HEADER_LOGGING_H
 
 /*******************************************************
 * spdlog tweakme.h configurations
@@ -69,4 +69,4 @@ using namespace spdlog;
 
 } // AoL namespace
 
-#endif // AOL_INTERNAL_LOGGING_H
+#endif // AOL_HEADER_LOGGING_H

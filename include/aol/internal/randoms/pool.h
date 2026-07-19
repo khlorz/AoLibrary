@@ -1,6 +1,8 @@
 /***************************************************************************************
 * RNG Pooling implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_RANDOMS_POOL_H
+#define AOL_HEADER_INTERNAL_RANDOMS_POOL_H
 
 namespace AoL
 {
@@ -166,4 +168,5 @@ using PoolBit32_16 = PoolBit<AoL::U32, 16>;
 
 } // AoL namespace
 
-// EOF
+
+#endif // AOL_HEADER_INTERNAL_RANDOMS_POOL_H

@@ -1,6 +1,9 @@
 /***************************************************************************************
 * Random number generator implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_RANDOMS_GENERATORS_H
+#define AOL_HEADER_INTERNAL_RANDOMS_GENERATORS_H
+
 
 namespace AoL
 {
@@ -49,4 +52,5 @@ using DefaultGen = Gen64;
 
 } // AoL namespace
 
-// EOF
+
+#endif // AOL_HEADER_INTERNAL_RANDOMS_GENERATORS_H

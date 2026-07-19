@@ -1,6 +1,8 @@
 /***************************************************************************************
 * RNG algorithm implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_RANDOMS_ALGORITHMS_H
+#define AOL_HEADER_INTERNAL_RANDOMS_ALGORITHMS_H
 
 namespace AoL
 {
@@ -174,3 +176,6 @@ constexpr It StableRandomPartition(It begin, It end, RNG& rng, Pool& pool) noexc
 }
 
 } // AoL namespace
+
+
+#endif // AOL_HEADER_INTERNAL_RANDOMS_ALGORITHMS_H

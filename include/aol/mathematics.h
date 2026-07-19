@@ -4,8 +4,8 @@
 * - Some math functions used by the library
 * - Currently small, but will be adding more as I do more project
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_MATH_H
-#define AOL_INTERNAL_MATH_H
+#ifndef AOL_HEADER_MATHEMATICS_H
+#define AOL_HEADER_MATHEMATICS_H
 
 #include "configs.h"
 
@@ -101,4 +101,4 @@ constexpr void SubtractInPlaceWithGuard(T& value, T subtrahend) noexcept
 
 } // namespace AoL
 
-#endif // AOL_INTERNAL_MATH_H
+#endif // AOL_HEADER_MATHEMATICS_H
