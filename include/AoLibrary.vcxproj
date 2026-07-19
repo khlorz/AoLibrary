@@ -157,6 +157,7 @@
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\array.h" />
     <ClInclude Include="aol\configs.h" />
+    <ClInclude Include="aol\cyclic_buffer.h" />
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
     <ClInclude Include="aol\dynamic_types.h" />
