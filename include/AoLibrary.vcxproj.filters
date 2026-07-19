@@ -865,6 +865,7 @@
     <ClInclude Include="aol\key_ordered_set.h" />
     <ClInclude Include="aol\insert_ordered_set.h" />
     <ClInclude Include="aol\cyclic_buffer.h" />
+    <ClInclude Include="aol\hash_set.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
