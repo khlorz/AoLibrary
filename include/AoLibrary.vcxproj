@@ -162,6 +162,7 @@
     <ClInclude Include="aol\dynamic_types.h" />
     <ClInclude Include="aol\exceptions.h" />
     <ClInclude Include="aol\hashes.h" />
+    <ClInclude Include="aol\hash_map.h" />
     <ClInclude Include="aol\insert_ordered_map.h" />
     <ClInclude Include="aol\key_ordered_map.h" />
     <ClInclude Include="aol\vector.h" />
