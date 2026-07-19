@@ -30,7 +30,7 @@
 * Math-related includes
 **********************************************/
 
-#include "internal/math.h"
+#include "mathematics.h"
 #include "algorithms.h"
 #include "hashes.h"
 

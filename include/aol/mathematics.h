@@ -9,8 +9,8 @@
 
 #include "configs.h"
 
-#include "types.h"
-#include "traits.h"
+#include "internal/types.h"
+#include "internal/traits.h"
 
 namespace AoL
 {
