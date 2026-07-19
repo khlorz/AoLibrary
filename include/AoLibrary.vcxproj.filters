@@ -860,6 +860,7 @@
     <ClInclude Include="aol\vector.h" />
     <ClInclude Include="aol\array.h" />
     <ClInclude Include="aol\key_ordered_map.h" />
+    <ClInclude Include="aol\insert_ordered_map.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
