@@ -11,9 +11,9 @@
 
 #if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR)
 #include "mimalloc/mimalloc.h"
+#elif defined(AOL_CONFIG_FLAG_USE_STD_ALLOCATOR)
+#include <memory> // std::allocator
 #endif
-
-#include <memory>	// std::allocator
 
 
 namespace AoL
@@ -36,8 +36,10 @@ template<typename T>
 using DefaultAllocator
 #ifdef AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR
 = mi_stl_allocator<T>;
-#else
+#elif defined(AOL_CONFIG_FLAG_USE_STD_ALLOCATOR)
 = std::allocator<T>;
+#else
+#error "No custom allocator yet!"
 #endif
 
 } // AoL namespace

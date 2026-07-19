@@ -39,13 +39,18 @@
 ****************************************/
 
 /**
-* This makes the whole AoLibrary use mimalloc library for STL allocators
+* This makes the whole AoLibrary use mimalloc library for general allocators
 *
-* - When undefined, the library will use the default STL allocator, std::allocator<T>
-*
-* - However, by default, we will use std::allocator since the overridden new/delete already come from mimalloc
+* - By default, we will use std::allocator since the overridden new/delete already come from mimalloc
 */
 //#define AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR
+
+/**
+* This makes the whole AoLibrary use std library for general allocators
+*
+* - By default, we will use std::allocator since the overridden new/delete already come from mimalloc
+*/
+#define AOL_CONFIG_FLAG_USE_STD_ALLOCATOR
 
 
 /***************************************
