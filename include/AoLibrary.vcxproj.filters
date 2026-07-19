@@ -867,6 +867,7 @@
     <ClInclude Include="aol\cyclic_buffer.h" />
     <ClInclude Include="aol\hash_set.h" />
     <ClInclude Include="aol\subrange.h" />
+    <ClInclude Include="aol\partitions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

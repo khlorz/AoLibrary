@@ -10,6 +10,9 @@
 namespace AoL::Internal
 {
 
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Contiguous {};
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Block {};
+
 template<
 	typename C
 >
@@ -29,7 +32,6 @@ public:
 	template<typename Ct = typename main_partition_type::container_type>
 	using main_partition_container = Ct;
 
-	using container_tag = ContainerTag;
 	using value_type = main_partition_container<>::value_type;
 
 	using size_type = SizeT;
@@ -685,7 +687,6 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	using base = PartitionContiguousBase<PartitionVectorEx<T, A>>;
 	using container_type = AoL::Vector<T, A>;
 
-	using container_tag = ContainerTag;
 	using value_type = container_type::value_type;
 	using allocator_type = container_type::allocator_type;
 
@@ -1022,7 +1023,6 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 
 	using container_type = AoL::Array<T, S>;
 
-	using container_tag = ContainerTag;
 	using value_type = container_type::value_type;
 
 	using size_type = SizeT;
