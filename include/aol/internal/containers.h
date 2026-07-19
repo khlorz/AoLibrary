@@ -12,7 +12,7 @@
 #include "configs.h"
 
 #include "macros.h"
-#include "allocators.h"
+#include "aol/allocators.h"
 #include "hashes.h"
 #include "types.h"
 #include "traits.h"
@@ -253,7 +253,7 @@ struct ArrayNamed4;
 */
 template<
 	typename T,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using Vector
 #if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
@@ -276,7 +276,7 @@ using Vector
 */
 template<
 	typename T,
-	typename A = Internal::DefaultPoolAllocator<T>
+	typename A = DefaultPoolAllocator<T>
 >
 using VectorPool = Vector<T, A>;
 
@@ -332,7 +332,7 @@ template<
 	typename K,
 	typename V,
 	typename P = KeyOrderMapPair<K, V>,
-	typename A = Internal::DefaultAllocator<P>
+	typename A = DefaultAllocator<P>
 >
 using KeyOrderMap
 #if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP)
@@ -361,7 +361,7 @@ template<
 	typename K,
 	typename V,
 	typename P = KeyOrderMapPair<K, V>,
-	typename A = Internal::DefaultPoolAllocator<P>
+	typename A = DefaultPoolAllocator<P>
 >
 using KeyOrderMapPool = KeyOrderMap<K, V, P, A>;
 
@@ -405,7 +405,7 @@ template<
 	typename K,
 	typename V,
 	typename P = FlatKeyOrderMapPair<K, V>,
-	typename A = Internal::DefaultAllocator<P>
+	typename A = DefaultAllocator<P>
 >
 using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 
@@ -425,7 +425,7 @@ template<
 	typename K,
 	typename V,
 	typename P = Internal::KeyValuePairEx<K, V>,
-	typename A = Internal::DefaultPoolAllocator<P>
+	typename A = DefaultPoolAllocator<P>
 >
 using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 
@@ -476,7 +476,7 @@ template<
 	typename V,
 	typename H = Internal::DefaultHash<K>,
 	typename P = InsertOrderMapPair<K, V>,
-	typename A = Internal::DefaultAllocator<P>
+	typename A = DefaultAllocator<P>
 >
 using InsertOrderMap
 #if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
@@ -503,7 +503,7 @@ template<
 	typename V,
 	typename H = Internal::DefaultHash<K>,
 	typename P = InsertOrderMapPair<K, V>,
-	typename A = Internal::DefaultPoolAllocator<P>
+	typename A = DefaultPoolAllocator<P>
 >
 using InsertOrderMapPool = InsertOrderMap<K, V, H, P, A>;
 
@@ -561,7 +561,7 @@ template<
 	typename V,
 	typename H = Internal::DefaultHash<K>,
 	typename P = HashMapPair<K, V>,
-	typename A = Internal::DefaultAllocator<P>
+	typename A = DefaultAllocator<P>
 >
 using HashMap
 #if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
@@ -590,7 +590,7 @@ template<
 	typename V,
 	typename H = Internal::DefaultHash<K>,
 	typename P = HashMapPair<K, V>,
-	typename A = Internal::DefaultPoolAllocator<P>
+	typename A = DefaultPoolAllocator<P>
 >
 using HashMapPool = HashMap<K, V, H, P, A>;
 
@@ -619,7 +619,7 @@ using HashMapPool = HashMap<K, V, H, P, A>;
 */
 template<
 	typename T,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using KeyOrderSet
 #if defined(AOL_USE_STD_ORDERED_SET)
@@ -642,7 +642,7 @@ using KeyOrderSet
 */
 template<
 	typename T,
-	typename A = Internal::DefaultPoolAllocator<T>
+	typename A = DefaultPoolAllocator<T>
 >
 using KeyOrderSetPool = KeyOrderSet<T, A>;
 
@@ -668,7 +668,7 @@ using KeyOrderSetPool = KeyOrderSet<T, A>;
 template<
 	typename T,
 	typename H = Internal::DefaultHash<T>,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using InsertOrderSet
 #if defined(AOL_CONFIG_FLAG_USE_TSL_INSERTORDERED_MAP)
@@ -691,7 +691,7 @@ using InsertOrderSet
 template<
 	typename T,
 	typename H = Internal::DefaultHash<T>,
-	typename A = Internal::DefaultPoolAllocator<T>
+	typename A = DefaultPoolAllocator<T>
 >
 using InsertOrderSetPool = InsertOrderSet<T, H, A>;
 
@@ -720,7 +720,7 @@ using InsertOrderSetPool = InsertOrderSet<T, H, A>;
 template<
 	typename T,
 	typename H = Internal::DefaultHash<T>,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using HashSet
 #if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_MAP)
@@ -745,7 +745,7 @@ using HashSet
 template<
 	typename T,
 	typename H = Internal::DefaultHash<T>,
-	typename A = Internal::DefaultPoolAllocator<T>
+	typename A = DefaultPoolAllocator<T>
 >
 using HashSetPool = HashSet<T, H, A>;
 
@@ -790,7 +790,7 @@ using CyclicBufferF = Internal::CyclicBufferFixed<T, S>;
 */
 template<
 	typename T,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using CyclicBufferD = Internal::CyclicBufferDynamic<T, A>;
 
@@ -836,7 +836,7 @@ using SubPartition = Internal::SubPartitionEx<P>;
 */
 template<
 	typename T,
-	typename A = Internal::DefaultAllocator<T>
+	typename A = DefaultAllocator<T>
 >
 using PartitionVector = Internal::PartitionVectorEx<T, A>;
 

@@ -52,14 +52,14 @@
     <Filter Include="internal\algorithms">
       <UniqueIdentifier>{5c78d3b3-675d-4892-ab38-dafd21372f9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\allocators">
+      <UniqueIdentifier>{0dd12a59-0b37-4c40-8e0e-9e40a41c3b7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\serialization\serialize.h">
       <Filter>serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\allocators.h">
-      <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
@@ -864,6 +864,16 @@
     </ClInclude>
     <ClInclude Include="aol\internal\algorithms\sort.h">
       <Filter>internal\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\allocators.h" />
+    <ClInclude Include="aol\internal\allocators\general.h">
+      <Filter>internal\allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\allocators\pool.h">
+      <Filter>internal\allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\allocators\strings.h">
+      <Filter>internal\allocators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

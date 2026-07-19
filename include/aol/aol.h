@@ -39,7 +39,7 @@
 * Memory-related includes
 **********************************************/
 
-#include "internal/allocators.h"
+#include "allocators.h"
 
 
 /**********************************************

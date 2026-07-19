@@ -10,7 +10,7 @@
 #include "configs.h"
 
 #include "types.h"
-#include "allocators.h"
+#include "aol/allocators.h"
 #include "traits.h"
 
 #include "stb/stb_sprintf.h"
@@ -75,7 +75,7 @@ inline constexpr bool IsValidFormatArgument = ValidFormatArgument<std::decay_t<T
 *
 * @tparam A allocator type (default = Internal::DefaultStringAllocator)
 */
-using String = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringAllocator>;
+using String = std::basic_string<char, std::char_traits<char>, DefaultStringAllocator>;
 
 /**
 * @details String but for pool allocators
@@ -84,7 +84,7 @@ using String = std::basic_string<char, std::char_traits<char>, Internal::Default
 *
 * @tparam A allocator type (default = Internal::DefaultStringPoolAllocator)
 */
-using StringPool = std::basic_string<char, std::char_traits<char>, Internal::DefaultStringPoolAllocator>;
+using StringPool = std::basic_string<char, std::char_traits<char>, DefaultStringPoolAllocator>;
 
 /**
 * @details View object for string values
