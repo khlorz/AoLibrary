@@ -4,6 +4,9 @@
 
 #ifndef NDEBUG
 #include "aol/internal/containers.h" // included only for debugging purposes
+
+#include "aol/vector.h"
+#include "aol/array.h"
 #endif
 
 namespace cereal

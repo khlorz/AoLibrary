@@ -9,7 +9,7 @@
 
 #include "configs.h"
 
-#include "internal/types.h"
+#include "types.h"
 #include "allocators.h"
 #include "traits.h"
 

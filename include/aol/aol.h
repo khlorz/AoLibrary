@@ -18,8 +18,7 @@
 * Type-related includes
 **********************************************/
 
-#include "internal/types.h"
-#include "internal/typedefs.h"
+#include "types.h"
 #include "dynamic_types.h"
 #include "traits.h"
 #include "internal/containers.h"

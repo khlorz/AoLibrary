@@ -70,12 +70,6 @@
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\typedefs.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\types.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\data_components\managers.h">
       <Filter>data_components</Filter>
     </ClInclude>
@@ -790,16 +784,7 @@
     <ClInclude Include="aol\third-party\spdlog\version.h">
       <Filter>third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers-vector-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers-base-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\containers-ordered-map-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers-array-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h">
@@ -871,6 +856,10 @@
     </ClInclude>
     <ClInclude Include="aol\strings.h" />
     <ClInclude Include="aol\traits.h" />
+    <ClInclude Include="aol\types.h" />
+    <ClInclude Include="aol\vector.h" />
+    <ClInclude Include="aol\array.h" />
+    <ClInclude Include="aol\key_ordered_map.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

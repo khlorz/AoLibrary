@@ -1,36 +1,88 @@
-#pragma once
+/***************************************************************************************
+* AoLibrary array
+****************************************************************************************
+* - The library's std::array
+***************************************************************************************/
+#ifndef AOL_HEADER_ARRAY_H
+#define AOL_HEADER_ARRAY_H
 
-/*************************************************
-* [Containers] Array implementations
-*************************************************/
+
+#include "configs.h"
+#include "macros.h"
+#include "types.h"
+#include "traits.h"
+
+#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
+#include <array>
+#endif
+
+#include <cassert>
 
 namespace AoL
 {
 
-/****************************************
-* General Array
-****************************************/
+/*************************************************
+* Arrays
+*************************************************/
+
+/**
+* @details Static sized container at runtime
+*
+* - Compile-time size
+*
+* - Statically fixed (no resizes)
+*
+* - Use this instead of a C array for safer usage
+*
+* @tparam T Element type
+* @tparam S Array size
+*/
+template<
+	typename T,
+	SizeT S
+>
+using Array
+#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
+= std::array<T, S>;
+#else
+#error "No custom array yet!"
+#endif
+
+template<
+	typename T
+>
+struct ArrayNamed2;
+
+template<
+	typename T
+>
+struct ArrayNamed3;
+
+template<
+	typename T
+>
+struct ArrayNamed4;
 
 namespace Internal
 {
 
 template<
-	typename T,
-	SizeT Size
+    typename T,
+    SizeT Size
 >
 struct ArrayIterator
 {
-	static_assert(Size != 0, "Array size should always be greater than zero!");
+    static_assert(Size != 0, "Array size should always be greater than zero!");
 
-	using iterator_concept = std::contiguous_iterator_tag;
-	using iterator_category = std::random_access_iterator_tag;
+    using iterator_concept = std::contiguous_iterator_tag;
+    using iterator_category = std::random_access_iterator_tag;
 
-	using value_type = T;
-	using difference_type = PtrDiff;
+    using value_type = T;
+    using difference_type = PtrDiff;
     using size_type = SizeT;
 
-	using pointer = T*;
-	using reference = T&;
+    using pointer = T*;
+    using reference = T&;
 
 #if AOL_DEBUG_OFF
     pointer ptr;
@@ -116,8 +168,8 @@ struct ArrayIterator
     size_type idx; // offset into array
 
     constexpr ArrayIterator() noexcept :
-        ptr{nullptr},
-        idx{0}
+        ptr{ nullptr },
+        idx{ 0 }
     {}
 
     constexpr explicit ArrayIterator(pointer arr_ptr, size_type offset = 0) noexcept :
@@ -249,44 +301,44 @@ public:
 };
 
 template<
-	SizeT S
+    SizeT S
 >
 struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedSize
 {
-	static constexpr SizeT ArrSize = S;
+    static constexpr SizeT ArrSize = S;
 };
 
 template<
-	typename Derived,
-	typename T,
+    typename Derived,
+    typename T,
     SizeT S
 >
 struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedBase : public ArrayNamedSize<S>
 {
-	static_assert(std::is_trivial_v<T>, "ArrayNamedBase requires T to be trivial");
-	static_assert(std::is_standard_layout_v<T>, "ArrayNamedBase requires T to be standard-layout");
+    static_assert(std::is_trivial_v<T>, "ArrayNamedBase requires T to be trivial");
+    static_assert(std::is_standard_layout_v<T>, "ArrayNamedBase requires T to be standard-layout");
 
-	using value_type = T;
-	using size_type = SizeT;
-	using reference = T&;
-	using const_reference = Traits::ConstRefOrCopyType<T>;
+    using value_type = T;
+    using size_type = SizeT;
+    using reference = T&;
+    using const_reference = const T&;
 
-	using iterator = Internal::ArrayIterator<T, S>;
-	using const_iterator = Internal::ArrayIterator<const T, S>;
-	using reverse_iterator = std::reverse_iterator<iterator>;
-	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+    using iterator = Internal::ArrayIterator<T, S>;
+    using const_iterator = Internal::ArrayIterator<const T, S>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-	AOL_ATTRIB_NO_DISCARD constexpr reference operator [] (SizeT idx) noexcept
-	{
-		assert(idx < S && "Invalid array access!");
-		return static_cast<Derived*>(this)->data_arr[idx];
-	}
+    AOL_ATTRIB_NO_DISCARD constexpr reference operator [] (SizeT idx) noexcept
+    {
+        assert(idx < S && "Invalid array access!");
+        return static_cast<Derived*>(this)->data_arr[idx];
+    }
 
     AOL_ATTRIB_NO_DISCARD constexpr const_reference operator [] (SizeT idx) const noexcept
-	{
-		assert(idx < S && "Invalid array access!");
-		return static_cast<Derived*>(this)->data_arr[idx];
-	}
+    {
+        assert(idx < S && "Invalid array access!");
+        return static_cast<Derived*>(this)->data_arr[idx];
+    }
 
     AOL_ATTRIB_NO_DISCARD constexpr auto begin() noexcept
     {
@@ -364,7 +416,7 @@ struct AOL_EMPTY_BASE_OPTIMIZATION ArrayNamedBase : public ArrayNamedSize<S>
 * @tparam T Element type
 */
 template<
-	typename T
+    typename T
 >
 struct ArrayNamed2 : public Internal::ArrayNamedBase<ArrayNamed2<T>, T, 2>
 {
@@ -372,30 +424,27 @@ private:
     using Base = Internal::ArrayNamedBase<ArrayNamed2<T>, T, 2>;
 
 public:
-	union
-	{
-		T data_arr[Base::ArrSize];
-		struct
-		{
-			T x;
-			T y;
-		};
-	};
+    union
+    {
+        T data_arr[Base::ArrSize];
+        struct
+        {
+            T x;
+            T y;
+        };
+    };
 
-	constexpr ArrayNamed2() noexcept(std::is_nothrow_default_constructible_v<T>)
-		: data_arr{}
-	{
-	}
+    constexpr ArrayNamed2() noexcept(std::is_nothrow_default_constructible_v<T>)
+        : data_arr{}
+    {}
 
     explicit constexpr ArrayNamed2(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value }
-    {
-    }
+    {}
 
     explicit constexpr ArrayNamed2(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_) noexcept(std::is_nothrow_copy_constructible_v<T>)
-		: data_arr{ x_, y_ }
-	{
-	}
+        : data_arr{ x_, y_ }
+    {}
 };
 
 /**
@@ -406,7 +455,7 @@ public:
 * @tparam T Element type
 */
 template<
-	typename T
+    typename T
 >
 struct ArrayNamed3 : public Internal::ArrayNamedBase<ArrayNamed3<T>, T, 3>
 {
@@ -416,29 +465,26 @@ private:
 public:
     union
     {
-	    T data_arr[Base::ArrSize];
-	    struct
-	    {
-		    T x;
-		    T y;
-		    T z;
-	    };
+        T data_arr[Base::ArrSize];
+        struct
+        {
+            T x;
+            T y;
+            T z;
+        };
     };
 
-	constexpr ArrayNamed3() noexcept(std::is_nothrow_default_constructible_v<T>)
-		: data_arr{}
-    {
-	}
+    constexpr ArrayNamed3() noexcept(std::is_nothrow_default_constructible_v<T>)
+        : data_arr{}
+    {}
 
     explicit constexpr ArrayNamed3(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value, value }
-    {
-    }
+    {}
 
     explicit constexpr ArrayNamed3(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_) noexcept(std::is_nothrow_copy_constructible_v<T>)
-		: data_arr{ x_, y_, z_ }
-    {
-	}
+        : data_arr{ x_, y_, z_ }
+    {}
 };
 
 /**
@@ -449,7 +495,7 @@ public:
 * @tparam T Element type
 */
 template<
-	typename T
+    typename T
 >
 struct ArrayNamed4 : public Internal::ArrayNamedBase<ArrayNamed4<T>, T, 4>
 {
@@ -459,33 +505,30 @@ private:
 public:
     union
     {
-	    T data_arr[Base::ArrSize];
-	    struct
-	    {
-		    T x;
-		    T y;
-		    T z;
-		    T w;
-	    };
+        T data_arr[Base::ArrSize];
+        struct
+        {
+            T x;
+            T y;
+            T z;
+            T w;
+        };
     };
 
-	constexpr ArrayNamed4() noexcept(std::is_nothrow_default_constructible_v<T>)
-		: data_arr{}
-	{
-	}
+    constexpr ArrayNamed4() noexcept(std::is_nothrow_default_constructible_v<T>)
+        : data_arr{}
+    {}
 
     explicit constexpr ArrayNamed4(Traits::ConstRefOrCopyType<T> value) noexcept(std::is_nothrow_copy_constructible_v<T>) :
         data_arr{ value, value, value, value }
-    {
-    }
+    {}
 
     explicit constexpr ArrayNamed4(Traits::ConstRefOrCopyType<T> x_, Traits::ConstRefOrCopyType<T> y_, Traits::ConstRefOrCopyType<T> z_, Traits::ConstRefOrCopyType<T> w_) noexcept(std::is_nothrow_copy_constructible_v<T>)
-		: data_arr{ x_, y_, z_, w_ }
-	{
-	}
+        : data_arr{ x_, y_, z_, w_ }
+    {}
 };
 
-} // AoL namespace
+}
 
 
-// containers-array-impl.h EOF
+#endif // AOL_HEADER_ARRAY_H

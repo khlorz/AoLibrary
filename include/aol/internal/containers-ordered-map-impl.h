@@ -4,6 +4,12 @@
 * [Containers] Ordered Map implementations
 *************************************************/
 
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/types.h"
+#include "aol/traits.h"
+#include "aol/vector.h"
+
 namespace AoL::Internal
 {
 

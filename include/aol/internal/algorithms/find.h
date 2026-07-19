@@ -6,7 +6,7 @@
 
 #include "aol/configs.h"
 #include "aol/traits.h"
-#include "aol/internal/types.h"
+#include "aol/types.h"
 
 #include <algorithm>    // std::find
 #include <bit>          // std::bit_floor, bit_ceil

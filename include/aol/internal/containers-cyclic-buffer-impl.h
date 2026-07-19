@@ -4,6 +4,9 @@
 * [Container] Cyclic Buffer implementations
 *************************************************/
 
+#include "aol/vector.h"
+#include "aol/array.h"
+
 namespace AoL::Internal
 {
 

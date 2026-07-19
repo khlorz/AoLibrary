@@ -10,7 +10,7 @@
 
 #include "configs.h"
 
-#include "internal/types.h"
+#include "types.h"
 #include "traits.h"
 #include "hashes.h"
 #include "internal/containers.h"

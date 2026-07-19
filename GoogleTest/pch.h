@@ -2,6 +2,8 @@
 
 #include "aol/aol.h"
 
+#include "aol/key_ordered_map.h"
+
 #include <gtest/gtest.h>
 
 #include <string>

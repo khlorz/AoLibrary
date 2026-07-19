@@ -25,23 +25,6 @@
 #include <utility>		// std::pair
 #include <ranges>		// std::views
 
-/*************************************************
-* Array includes
-*************************************************/
-
-#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
-#include <array>
-#endif
-
-
-/*************************************************
-* Vector includes
-*************************************************/
-
-#if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
-#include <vector>
-#endif
-
 
 /*************************************************
 * Hash/Unordered map/set includes
@@ -60,17 +43,7 @@
 #endif
 
 
-/*************************************************
-* Key-ordered map includes
-*************************************************/
 
-#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP)
-#include <map>
-#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
-#include "boost/container/map.hpp"
-#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
-#include "absl/container/btree_map.h"
-#endif
 
 
 /*************************************************
@@ -158,28 +131,6 @@ template<
 >
 struct CyclicBufferDynamic;
 
-/****************************
-* Maps
-****************************/
-
-template<
-	typename K,
-	typename V
->
-struct KeyValuePairEx;
-
-template<typename P>
-struct PairLessComparator;
-
-template<
-	typename K,
-	typename V,
-	typename P,
-	typename C,
-	typename A
->
-struct KeyOrderMapEx;
-
 
 /****************************
 * Subranges
@@ -192,242 +143,6 @@ struct SubrangeEx;
 
 }
 
-/*************************************************
-* Arrays
-*************************************************/
-
-/**
-* @details Static sized container at runtime
-*
-* - Compile-time size
-*
-* - Statically fixed (no resizes)
-*
-* - Use this instead of a C array for safer usage
-*
-* @tparam T Element type
-* @tparam S Array size
-*/
-template<
-	typename T,
-	SizeT S
->
-using Array
-#if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
-= std::array<T, S>;
-#else
-#error "No custom array yet!"
-#endif
-
-template<
-	typename T
->
-struct ArrayNamed2;
-
-template<
-	typename T
->
-struct ArrayNamed3;
-
-template<
-	typename T
->
-struct ArrayNamed4;
-
-
-/*************************************************
-* Vectors
-*************************************************/
-
-/**
-* @details Resizable container at runtime
-*
-* - Dynamically resizable container
-*
-* - Allocator can be customized for better use cases
-*
-* - For most use cases, use this until it becomes a bottleneck
-*
-* @tparam T Element type
-* @tparam A Allocator type
-*/
-template<
-	typename T,
-	typename A = DefaultAllocator<T>
->
-using Vector
-#if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
-= std::vector<T, A>;
-#else
-#error "No custom vector yet!"
-#endif
-
-/**
-* @details Vector but specialized for pool allocation
-*
-* - Uses a pool-based allocator
-*
-* - Default pool allocator is backed by mimalloc
-*
-* - Internally operates on `mi_heap_t`
-*
-* @tparam T Element type
-* @tparam A Allocator type
-*/
-template<
-	typename T,
-	typename A = DefaultPoolAllocator<T>
->
-using VectorPool = Vector<T, A>;
-
-
-/*************************************************
-* Ordered maps
-*************************************************/
-
-/**
-* @details Key-value pair type used by KeyOrderMap
-*
-* - This will be the main pair type used for KeyOrderMap type
-*
-* - Each aliases will have the same, more or less, interfaces so they are interchangeable depending on the map used
-*
-* - Read and look at the defines at include/libconfig.h for more information on the type aliases
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-*/
-template<
-	typename K,
-	typename V
->
-using KeyOrderMapPair
-#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP) || defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
-= std::pair<const K, V>;
-#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
-= std::pair<K, V>;
-#else
-= Internal::KeyValuePairEx<K, V>;
-#endif
-
-/**
-* @details Key-ordered associative map
-*
-* - Compared to InsertOrderMap, this map is sorted by key.
-*
-* - For the most part, each map aliases will have the same interfaces. Although some map type have additional interfaces.
-*
-* - By default, AoLibrary will be using absl::btree_map
-*
-* -- For more information, go to 'github.com/abseil/abseil-cpp'
-*
-* - Read and look at the defines at include/libconfig.h for more information on the type aliases
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
-* @tparam A Allocator type (default: Internal::DefaultAllocator<P>)
-*/
-template<
-	typename K,
-	typename V,
-	typename P = KeyOrderMapPair<K, V>,
-	typename A = DefaultAllocator<P>
->
-using KeyOrderMap
-#if defined(AOL_CONFIG_FLAG_USE_STD_KEYORDERED_MAP)
-= std::map<K, V>;
-#elif defined(AOL_CONFIG_FLAG_USE_BOOST_KEYORDERED_MAP)
-= boost::container::map<K, V, std::less<K>, A>;
-#elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
-= absl::btree_map<K, V, std::less<K>, A>;
-#else
-= Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
-#endif
-
-/**
-* @details KeyOrderMap but specialized for pool allocators
-*
-* - Default pool allocator is backed by mimalloc
-*
-* - Internally operates on `mi_heap_t`
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
-* @tparam A Allocator type (default: Internal::DefaultPoolAllocator<P>)
-*/
-template<
-	typename K,
-	typename V,
-	typename P = KeyOrderMapPair<K, V>,
-	typename A = DefaultPoolAllocator<P>
->
-using KeyOrderMapPool = KeyOrderMap<K, V, P, A>;
-
-/**
-* @details Key-value pair type used by FlatKeyOrderMap
-*
-* - This will be the main pair type used for FlatKeyOrderMap type
-*
-* - Each aliases will have the same, more or less, interfaces so they are interchangeable depending on the map used
-*
-* - Read and look at the defines at include/config.h for more information on the type aliases
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-*/
-template<
-	typename K,
-	typename V
->
-using FlatKeyOrderMapPair = Internal::KeyValuePairEx<K, V>;
-
-/**
-* @details flat Key-ordered associative map
-*
-* - Compared to InsertOrderMap, this map is sorted by key.
-*
-* - Internally uses a vector
-* 
-* - For fast operations, use the build functions: build_start -> build_add... -> build_end
-* 
-* - Used for "Add elements then sort after"
-* 
-* - Optimized for lookups more than insertion
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
-* @tparam A Allocator type (default: Internal::DefaultAllocator<P>)
-*/
-template<
-	typename K,
-	typename V,
-	typename P = FlatKeyOrderMapPair<K, V>,
-	typename A = DefaultAllocator<P>
->
-using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
-
-/**
-* @details FlatKeyOrderMap but specialized for pool allocators
-*
-* - Default pool allocator is backed by mimalloc
-*
-* - Internally operates on `mi_heap_t`
-*
-* @tparam K Key type
-* @tparam V Mapped value type
-* @tparam P Key-value pair type (default: KeyOrderMapPair<K,V>)
-* @tparam A Allocator type (default: Internal::DefaultPoolAllocator<P>)
-*/
-template<
-	typename K,
-	typename V,
-	typename P = Internal::KeyValuePairEx<K, V>,
-	typename A = DefaultPoolAllocator<P>
->
-using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
 
 /**
 * @details Insert-value pair type used by InsertOrderedMap
@@ -1067,10 +782,6 @@ concept IsAoLContainer = std::is_same_v<typename T::container_tag, Internal::Con
 * Implementation includes
 *************************************************/
 
-#include "containers-base-impl.h"
-#include "containers-array-impl.h"
-#include "containers-vector-impl.h"
-#include "containers-ordered-map-impl.h"
 #include "containers-cyclic-buffer-impl.h"
 #include "containers-subrange-impl.h"
 #include "containers-partitions-impl.h"

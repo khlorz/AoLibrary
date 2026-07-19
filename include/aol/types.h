@@ -4,8 +4,8 @@
 * - These fundamental types typedef for ease of library use
 * - If using the library, better to use this types
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_TYPES_H
-#define AOL_INTERNAL_TYPES_H
+#ifndef AOL_HEADER_TYPES_H
+#define AOL_HEADER_TYPES_H
 
 #include <cstddef>
 
@@ -50,4 +50,4 @@ using PtrDiff	= std::ptrdiff_t;
 
 } // AoL namespace
 
-#endif // AOL_INTERNAL_TYPES_H
+#endif // AOL_HEADER_TYPES_H
