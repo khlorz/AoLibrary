@@ -20,4 +20,8 @@
 
 #ifdef AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE
 #include "mimalloc/mimalloc-new-delete.h"
+#elif defined(AOL_CONFIG_FLAG_USE_CUSTOM_NEW_AND_DELETE)
+#error "No custom new and delete implementations yet!"
+#else
+#warning "Using the default new and delete implementations!"
 #endif

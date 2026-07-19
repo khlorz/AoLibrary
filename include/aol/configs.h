@@ -22,6 +22,17 @@
 */
 #define AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE
 
+/**
+* This replaces every new and delete functions to custom new and delete
+* 
+* - By default we will be using mimalloc
+*/
+//#define AOL_CONFIG_FLAG_USE_CUSTOM_NEW_DELETE
+
+#if (defined(AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE) + defined(AOL_CONFIG_FLAG_USE_CUSTOM_NEW_DELETE)) > 1
+#error "Define only one NEW_DELETE config flag"
+#endif
+
 
 /***************************************
 * STL Allocator
