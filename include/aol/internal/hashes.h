@@ -7,7 +7,7 @@
 #ifndef AOL_INTERNAL_HASHES_H
 #define AOL_INTERNAL_HASHES_H
 
-#include "config.h"
+#include "configs.h"
 
 #ifdef AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 #include "unordered_dense/unordered_dense.h"

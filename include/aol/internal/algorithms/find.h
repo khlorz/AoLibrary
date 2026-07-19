@@ -1,6 +1,17 @@
 /***************************************************************************************
 * Algorithm Find Implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_ALGORITHM_FIND_H
+#define AOL_HEADER_INTERNAL_ALGORITHM_FIND_H
+
+#include "aol/configs.h"
+#include "aol/internal/traits.h"
+#include "aol/internal/types.h"
+
+#include <algorithm>    // std::find
+#include <bit>          // std::bit_floor, bit_ceil
+#include <utility>      // std::forward
+#include <functional>   // std::less
 
 namespace AoL
 {
@@ -177,4 +188,5 @@ It FindLowerBound(It it_begin, It it_end, const K& value, Comparator compare = C
 
 } // AoL namespace
 
-// EOF
+
+#endif // AOL_HEADER_INTERNAL_ALGORITHM_FIND_H

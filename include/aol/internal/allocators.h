@@ -9,7 +9,7 @@
 #ifndef AOL_INTERNAL_ALLOCATORS_H
 #define AOL_INTERNAL_ALLOCATORS_H
 
-#include "config.h"
+#include "configs.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_ALLOCATOR) || defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR)
 #include "mimalloc/mimalloc.h"

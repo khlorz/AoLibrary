@@ -9,7 +9,7 @@
 #ifndef AOL_INTERNAL_CONTAINERS_H
 #define AOL_INTERNAL_CONTAINERS_H
 
-#include "config.h"
+#include "configs.h"
 
 #include "macros.h"
 #include "allocators.h"
@@ -17,7 +17,7 @@
 #include "types.h"
 #include "traits.h"
 #include "math.h"
-#include "algorithm.h"
+#include "aol/algorithms.h"
 
 #include <iterator>		// iterator/const_iterators
 #include <compare>		// <=> operator

@@ -8,7 +8,7 @@
 #ifndef AOL_DATA_COMPONENTS_PROFILES_H
 #define AOL_DATA_COMPONENTS_PROFILES_H
 
-#include "aol/internal/config.h"
+#include "aol/internal/configs.h"
 #include "aol/internal/macros.h"
 
 #include "aol/internal/types.h"

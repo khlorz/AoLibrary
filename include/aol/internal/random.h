@@ -8,13 +8,13 @@
 #ifndef AOL_INTERNAL_RANDOM_H
 #define AOL_INTERNAL_RANDOM_H
 
-#include "config.h"
+#include "configs.h"
 
 #include "types.h"
 #include "traits.h"
 #include "hashes.h"
 #include "containers.h"
-#include "algorithm.h"
+#include "aol/algorithms.h"
 
 #include <random>
 #include <chrono>

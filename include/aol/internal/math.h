@@ -7,7 +7,7 @@
 #ifndef AOL_INTERNAL_MATH_H
 #define AOL_INTERNAL_MATH_H
 
-#include "config.h"
+#include "configs.h"
 
 #include "types.h"
 #include "traits.h"

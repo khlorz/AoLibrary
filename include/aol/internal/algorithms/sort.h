@@ -1,6 +1,17 @@
 /***************************************************************************************
 * Algorithm Sort Implementations
 ***************************************************************************************/
+#ifndef AOL_HEADER_INTERNAL_ALGORITHMS_SORT_H
+#define AOL_HEADER_INTERNAL_ALGORITHMS_SORT_H
+
+
+#include "aol/configs.h"
+#include "aol/internal/traits.h"
+#include "aol/internal/types.h"
+
+#include <algorithm>	// std::sort
+#include <utility>		// std::forward
+#include <iterator>		// std::make_reverse_iterator
 
 namespace AoL
 {
@@ -71,4 +82,5 @@ constexpr void SortReverse(E&& e, It it_begin, It it_end, F&& f) noexcept requir
 
 } // AoL namespace
 
-// EOF
+
+#endif // AOL_HEADER_INTERNAL_ALGORITHMS_SORT_H

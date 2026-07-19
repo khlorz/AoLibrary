@@ -7,7 +7,7 @@
 #ifndef AOL_INTERNAL_STRINGS_H
 #define AOL_INTERNAL_STRINGS_H
 
-#include "config.h"
+#include "configs.h"
 
 #include "types.h"
 #include "allocators.h"

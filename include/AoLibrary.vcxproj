@@ -152,13 +152,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="aol\algorithms.h" />
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\configs.h" />
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
-    <ClInclude Include="aol\internal\algorithm-find-impl.h" />
-    <ClInclude Include="aol\internal\algorithm-sort-impl.h" />
-    <ClInclude Include="aol\internal\algorithm.h" />
+    <ClInclude Include="aol\internal\algorithms\find.h" />
+    <ClInclude Include="aol\internal\algorithms\sort.h" />
     <ClInclude Include="aol\internal\allocators.h" />
     <ClInclude Include="aol\internal\containers-array-impl.h" />
     <ClInclude Include="aol\internal\containers-base-impl.h" />

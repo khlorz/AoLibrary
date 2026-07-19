@@ -7,7 +7,7 @@
 #ifndef AOL_INTERNAL_TRAITS_H
 #define AOL_INTERNAL_TRAITS_H
 
-#include "config.h"
+#include "configs.h"
 
 #include <type_traits>
 #include <concepts>

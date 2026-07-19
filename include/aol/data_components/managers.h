@@ -8,7 +8,7 @@
 #ifndef AOL_DATA_COMPONENTS_MANAGERS_H
 #define AOL_DATA_COMPONENTS_MANAGERS_H
 
-#include "aol/internal/config.h"
+#include "aol/internal/configs.h"
 
 #include "aol/internal/types.h"
 

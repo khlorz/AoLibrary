@@ -49,14 +49,14 @@
     <Filter Include="internal\macros">
       <UniqueIdentifier>{11c3775f-3390-447e-9d0e-0e7200d644a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\algorithms">
+      <UniqueIdentifier>{5c78d3b3-675d-4892-ab38-dafd21372f9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\serialization\serialize.h">
       <Filter>serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\algorithm.h">
-      <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\internal\allocators.h">
       <Filter>internal</Filter>
@@ -832,12 +832,6 @@
     <ClInclude Include="aol\serialization\serialize-data-components-impl.h">
       <Filter>serialization</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\algorithm-find-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\algorithm-sort-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\random.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -864,6 +858,13 @@
       <Filter>internal\macros</Filter>
     </ClInclude>
     <ClInclude Include="aol\configs.h" />
+    <ClInclude Include="aol\algorithms.h" />
+    <ClInclude Include="aol\internal\algorithms\find.h">
+      <Filter>internal\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\algorithms\sort.h">
+      <Filter>internal\algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

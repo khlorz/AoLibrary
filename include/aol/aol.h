@@ -31,7 +31,7 @@
 **********************************************/
 
 #include "internal/math.h"
-#include "internal/algorithm.h"
+#include "algorithms.h"
 #include "internal/hashes.h"
 
 
