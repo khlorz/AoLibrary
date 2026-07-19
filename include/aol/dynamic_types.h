@@ -5,8 +5,8 @@
 * - Use this for types where you need any runtime-related things you can't do on
 *	compile time
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_DYNAMIC_TYPES_H
-#define AOL_INTERNAL_DYNAMIC_TYPES_H
+#ifndef AOL_HEADER_DYNAMIC_TYPES_H
+#define AOL_HEADER_DYNAMIC_TYPES_H
 
 #include <optional>	// std::optional
 #include <variant>	// std::variant
@@ -25,4 +25,4 @@ using AnyType = std::any;
 
 }
 
-#endif // AOL_INTERNAL_DYNAMIC_TYPES_H
+#endif // AOL_HEADER_DYNAMIC_TYPES_H

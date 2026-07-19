@@ -4,8 +4,8 @@
 * - The main hash functions/objects used by the library
 * - These are the hashes used for several containers like map and unordered_set
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_HASHES_H
-#define AOL_INTERNAL_HASHES_H
+#ifndef AOL_HEADER_HASHES_H
+#define AOL_HEADER_HASHES_H
 
 #include "configs.h"
 
@@ -40,4 +40,4 @@ using DefaultHash
 
 } // namespace AoL::Internal
 
-#endif // AOL_INTERNAL_HASHES_H
+#endif // AOL_HEADER_HASHES_H
