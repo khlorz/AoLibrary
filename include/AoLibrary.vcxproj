@@ -183,7 +183,6 @@
     <ClInclude Include="aol\internal\randoms\generators.h" />
     <ClInclude Include="aol\internal\randoms\pool.h" />
     <ClInclude Include="aol\internal\randoms\rolls.h" />
-    <ClInclude Include="aol\internal\strings.h" />
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
@@ -194,6 +193,7 @@
     <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
     <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
     <ClInclude Include="aol\serialization\serialize.h" />
+    <ClInclude Include="aol\strings.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />
     <ClInclude Include="aol\third-party\fmt\chrono.h" />

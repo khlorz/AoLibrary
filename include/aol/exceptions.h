@@ -10,8 +10,8 @@
 #define AOL_HEADER_EXCEPTIONS_H
 
 
-#include "internal/strings.h"
 #include "internal/exceptions/base.h"
+#include "internal/exceptions/runtime.h"
 
 
 #endif // AOL_HEADER_EXCEPTIONS_H

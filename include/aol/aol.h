@@ -23,7 +23,7 @@
 #include "dynamic_types.h"
 #include "internal/traits.h"
 #include "internal/containers.h"
-#include "internal/strings.h"
+#include "strings.h"
 
 
 /**********************************************

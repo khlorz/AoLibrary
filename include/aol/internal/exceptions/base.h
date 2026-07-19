@@ -7,7 +7,7 @@
 #define AOL_HEADER_INTERNAL_EXCEPTIONS_BASE_H
 
 #include "aol/configs.h"
-#include "aol/internal/strings.h"
+#include "aol/strings.h"
 
 namespace AoL
 {

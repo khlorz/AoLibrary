@@ -9,9 +9,9 @@
 
 #include "configs.h"
 
-#include "types.h"
-#include "aol/allocators.h"
-#include "traits.h"
+#include "internal/types.h"
+#include "allocators.h"
+#include "internal/traits.h"
 
 #include "stb/stb_sprintf.h"
 #include "fmt/format.h"
