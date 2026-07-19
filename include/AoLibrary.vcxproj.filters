@@ -67,9 +67,6 @@
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\hashes.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\math.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -880,6 +877,7 @@
     <ClInclude Include="aol\internal\exceptions\runtime.h">
       <Filter>internal\exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="aol\hashes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

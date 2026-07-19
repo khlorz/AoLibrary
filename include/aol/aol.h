@@ -32,7 +32,7 @@
 
 #include "internal/math.h"
 #include "algorithms.h"
-#include "internal/hashes.h"
+#include "hashes.h"
 
 
 /**********************************************
