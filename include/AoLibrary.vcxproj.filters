@@ -70,9 +70,6 @@
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\traits.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\typedefs.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -873,6 +870,7 @@
       <Filter>internal\randoms</Filter>
     </ClInclude>
     <ClInclude Include="aol\strings.h" />
+    <ClInclude Include="aol\traits.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

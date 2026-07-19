@@ -11,7 +11,7 @@
 #include "configs.h"
 
 #include "internal/types.h"
-#include "internal/traits.h"
+#include "traits.h"
 #include "hashes.h"
 #include "internal/containers.h"
 #include "algorithms.h"

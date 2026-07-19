@@ -6,7 +6,7 @@
 
 
 #include "aol/configs.h"
-#include "aol/internal/traits.h"
+#include "aol/traits.h"
 #include "aol/internal/types.h"
 
 #include <algorithm>	// std::sort

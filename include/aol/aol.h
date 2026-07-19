@@ -21,7 +21,7 @@
 #include "internal/types.h"
 #include "internal/typedefs.h"
 #include "dynamic_types.h"
-#include "internal/traits.h"
+#include "traits.h"
 #include "internal/containers.h"
 #include "strings.h"
 

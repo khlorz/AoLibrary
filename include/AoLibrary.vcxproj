@@ -183,7 +183,6 @@
     <ClInclude Include="aol\internal\randoms\generators.h" />
     <ClInclude Include="aol\internal\randoms\pool.h" />
     <ClInclude Include="aol\internal\randoms\rolls.h" />
-    <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
     <ClInclude Include="aol\logging.h" />
@@ -291,6 +290,7 @@
     <ClInclude Include="aol\third-party\spdlog\tweakme.h" />
     <ClInclude Include="aol\third-party\spdlog\version.h" />
     <ClInclude Include="aol\third-party\stb\stb_sprintf.h" />
+    <ClInclude Include="aol\traits.h" />
     <ClInclude Include="third-party\absl\container\btree_map.h" />
     <ClInclude Include="third-party\absl\container\btree_set.h" />
     <ClInclude Include="third-party\boost\container\map.hpp" />

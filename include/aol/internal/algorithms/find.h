@@ -5,7 +5,7 @@
 #define AOL_HEADER_INTERNAL_ALGORITHM_FIND_H
 
 #include "aol/configs.h"
-#include "aol/internal/traits.h"
+#include "aol/traits.h"
 #include "aol/internal/types.h"
 
 #include <algorithm>    // std::find

@@ -4,8 +4,8 @@
 * - Additional traits and concepts used by the library
 * - Additionally includes <type_traits> and <concepts>
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_TRAITS_H
-#define AOL_INTERNAL_TRAITS_H
+#ifndef AOL_HEADER_TRAITS_H
+#define AOL_HEADER_TRAITS_H
 
 #include "configs.h"
 
@@ -127,4 +127,4 @@ inline constexpr bool AssertFalse = false;
 
 } // AoL namespace
 
-#endif // AOL_INTERNAL_TRAITS_H 
+#endif // AOL_HEADER_TRAITS_H

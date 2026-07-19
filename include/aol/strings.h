@@ -11,7 +11,7 @@
 
 #include "internal/types.h"
 #include "allocators.h"
-#include "internal/traits.h"
+#include "traits.h"
 
 #include "stb/stb_sprintf.h"
 #include "fmt/format.h"

@@ -10,7 +10,7 @@
 #include "configs.h"
 
 #include "internal/types.h"
-#include "internal/traits.h"
+#include "traits.h"
 
 namespace AoL
 {
