@@ -60,5 +60,5 @@
 * Random includes
 **********************************************/
 
-#include "internal/random.h"
+#include "randoms.h"
 

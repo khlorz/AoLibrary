@@ -58,6 +58,9 @@
     <Filter Include="internal\exceptions">
       <UniqueIdentifier>{b0110176-b70f-436b-91dd-ca2874e7096f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\randoms">
+      <UniqueIdentifier>{c1c71548-7cb6-4014-9f41-5d1693f5ad17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
@@ -820,21 +823,6 @@
     <ClInclude Include="aol\serialization\serialize-data-components-impl.h">
       <Filter>serialization</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\random.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\random-generators-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\random-rng-pool-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\random-rng-rolls-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\random-algorithms-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\macros\functions.h">
       <Filter>internal\macros</Filter>
     </ClInclude>
@@ -874,6 +862,19 @@
     <ClInclude Include="aol\hashes.h" />
     <ClInclude Include="aol\logging.h" />
     <ClInclude Include="aol\mathematics.h" />
+    <ClInclude Include="aol\randoms.h" />
+    <ClInclude Include="aol\internal\randoms\algorithms.h">
+      <Filter>internal\randoms</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\randoms\generators.h">
+      <Filter>internal\randoms</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\randoms\pool.h">
+      <Filter>internal\randoms</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\randoms\rolls.h">
+      <Filter>internal\randoms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

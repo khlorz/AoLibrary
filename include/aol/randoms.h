@@ -10,11 +10,11 @@
 
 #include "configs.h"
 
-#include "types.h"
-#include "traits.h"
+#include "internal/types.h"
+#include "internal/traits.h"
 #include "hashes.h"
-#include "containers.h"
-#include "aol/algorithms.h"
+#include "internal/containers.h"
+#include "algorithms.h"
 
 #include <random>
 #include <chrono>
@@ -31,9 +31,9 @@
 // Do nothing
 #endif
 
-#include "random-generators-impl.h"
-#include "random-rng-pool-impl.h"
-#include "random-rng-rolls-impl.h"
-#include "random-algorithms-impl.h"
+#include "internal/randoms/generators.h"
+#include "internal/randoms/pool.h"
+#include "internal/randoms/rolls.h"
+#include "internal/randoms/algorithms.h"
 
 #endif // AOL_INTERNAL_RANDOM_H
