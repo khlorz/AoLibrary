@@ -61,9 +61,6 @@
     <ClInclude Include="aol\internal\allocators.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\config.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -866,6 +863,7 @@
     <ClInclude Include="aol\internal\macros\defines.h">
       <Filter>internal\macros</Filter>
     </ClInclude>
+    <ClInclude Include="aol\configs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

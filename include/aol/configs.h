@@ -4,8 +4,8 @@
 * - Uncomment the defines you want to enable
 * - This will apply to all AoLibrary files
 ***************************************************************************************/
-#ifndef AOL_INTERNAL_CONFIG_H
-#define AOL_INTERNAL_CONFIG_H
+#ifndef AOL_HEADER_CONFIGS_H
+#define AOL_HEADER_CONFIGS_H
 
 /*********************************************************************
 * ALLOCATORS
@@ -286,4 +286,4 @@
 #error "Define only one RNG config flag!"
 #endif
 
-#endif // AOL_INTERNAL_CONFIG_H
+#endif // AOL_HEADER_CONFIGS_H
