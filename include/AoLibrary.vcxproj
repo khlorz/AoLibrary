@@ -173,6 +173,8 @@
     <ClInclude Include="aol\internal\containers-subrange-impl.h" />
     <ClInclude Include="aol\internal\containers-vector-impl.h" />
     <ClInclude Include="aol\internal\containers.h" />
+    <ClInclude Include="aol\internal\exceptions\base.h" />
+    <ClInclude Include="aol\internal\exceptions\runtime.h" />
     <ClInclude Include="aol\internal\hashes.h" />
     <ClInclude Include="aol\internal\macros\attributes.h" />
     <ClInclude Include="aol\internal\macros\defines.h" />

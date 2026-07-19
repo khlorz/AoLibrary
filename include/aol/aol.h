@@ -46,7 +46,7 @@
 * Error-handling includes
 **********************************************/
 
-#include "internal/exceptions.h"
+#include "exceptions.h"
 
 
 /**********************************************

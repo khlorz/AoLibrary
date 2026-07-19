@@ -55,6 +55,9 @@
     <Filter Include="internal\allocators">
       <UniqueIdentifier>{0dd12a59-0b37-4c40-8e0e-9e40a41c3b7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\exceptions">
+      <UniqueIdentifier>{b0110176-b70f-436b-91dd-ca2874e7096f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aol\aol.h" />
@@ -871,6 +874,12 @@
     </ClInclude>
     <ClInclude Include="aol\dynamic_types.h" />
     <ClInclude Include="aol\exceptions.h" />
+    <ClInclude Include="aol\internal\exceptions\base.h">
+      <Filter>internal\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\exceptions\runtime.h">
+      <Filter>internal\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />
