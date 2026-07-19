@@ -53,7 +53,7 @@
 * Logging includes
 **********************************************/
 
-#include "internal/logging.h"
+#include "logging.h"
 
 
 /**********************************************

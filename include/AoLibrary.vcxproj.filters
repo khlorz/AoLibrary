@@ -796,9 +796,6 @@
     <ClInclude Include="aol\third-party\spdlog\version.h">
       <Filter>third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\logging.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\containers-vector-impl.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -878,6 +875,7 @@
       <Filter>internal\exceptions</Filter>
     </ClInclude>
     <ClInclude Include="aol\hashes.h" />
+    <ClInclude Include="aol\logging.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

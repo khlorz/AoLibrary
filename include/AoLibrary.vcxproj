@@ -181,7 +181,6 @@
     <ClInclude Include="aol\internal\macros\functions.h" />
     <ClInclude Include="aol\internal\random-algorithms-impl.h" />
     <ClInclude Include="aol\internal\random-rng-rolls-impl.h" />
-    <ClInclude Include="aol\internal\logging.h" />
     <ClInclude Include="aol\internal\math.h" />
     <ClInclude Include="aol\internal\random-generators-impl.h" />
     <ClInclude Include="aol\internal\random-rng-pool-impl.h" />
@@ -190,6 +189,7 @@
     <ClInclude Include="aol\internal\traits.h" />
     <ClInclude Include="aol\internal\typedefs.h" />
     <ClInclude Include="aol\internal\types.h" />
+    <ClInclude Include="aol\logging.h" />
     <ClInclude Include="aol\macros.h" />
     <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
     <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
