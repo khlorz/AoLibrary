@@ -13,7 +13,6 @@
 #include "types.h"
 #include "traits.h"
 #include "hashes.h"
-#include "internal/containers.h"
 #include "algorithms.h"
 
 #include <random>

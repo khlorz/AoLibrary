@@ -10,13 +10,13 @@
 ***************************/
 
 #define STB_SPRINTF_IMPLEMENTATION
-
+#include "third-party/stb/stb_sprintf.h"
 
 /***************************
 * #includes
 ***************************/
 
-#include "aol.h"
+#include "configs.h"
 
 #ifdef AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE
 #include "mimalloc/mimalloc-new-delete.h"

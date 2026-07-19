@@ -1,8 +1,14 @@
-#pragma once
-
 /*************************************************
-* [Container] Subrange implementations
+* AoLibrary Subrange implementations
 *************************************************/
+#ifndef AOL_HEADER_INTERNAL_CONTAINERS_SUBRANGE_H
+#define AOL_HEADER_INTERNAL_CONTAINERS_SUBRANGE_H
+
+
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/types.h"
+#include "aol/traits.h"
 
 #include <iterator>
 
@@ -86,3 +92,6 @@ template<typename It>
 SubrangeEx(It, It) -> SubrangeEx<It>;
 
 } // AoL::Internal namespace
+
+
+#endif // AOL_HEADER_INTERNAL_CONTAINERS_SUBRANGE_H

@@ -3,6 +3,9 @@
 ********************************************************************/
 
 #include "pch.h"
+
+#include "aol/randoms.h"
+
 #include <numeric>
 #include <list>
 

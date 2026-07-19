@@ -11,7 +11,8 @@
 #include "traits.h"
 #include "allocators.h"
 
-#include "internal/containers-partitions-impl.h"
+#include "internal/containers/partitions.h"
+
 
 namespace AoL
 {
@@ -53,5 +54,6 @@ template<
 using PartitionArray = Internal::PartitionArrayEx<T, S>;
 
 }
+
 
 #endif // AOL_HEADER_PARTITION_H

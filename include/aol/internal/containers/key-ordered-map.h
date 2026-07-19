@@ -1,14 +1,15 @@
-#pragma once
-
 /*************************************************
-* [Containers] Ordered Map implementations
+* AoLibrary Ordered Map implementations
 *************************************************/
+#ifndef AOL_HEADER_INTERNAL_CONTAINERS_KEY_ORDERED_MAP_H
+#define AOL_HEADER_INTERNAL_CONTAINERS_KEY_ORDERED_MAP_H
 
 #include "aol/configs.h"
 #include "aol/macros.h"
 #include "aol/types.h"
 #include "aol/traits.h"
 #include "aol/vector.h"
+#include "aol/algorithms.h"
 
 namespace AoL::Internal
 {
@@ -75,7 +76,6 @@ struct KeyOrderMapEx
 {
 public:
 	using container_type = AoL::Vector<P, A>;
-	using container_tag = AoL::Internal::ContainerTag;
 
 	using value_type = P;
 	using key_type = K;
@@ -406,4 +406,4 @@ public:
 } // AoL::Internal namespace
 
 
-// containers-ordered-map-impl.h EOF
+#endif // AOL_HEADER_INTERNAL_CONTAINERS_KEY_ORDERED_MAP_H

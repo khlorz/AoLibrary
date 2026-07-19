@@ -61,14 +61,13 @@
     <Filter Include="internal\randoms">
       <UniqueIdentifier>{c1c71548-7cb6-4014-9f41-5d1693f5ad17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\containers">
+      <UniqueIdentifier>{2e42a589-0b4e-4ae8-875f-b3fdae95e7b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\serialization\serialize.h">
       <Filter>serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers.h">
-      <Filter>internal</Filter>
     </ClInclude>
     <ClInclude Include="aol\data_components\managers.h">
       <Filter>data_components</Filter>
@@ -784,18 +783,6 @@
     <ClInclude Include="aol\third-party\spdlog\version.h">
       <Filter>third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers-ordered-map-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers-subrange-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\internal\containers-partitions-impl.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\serialization\serialize-containers-impl.h">
       <Filter>serialization</Filter>
     </ClInclude>
@@ -869,6 +856,18 @@
     <ClInclude Include="aol\subrange.h" />
     <ClInclude Include="aol\partitions.h" />
     <ClInclude Include="aol\utilities.h" />
+    <ClInclude Include="aol\internal\containers\cyclic-buffer.h">
+      <Filter>internal\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\containers\key-ordered-map.h">
+      <Filter>internal\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\containers\partitions.h">
+      <Filter>internal\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\containers\subrange.h">
+      <Filter>internal\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

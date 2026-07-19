@@ -11,7 +11,7 @@
 #include "traits.h"
 #include "allocators.h"
 
-#include "internal/containers-cyclic-buffer-impl.h"
+#include "internal/containers/cyclic-buffer.h"
 
 
 namespace AoL

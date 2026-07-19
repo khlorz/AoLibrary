@@ -1,9 +1,13 @@
-#pragma once
-
 /*************************************************
-* [Container] Cyclic Buffer implementations
+* AoLibrary Cyclic Buffer implementations
 *************************************************/
+#ifndef AOL_HEADER_INTERNAL_CONTAINERS_CYCLIC_BUFFER_H
+#define AOL_HEADER_INTERNAL_CONTAINERS_CYCLIC_BUFFER_H
 
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/types.h"
+#include "aol/traits.h"
 #include "aol/vector.h"
 #include "aol/array.h"
 
@@ -666,3 +670,6 @@ private:
 };
 
 } // AoL::Internal namespace
+
+
+#endif // AOL_HEADER_INTERNAL_CONTAINERS_CYCLIC_BUFFER_H

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "aol/aol.h"
-
 #include "aol/vector.h"
 #include "aol/array.h"
 
@@ -14,6 +12,11 @@
 #include "aol/hash_set.h"
 
 #include "aol/cyclic_buffer.h"
+#include "aol/partitions.h"
+
+#include "aol/subrange.h"
+
+#include "aol/utilities.h"
 
 #include <gtest/gtest.h>
 

@@ -11,7 +11,7 @@
 #include "traits.h"
 #include "types.h"
 
-#include "internal/containers-subrange-impl.h"
+#include "internal/containers/subrange.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_STD_SUBRANGE)
 #include <ranges>

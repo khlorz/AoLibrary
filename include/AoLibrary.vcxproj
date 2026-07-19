@@ -154,7 +154,6 @@
   <ItemGroup>
     <ClInclude Include="aol\algorithms.h" />
     <ClInclude Include="aol\allocators.h" />
-    <ClInclude Include="aol\aol.h" />
     <ClInclude Include="aol\array.h" />
     <ClInclude Include="aol\configs.h" />
     <ClInclude Include="aol\cyclic_buffer.h" />
@@ -167,6 +166,10 @@
     <ClInclude Include="aol\hash_set.h" />
     <ClInclude Include="aol\insert_ordered_map.h" />
     <ClInclude Include="aol\insert_ordered_set.h" />
+    <ClInclude Include="aol\internal\containers\cyclic-buffer.h" />
+    <ClInclude Include="aol\internal\containers\key-ordered-map.h" />
+    <ClInclude Include="aol\internal\containers\partitions.h" />
+    <ClInclude Include="aol\internal\containers\subrange.h" />
     <ClInclude Include="aol\key_ordered_map.h" />
     <ClInclude Include="aol\key_ordered_set.h" />
     <ClInclude Include="aol\partitions.h" />
@@ -178,11 +181,6 @@
     <ClInclude Include="aol\internal\allocators\general.h" />
     <ClInclude Include="aol\internal\allocators\pool.h" />
     <ClInclude Include="aol\internal\allocators\strings.h" />
-    <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h" />
-    <ClInclude Include="aol\internal\containers-ordered-map-impl.h" />
-    <ClInclude Include="aol\internal\containers-partitions-impl.h" />
-    <ClInclude Include="aol\internal\containers-subrange-impl.h" />
-    <ClInclude Include="aol\internal\containers.h" />
     <ClInclude Include="aol\internal\exceptions\base.h" />
     <ClInclude Include="aol\internal\exceptions\runtime.h" />
     <ClInclude Include="aol\internal\macros\attributes.h" />

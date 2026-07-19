@@ -16,7 +16,7 @@
 #elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 #include "absl/container/btree_map.h"
 #endif
-#include "internal/containers-ordered-map-impl.h"
+#include "internal/containers/key-ordered-map.h"
 
 #include <utility>
 

@@ -1,11 +1,16 @@
-#pragma once
-
 /*************************************************
-* [Container] Partition implementations
+* AoLibrary Partition implementations
 *************************************************/
+#ifndef AOL_HEADER_INTERNAL_CONTAINERS_PARTITION_H
+#define AOL_HEADER_INTERNAL_CONTAINERS_PARTITION_H
 
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/types.h"
+#include "aol/traits.h"
 #include "aol/vector.h"
 #include "aol/array.h"
+#include "aol/dynamic_types.h"
 
 namespace AoL::Internal
 {
@@ -1175,4 +1180,5 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 
 } // AoL::Internal namespace
 
-// containers-partitions-impl.h EOF
+
+#endif // AOL_HEADER_INTERNAL_CONTAINERS_PARTITION_H
