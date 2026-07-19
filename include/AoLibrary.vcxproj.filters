@@ -64,9 +64,6 @@
     <ClInclude Include="aol\internal\containers.h">
       <Filter>internal</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\exceptions.h">
-      <Filter>internal</Filter>
-    </ClInclude>
     <ClInclude Include="aol\internal\hashes.h">
       <Filter>internal</Filter>
     </ClInclude>
@@ -873,6 +870,7 @@
       <Filter>internal\allocators</Filter>
     </ClInclude>
     <ClInclude Include="aol\dynamic_types.h" />
+    <ClInclude Include="aol\exceptions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aol\aol.cpp" />

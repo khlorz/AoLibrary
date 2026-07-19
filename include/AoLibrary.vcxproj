@@ -159,6 +159,7 @@
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
     <ClInclude Include="aol\dynamic_types.h" />
+    <ClInclude Include="aol\exceptions.h" />
     <ClInclude Include="aol\internal\algorithms\find.h" />
     <ClInclude Include="aol\internal\algorithms\sort.h" />
     <ClInclude Include="aol\internal\allocators\general.h" />
@@ -172,7 +173,6 @@
     <ClInclude Include="aol\internal\containers-subrange-impl.h" />
     <ClInclude Include="aol\internal\containers-vector-impl.h" />
     <ClInclude Include="aol\internal\containers.h" />
-    <ClInclude Include="aol\internal\exceptions.h" />
     <ClInclude Include="aol\internal\hashes.h" />
     <ClInclude Include="aol\internal\macros\attributes.h" />
     <ClInclude Include="aol\internal\macros\defines.h" />

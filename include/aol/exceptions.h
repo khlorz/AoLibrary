@@ -11,7 +11,7 @@
 
 #include "configs.h"
 
-#include "strings.h"
+#include "internal/strings.h"
 
 #include <exception>
 
