@@ -7,11 +7,12 @@
 #ifndef AOL_HEADER_STRINGS_H
 #define AOL_HEADER_STRINGS_H
 
-#include "configs.h"
 
+#include "configs.h"
+#include "macros.h"
+#include "traits.h"
 #include "types.h"
 #include "allocators.h"
-#include "traits.h"
 
 #include "stb/stb_sprintf.h"
 #include "fmt/format.h"
@@ -24,6 +25,7 @@
 #include <cstring>
 #include <string_view>
 #include <charconv>
+
 
 namespace AoL
 {

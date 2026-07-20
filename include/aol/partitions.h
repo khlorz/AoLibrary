@@ -6,9 +6,11 @@
 #ifndef AOL_HEADER_PARTITION_H
 #define AOL_HEADER_PARTITION_H
 
+
 #include "configs.h"
-#include "types.h"
+#include "macros.h"
 #include "traits.h"
+#include "types.h"
 #include "allocators.h"
 
 #include "internal/containers/partitions.h"
@@ -53,7 +55,7 @@ template<
 >
 using PartitionArray = Internal::PartitionArrayEx<T, S>;
 
-}
+} // AoL namespace
 
 
 #endif // AOL_HEADER_PARTITION_H

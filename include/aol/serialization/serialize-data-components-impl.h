@@ -1,6 +1,13 @@
 /*****************************************************
-* Data components serialization implementations
-*****************************************************/
+ * Data components serialization implementations
+ *****************************************************/
+
+
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
+
 
 #ifndef NDEBUG
 #include "aol/data_components/profiles.h" // included only for debugging purposes

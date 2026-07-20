@@ -9,6 +9,11 @@
 #define AOL_HEADER_ALGORITHMS_H
 
 
+#include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
+
 #include "internal/algorithms/find.h"
 #include "internal/algorithms/sort.h"
 

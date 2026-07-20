@@ -7,10 +7,14 @@
 #ifndef AOL_HEADER_MATHEMATICS_H
 #define AOL_HEADER_MATHEMATICS_H
 
-#include "configs.h"
 
-#include "types.h"
+#include "configs.h"
+#include "macros.h"
 #include "traits.h"
+#include "types.h"
+
+#include <limits>
+
 
 namespace AoL
 {
@@ -99,6 +103,7 @@ constexpr void SubtractInPlaceWithGuard(T& value, T subtrahend) noexcept
 	}
 }
 
-} // namespace AoL
+} // AoL namespace
+
 
 #endif // AOL_HEADER_MATHEMATICS_H

@@ -7,8 +7,8 @@
 
 #include "aol/configs.h"
 #include "aol/macros.h"
-#include "aol/types.h"
 #include "aol/traits.h"
+#include "aol/types.h"
 
 #include <iterator>
 

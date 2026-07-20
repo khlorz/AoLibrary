@@ -8,6 +8,9 @@
 #define AOL_HEADER_INTERNAL_MACROS_DEFINES_H
 
 
+#include "aol/configs.h"
+
+
 /**
 * Portable C++ standard version
 * - MSVC defines __cplusplus as 199711L unless /Zc:__cplusplus is set

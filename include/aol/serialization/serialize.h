@@ -22,7 +22,10 @@
 #include "cereal/types/unordered_set.hpp"							/* std::unordered_set and the likes */
 #include "cereal/types/concepts/pair_associative_container.hpp"		/* paired-containers like map and the likes */
 
-#include "aol/internal/traits.h"
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 
 
 /*****************************************************

@@ -6,9 +6,11 @@
 #ifndef AOL_HEADER_CYCLIC_BUFFER_H
 #define AOL_HEADER_CYCLIC_BUFFER_H
 
+
 #include "configs.h"
-#include "types.h"
+#include "macros.h"
 #include "traits.h"
+#include "types.h"
 #include "allocators.h"
 
 #include "internal/containers/cyclic-buffer.h"

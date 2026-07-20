@@ -1,13 +1,18 @@
 /*****************************************************
-* Container's serialization implementations
-*****************************************************/
+ * Container's serialization implementations
+ *****************************************************/
+
+
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 
 #ifndef NDEBUG
-#include "aol/internal/containers.h" // included only for debugging purposes
-
 #include "aol/vector.h"
 #include "aol/array.h"
 #endif
+
 
 namespace cereal
 {

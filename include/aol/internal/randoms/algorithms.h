@@ -4,6 +4,13 @@
 #ifndef AOL_HEADER_INTERNAL_RANDOMS_ALGORITHMS_H
 #define AOL_HEADER_INTERNAL_RANDOMS_ALGORITHMS_H
 
+
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
+
+
 namespace AoL
 {
 

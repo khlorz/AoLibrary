@@ -10,6 +10,11 @@
 #define AOL_HEADER_ALLOCATORS_H
 
 
+#include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
+
 #include "internal/allocators/general.h"
 #include "internal/allocators/pool.h"
 #include "internal/allocators/strings.h"

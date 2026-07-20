@@ -789,9 +789,6 @@
     <ClInclude Include="aol\serialization\serialize-data-components-impl.h">
       <Filter>serialization</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\macros\functions.h">
-      <Filter>internal\macros</Filter>
-    </ClInclude>
     <ClInclude Include="aol\macros.h" />
     <ClInclude Include="aol\internal\macros\attributes.h">
       <Filter>internal\macros</Filter>
@@ -867,6 +864,9 @@
     </ClInclude>
     <ClInclude Include="aol\internal\containers\subrange.h">
       <Filter>internal\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\macros\functions.h">
+      <Filter>internal\macros</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

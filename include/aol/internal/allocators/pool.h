@@ -8,6 +8,9 @@
 
 
 #include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_MIMALLOCATOR_POOL_ALLOCATOR)
 #include "mimalloc/mimalloc.h"

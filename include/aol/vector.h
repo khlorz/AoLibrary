@@ -6,12 +6,17 @@
 #ifndef AOL_HEADER_VECTOR_H
 #define AOL_HEADER_VECTOR_H
 
+
 #include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
 #include "allocators.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_STD_VECTOR)
 #include <vector>
 #endif
+
 
 namespace AoL
 {

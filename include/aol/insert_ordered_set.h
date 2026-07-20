@@ -8,8 +8,9 @@
 
 
 #include "configs.h"
-#include "types.h"
+#include "macros.h"
 #include "traits.h"
+#include "types.h"
 #include "hashes.h"
 #include "allocators.h"
 
@@ -19,6 +20,7 @@
 
 #include <utility>
 #include <functional>
+
 
 namespace AoL
 {

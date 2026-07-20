@@ -9,14 +9,14 @@
 
 #include "configs.h"
 #include "macros.h"
-#include "types.h"
 #include "traits.h"
+#include "types.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_STD_ARRAY)
 #include <array>
 #endif
-
 #include <cassert>
+
 
 namespace AoL
 {

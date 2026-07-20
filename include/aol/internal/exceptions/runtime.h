@@ -6,10 +6,15 @@
 #ifndef AOL_HEADER_INTERNAL_EXCEPTIONS_RUNTIME_H
 #define AOL_HEADER_INTERNAL_EXCEPTIONS_RUNTIME_H
 
+
 #include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 #include "aol/internal/exceptions/base.h"
 
 #include <exception>
+
 
 namespace AoL
 {

@@ -6,8 +6,13 @@
 #ifndef AOL_HEADER_INTERNAL_EXCEPTIONS_BASE_H
 #define AOL_HEADER_INTERNAL_EXCEPTIONS_BASE_H
 
+
 #include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 #include "aol/strings.h"
+
 
 namespace AoL
 {

@@ -5,6 +5,22 @@
 #define AOL_HEADER_INTERNAL_RANDOMS_GENERATORS_H
 
 
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
+
+#if defined(AOL_CONFIG_FLAG_USE_XOSHIRO_NESSAN_RNG)
+#include "xoshiro/xoshiro.h"
+#elif defined(AOL_CONFIG_FLAG_USE_PCG_CPP_RNG)
+#include "pcg-cpp/pcg_random.hpp"
+#elif defined(AOL_CONFIG_FLAG_USE_STD_RNG)
+#include <random>
+#else
+// Do nothing
+#endif
+
+
 namespace AoL
 {
 

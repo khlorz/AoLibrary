@@ -8,12 +8,14 @@
 #ifndef AOL_DATA_COMPONENTS_MANAGERS_H
 #define AOL_DATA_COMPONENTS_MANAGERS_H
 
-#include "aol/internal/configs.h"
 
-#include "aol/internal/types.h"
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 
-#include <optional>
 #include <cassert>
+
 
 namespace AoL
 {

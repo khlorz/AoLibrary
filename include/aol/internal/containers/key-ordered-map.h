@@ -4,12 +4,14 @@
 #ifndef AOL_HEADER_INTERNAL_CONTAINERS_KEY_ORDERED_MAP_H
 #define AOL_HEADER_INTERNAL_CONTAINERS_KEY_ORDERED_MAP_H
 
+
 #include "aol/configs.h"
 #include "aol/macros.h"
-#include "aol/types.h"
 #include "aol/traits.h"
+#include "aol/types.h"
 #include "aol/vector.h"
 #include "aol/algorithms.h"
+
 
 namespace AoL::Internal
 {

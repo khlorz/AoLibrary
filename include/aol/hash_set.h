@@ -6,11 +6,13 @@
 #ifndef AOL_HEADER_HASH_SET_H
 #define AOL_HEADER_HASH_SET_H
 
+
 #include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
 #include "hashes.h"
 #include "allocators.h"
-#include "types.h"
-#include "traits.h"
 
 #if defined(AOL_CONFIG_FLAG_USE_STD_UNORDERED_SET)
 #include <unordered_set>
@@ -20,6 +22,7 @@
 
 #include <utility>
 #include <functional>
+
 
 namespace AoL
 {

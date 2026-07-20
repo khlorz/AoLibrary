@@ -4,12 +4,14 @@
 #ifndef AOL_HEADER_INTERNAL_CONTAINERS_CYCLIC_BUFFER_H
 #define AOL_HEADER_INTERNAL_CONTAINERS_CYCLIC_BUFFER_H
 
+
 #include "aol/configs.h"
 #include "aol/macros.h"
-#include "aol/types.h"
 #include "aol/traits.h"
+#include "aol/types.h"
 #include "aol/vector.h"
 #include "aol/array.h"
+
 
 namespace AoL::Internal
 {

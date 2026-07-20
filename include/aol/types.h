@@ -7,11 +7,13 @@
 #ifndef AOL_HEADER_TYPES_H
 #define AOL_HEADER_TYPES_H
 
+
 #include <cstddef>
 
 #if defined(_MSC_VER)
 #include <__msvc_int128.hpp>
 #endif
+
 
 namespace AoL
 {

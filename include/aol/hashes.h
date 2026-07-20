@@ -7,13 +7,18 @@
 #ifndef AOL_HEADER_HASHES_H
 #define AOL_HEADER_HASHES_H
 
+
 #include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
 
 #ifdef AOL_CONFIG_FLAG_USE_UNORDERED_DENSE_HASH
 #include "unordered_dense/unordered_dense.h"
 #else
 #include <memory>
 #endif
+
 
 namespace AoL::Internal
 {

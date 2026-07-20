@@ -8,6 +8,9 @@
 
 
 #include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
 #include "allocators.h"
 #include "hashes.h"
 

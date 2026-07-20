@@ -4,7 +4,9 @@
 #ifndef AOL_HEADER_INTERNAL_ALGORITHM_FIND_H
 #define AOL_HEADER_INTERNAL_ALGORITHM_FIND_H
 
+
 #include "aol/configs.h"
+#include "aol/macros.h"
 #include "aol/traits.h"
 #include "aol/types.h"
 
@@ -12,6 +14,7 @@
 #include <bit>          // std::bit_floor, bit_ceil
 #include <utility>      // std::forward
 #include <functional>   // std::less
+
 
 namespace AoL
 {

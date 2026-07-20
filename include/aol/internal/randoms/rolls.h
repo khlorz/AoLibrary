@@ -4,6 +4,12 @@
 #ifndef AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H
 #define AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H
 
+
+
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
 #include "aol/vector.h"
 #include "aol/array.h"
 

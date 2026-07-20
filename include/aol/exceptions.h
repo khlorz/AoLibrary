@@ -10,6 +10,11 @@
 #define AOL_HEADER_EXCEPTIONS_H
 
 
+#include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
+
 #include "internal/exceptions/base.h"
 #include "internal/exceptions/runtime.h"
 

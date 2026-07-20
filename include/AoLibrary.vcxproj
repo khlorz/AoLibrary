@@ -170,6 +170,7 @@
     <ClInclude Include="aol\internal\containers\key-ordered-map.h" />
     <ClInclude Include="aol\internal\containers\partitions.h" />
     <ClInclude Include="aol\internal\containers\subrange.h" />
+    <ClInclude Include="aol\internal\macros\functions.h" />
     <ClInclude Include="aol\key_ordered_map.h" />
     <ClInclude Include="aol\key_ordered_set.h" />
     <ClInclude Include="aol\partitions.h" />
@@ -185,7 +186,6 @@
     <ClInclude Include="aol\internal\exceptions\runtime.h" />
     <ClInclude Include="aol\internal\macros\attributes.h" />
     <ClInclude Include="aol\internal\macros\defines.h" />
-    <ClInclude Include="aol\internal\macros\functions.h" />
     <ClInclude Include="aol\internal\randoms\algorithms.h" />
     <ClInclude Include="aol\internal\randoms\generators.h" />
     <ClInclude Include="aol\internal\randoms\pool.h" />

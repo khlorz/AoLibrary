@@ -6,12 +6,14 @@
 
 
 #include "aol/configs.h"
+#include "aol/macros.h"
 #include "aol/traits.h"
 #include "aol/types.h"
 
 #include <algorithm>	// std::sort
 #include <utility>		// std::forward
 #include <iterator>		// std::make_reverse_iterator
+
 
 namespace AoL
 {

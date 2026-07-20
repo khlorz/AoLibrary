@@ -7,6 +7,9 @@
 #define AOL_HEADER_INTERNAL_MACROS_FUNCTION_H
 
 
+#include "aol/configs.h"
+
+
 /**
 * We use each platform's prefetch function
 * Cannot proceed with no prefetch function

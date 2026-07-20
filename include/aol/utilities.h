@@ -6,12 +6,14 @@
 #ifndef AOL_HEADER_UTILITIES_H
 #define AOL_HEADER_UTILITIES_H
 
+
 #include "configs.h"
-#include "types.h"
-#include "traits.h"
 #include "macros.h"
+#include "traits.h"
+#include "types.h"
 
 #include <iterator>
+
 
 namespace AoL
 {

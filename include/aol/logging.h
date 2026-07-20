@@ -7,6 +7,13 @@
 #ifndef AOL_HEADER_LOGGING_H
 #define AOL_HEADER_LOGGING_H
 
+
+#include "configs.h"
+#include "macros.h"
+#include "traits.h"
+#include "types.h"
+
+
 /*******************************************************
 * spdlog tweakme.h configurations
 *******************************************************/
