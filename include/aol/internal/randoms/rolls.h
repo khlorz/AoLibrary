@@ -5,7 +5,6 @@
 #define AOL_HEADER_INTERNAL_RANDOMS_ROLLS_H
 
 
-
 #include "aol/configs.h"
 #include "aol/macros.h"
 #include "aol/traits.h"
