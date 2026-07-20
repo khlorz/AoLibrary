@@ -13,6 +13,8 @@
 #include "aol/array.h"
 #include "aol/dynamic_types.h"
 
+#include <ranges>
+
 
 namespace AoL::Internal
 {

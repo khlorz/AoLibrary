@@ -1,8 +1,14 @@
 /********************************************************************
-* Set container tests: KeyOrderSet, HashSet
+* Set container tests: KeyOrderSet, InsertOrderSet, HashSet
 ********************************************************************/
 
 #include "pch.h"
+
+#include "aol/key_ordered_set.h"
+#include "aol/insert_ordered_set.h"
+#include "aol/hash_set.h"
+
+#include "aol/utilities.h"
 
 namespace
 {

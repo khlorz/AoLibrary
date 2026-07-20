@@ -2,7 +2,11 @@
 * Sort algorithm tests: Sort, SortReverse, with comparators, arrays
 ********************************************************************/
 
+
 #include "pch.h"
+
+#include "aol/algorithms.h"
+
 
 namespace
 {

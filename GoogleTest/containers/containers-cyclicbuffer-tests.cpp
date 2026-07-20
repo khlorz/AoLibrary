@@ -2,7 +2,12 @@
 * Cyclic buffer tests: fixed and dynamic
 ********************************************************************/
 
+
 #include "pch.h"
+
+#include "aol/cyclic_buffer.h"
+#include "aol/utilities.h"
+
 
 namespace
 {

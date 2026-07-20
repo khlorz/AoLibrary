@@ -4,6 +4,12 @@
 
 #include "pch.h"
 
+#include "aol/key_ordered_map.h"
+#include "aol/insert_ordered_map.h"
+#include "aol/hash_map.h"
+
+#include "aol/utilities.h"
+
 namespace
 {
 
