@@ -171,9 +171,12 @@
     <ClInclude Include="aol\internal\containers\partitions.h" />
     <ClInclude Include="aol\internal\containers\subrange.h" />
     <ClInclude Include="aol\internal\macros\functions.h" />
+    <ClInclude Include="aol\internal\serialization\containers.h" />
+    <ClInclude Include="aol\internal\serialization\data-components.h" />
     <ClInclude Include="aol\key_ordered_map.h" />
     <ClInclude Include="aol\key_ordered_set.h" />
     <ClInclude Include="aol\partitions.h" />
+    <ClInclude Include="aol\serialization.h" />
     <ClInclude Include="aol\subrange.h" />
     <ClInclude Include="aol\utilities.h" />
     <ClInclude Include="aol\vector.h" />
@@ -194,9 +197,6 @@
     <ClInclude Include="aol\macros.h" />
     <ClInclude Include="aol\mathematics.h" />
     <ClInclude Include="aol\randoms.h" />
-    <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
-    <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
-    <ClInclude Include="aol\serialization\serialize.h" />
     <ClInclude Include="aol\strings.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />

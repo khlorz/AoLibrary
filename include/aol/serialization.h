@@ -5,8 +5,8 @@
 * - To serialize the type, just include this header after all other includes
 * - Does not need to be included everywhere, include only when needed
 ***************************************************************************************/
-#ifndef AOL_SERIALIZATION_SERIALIZE_H
-#define AOL_SERIALIZATION_SERIALIZE_H
+#ifndef AOL_HEADER_SERIALIZATION_H
+#define AOL_HEADER_SERIALIZATION_H
 
 
 /*****************************************************
@@ -32,8 +32,8 @@
 * Implementation includes
 *****************************************************/
 
-#include "serialize-containers-impl.h"
-#include "serialize-data-components-impl.h"
+#include "internal/serialization/containers.h"
+#include "internal/serialization/data-components.h"
 
 
-#endif // AOL_SERIALIZATION_SERIALIZE_H
+#endif // !AOL_HEADER_SERIALIZATION_H

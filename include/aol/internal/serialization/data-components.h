@@ -1,6 +1,8 @@
 /*****************************************************
  * Data components serialization implementations
  *****************************************************/
+#ifndef AOL_HEADER_INTERNAL_SERIALIZATION_DATA_COMPONENTS_H
+#define AOL_HEADER_INTERNAL_SERIALIZATION_DATA_COMPONENTS_H
 
 
 #include "aol/configs.h"
@@ -9,13 +11,10 @@
 #include "aol/types.h"
 
 
-#ifndef NDEBUG
-#include "aol/data_components/profiles.h" // included only for debugging purposes
-#endif
-
 namespace cereal
 {
 
+#if defined(AOL_HEADER_DATA_COMPONENTS_PROFILES_H)
 /****************************************
 * DataID
 ****************************************/
@@ -97,5 +96,9 @@ void load(Archive& archive, AoL::DataMinimal<Derived>& data)
 		data.name.resize(DataBasic::Default::NameLength);
 	}
 }
+#endif // AOL_HEADER_DATA_COMPONENTS_PROFILES_H
 
 } // cereal namespace
+
+
+#endif // !AOL_HEADER_INTERNAL_SERIALIZATION_DATA_COMPONENTS_H

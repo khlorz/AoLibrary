@@ -28,9 +28,6 @@
     <Filter Include="third-party\type_safe">
       <UniqueIdentifier>{f5aef86e-2cfc-4884-96fe-20a39dec349d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="serialization">
-      <UniqueIdentifier>{58a83108-b403-45ec-a2d4-7270b6c88cdb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="data_components">
       <UniqueIdentifier>{f192d7a4-27e6-4189-b1d2-6e0a34d89c6d}</UniqueIdentifier>
     </Filter>
@@ -64,11 +61,11 @@
     <Filter Include="internal\containers">
       <UniqueIdentifier>{2e42a589-0b4e-4ae8-875f-b3fdae95e7b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="internal\serialization">
+      <UniqueIdentifier>{d9924838-907a-4a8e-95a0-f750c3d2ed0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aol\serialization\serialize.h">
-      <Filter>serialization</Filter>
-    </ClInclude>
     <ClInclude Include="aol\data_components\managers.h">
       <Filter>data_components</Filter>
     </ClInclude>
@@ -783,12 +780,6 @@
     <ClInclude Include="aol\third-party\spdlog\version.h">
       <Filter>third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\serialization\serialize-containers-impl.h">
-      <Filter>serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\serialization\serialize-data-components-impl.h">
-      <Filter>serialization</Filter>
-    </ClInclude>
     <ClInclude Include="aol\macros.h" />
     <ClInclude Include="aol\internal\macros\attributes.h">
       <Filter>internal\macros</Filter>
@@ -867,6 +858,13 @@
     </ClInclude>
     <ClInclude Include="aol\internal\macros\functions.h">
       <Filter>internal\macros</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\serialization.h" />
+    <ClInclude Include="aol\internal\serialization\containers.h">
+      <Filter>internal\serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="aol\internal\serialization\data-components.h">
+      <Filter>internal\serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
