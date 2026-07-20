@@ -68,7 +68,7 @@
       <UniqueIdentifier>{f192d7a4-27e6-4189-b1d2-6e0a34d89c6d}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
-      <UniqueIdentifier>{ec9a8fe1-69b6-4c2f-b40b-23865af2eed6}</UniqueIdentifier>
+      <UniqueIdentifier>{40f74c7f-33be-412a-84ad-5d4945021b34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -931,7 +931,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="aol\aol.cpp">
+    <ClCompile Include="..\src\aol\aol.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

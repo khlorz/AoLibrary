@@ -5,18 +5,19 @@
 * - Put all future implementations here [developer]
 ****************************************************************/
 
-/***************************
+/**********************************
 * stb implementations
-***************************/
+**********************************/
 
 #define STB_SPRINTF_IMPLEMENTATION
-#include "third-party/stb/stb_sprintf.h"
+#include "stb/stb_sprintf.h"
 
-/***************************
-* #includes
-***************************/
 
-#include "configs.h"
+/**********************************
+* New and delete implementations
+**********************************/
+
+#include "aol/configs.h"
 
 #ifdef AOL_CONFIG_FLAG_USE_MIMALLOC_NEW_DELETE
 #include "mimalloc/mimalloc-new-delete.h"
@@ -25,3 +26,6 @@
 #else
 #warning "Using the default new and delete implementations!"
 #endif
+
+
+// EOF
