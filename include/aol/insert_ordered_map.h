@@ -3,8 +3,8 @@
 ****************************************************************************************
 * - The library's insert ordered map
 ***************************************************************************************/
-#ifndef AOL_HEADER_INSERT_ORDERED_MAP
-#define AOL_HEADER_INSERT_ORDERED_MAP
+#ifndef AOL_HEADER_INSERT_ORDERED_MAP_H
+#define AOL_HEADER_INSERT_ORDERED_MAP_H
 
 
 #include "configs.h"
@@ -103,4 +103,4 @@ using InsertOrderMapPool = InsertOrderMap<K, V, H, P, A>;
 }
 
 
-#endif // AOL_HEADER_INSERT_ORDERED_MAP
+#endif // !AOL_HEADER_INSERT_ORDERED_MAP_H

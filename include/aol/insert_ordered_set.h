@@ -3,8 +3,8 @@
 ****************************************************************************************
 * - The library's insert ordered set
 ***************************************************************************************/
-#ifndef AOL_HEADER_INSERT_ORDERED_SET
-#define AOL_HEADER_INSERT_ORDERED_SET
+#ifndef AOL_HEADER_INSERT_ORDERED_SET_H
+#define AOL_HEADER_INSERT_ORDERED_SET_H
 
 
 #include "configs.h"
@@ -77,4 +77,4 @@ using InsertOrderSetPool = InsertOrderSet<T, H, A>;
 } // AoL namespace
 
 
-#endif
+#endif // !AOL_HEADER_INSERT_ORDERED_SET_H
