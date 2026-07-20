@@ -1,6 +1,8 @@
 /*****************************************************
  * Container's serialization implementations
  *****************************************************/
+#ifndef AOL_HEADER_INTERNAL_SERIALIZATION_CONTAINERS_H
+#define AOL_HEADER_INTERNAL_SERIALIZATION_CONTAINERS_H
 
 
 #include "aol/configs.h"
@@ -8,14 +10,53 @@
 #include "aol/traits.h"
 #include "aol/types.h"
 
-#ifndef NDEBUG
-#include "aol/vector.h"
-#include "aol/array.h"
-#endif
-
 
 namespace cereal
 {
+
+#if defined(AOL_HEADER_VECTOR_H)
+#include "cereal/types/vector.hpp"
+#endif // AOL_HEADER_VECTOR_H
+
+
+#if defined(AOL_HEADER_ARRAY_H)
+#include "cereal/types/array.hpp"
+
+/****************************************
+* ArrayNamed# containers
+****************************************/
+
+#define AOL_SERIALIZATION_HELPER_NAMED_ARRAY(size) \
+template<															\
+	typename Archive,												\
+	typename T														\
+>																	\
+void save(Archive& archive, const AoL::ArrayNamed##size##<T>& arr)	\
+{																	\
+	archive(														\
+		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
+	);																\
+}																	\
+																	\
+template<															\
+	typename Archive,												\
+	typename T														\
+>																	\
+void load(Archive& archive, AoL::ArrayNamed##size##<T>& arr)		\
+{																	\
+	archive(														\
+		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
+	);																\
+}																	
+
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(2)
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(3)
+AOL_SERIALIZATION_HELPER_NAMED_ARRAY(4)
+#endif // AOL_HEADER_ARRAY_H
+
+
+#if defined(AOL_HEADER_KEY_ORDERED_MAP_H)
+#include "cereal/types/vector.hpp"
 
 /****************************************
 * KeyValuePairEx
@@ -76,39 +117,37 @@ void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, C, A>& c)
 {
 	archive(c.container_obj);
 }
+#endif // AOL_HEADER_KEY_ORDERED_MAP_H
 
 
-/****************************************
-* ArrayNamed# containers
-****************************************/
+#if defined(AOL_HEADER_KEY_ORDERED_SET_H)
+#include "cereal/types/set.hpp"
+#endif // AOL_HEADER_KEY_ORDERED_SET_H
 
-#define AOL_SERIALIZATION_HELPER_NAMED_ARRAY(size) \
-template<															\
-	typename Archive,												\
-	typename T														\
->																	\
-void save(Archive& archive, const AoL::ArrayNamed##size##<T>& arr)	\
-{																	\
-	archive(														\
-		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
-	);																\
-}																	\
-																	\
-template<															\
-	typename Archive,												\
-	typename T														\
->																	\
-void load(Archive& archive, AoL::ArrayNamed##size##<T>& arr)		\
-{																	\
-	archive(														\
-		cereal::binary_data(arr.data_arr, sizeof(T) * size)			\
-	);																\
-}																	
 
-AOL_SERIALIZATION_HELPER_NAMED_ARRAY(2)
-AOL_SERIALIZATION_HELPER_NAMED_ARRAY(3)
-AOL_SERIALIZATION_HELPER_NAMED_ARRAY(4)
+#if defined(AOL_HEADER_INSERT_ORDERED_MAP_H)
+#include "cereal/types/map.hpp"
+#endif // AOL_HEADER_INSERT_ORDERED_MAP_H
 
+
+#if defined(AOL_HEADER_INSERT_ORDERED_SET_H)
+#include "cereal/types/set.hpp"
+#endif // AOL_HEADER_INSERT_ORDERED_SET_H
+
+
+#if defined(AOL_HEADER_HASH_MAP_H)
+#include "cereal/types/unordered_map.hpp"
+#endif // AOL_HEADER_HASH_MAP_H
+
+
+#if defined(AOL_HEADER_HASH_SET_H)
+#include "cereal/types/unordered_set.hpp"
+#endif // AOL_HEADER_HASH_SET_H
+
+
+#if defined(AOL_HEADER_CYCLIC_BUFFER_H)
+#include "cereal/types/vector.hpp"
+#include "cereal/types/array.hpp"
 
 /****************************************
 * CyclicBuffer containers
@@ -195,6 +234,12 @@ void load(Archive& archive, AoL::CyclicBufferF<T, S>& cbb)
 		cereal::base_class<AoL::Internal::CyclicBufferBase<AoL::CyclicBufferF<T, S>, T, void, S>>(&cbb)
 	);
 }
+#endif // AOL_HEADER_CYCLIC_BUFFER_H
+
+
+#if defined(AOL_HEADER_PARTITIONS_H)
+#include "cereal/types/vector.hpp"
+#include "cereal/types/array.hpp"
 
 /****************************************
 * Partitions containers
@@ -307,5 +352,9 @@ void load(Archive& archive, AoL::PartitionArray<T, S>& pa)
 		}
 	}
 }
+#endif // AOL_HEADER_PARTITIONS_H
 
 }
+
+
+#endif // !AOL_HEADER_INTERNAL_SERIALIZATION_CONTAINERS_H
