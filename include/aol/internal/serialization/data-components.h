@@ -15,6 +15,8 @@ namespace cereal
 {
 
 #if defined(AOL_HEADER_DATA_COMPONENTS_PROFILES_H)
+#include "cereal/types/cereal.hpp"
+
 /****************************************
 * DataID
 ****************************************/

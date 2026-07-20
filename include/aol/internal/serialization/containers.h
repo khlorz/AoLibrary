@@ -148,6 +148,7 @@ void load(Archive& archive, AoL::Internal::KeyOrderMapEx<K, V, P, C, A>& c)
 #if defined(AOL_HEADER_CYCLIC_BUFFER_H)
 #include "cereal/types/vector.hpp"
 #include "cereal/types/array.hpp"
+#include "cereal/types/base_class.hpp"
 
 /****************************************
 * CyclicBuffer containers

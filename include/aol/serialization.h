@@ -9,29 +9,6 @@
 #define AOL_HEADER_SERIALIZATION_H
 
 
-/*****************************************************
-* Essential includes
-*****************************************************/
-
-#include "cereal/cereal.hpp"										/* main serialization include */
-#include "cereal/types/base_class.hpp"								/* for inheritance types*/
-#include "cereal/types/string.hpp"									/* std::string and the likes */
-#include "cereal/types/vector.hpp"									/* std::vector and the likes */
-#include "cereal/types/array.hpp"									/* std::array and the likes */
-#include "cereal/types/set.hpp"										/* std::set and the likes */
-#include "cereal/types/unordered_set.hpp"							/* std::unordered_set and the likes */
-#include "cereal/types/concepts/pair_associative_container.hpp"		/* paired-containers like map and the likes */
-
-#include "aol/configs.h"
-#include "aol/macros.h"
-#include "aol/traits.h"
-#include "aol/types.h"
-
-
-/*****************************************************
-* Implementation includes
-*****************************************************/
-
 #include "internal/serialization/containers.h"
 #include "internal/serialization/data-components.h"
 
