@@ -152,40 +152,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="aol\aol.h" />
+    <ClInclude Include="aol\algorithms.h" />
+    <ClInclude Include="aol\allocators.h" />
+    <ClInclude Include="aol\array.h" />
+    <ClInclude Include="aol\configs.h" />
+    <ClInclude Include="aol\cyclic_buffer.h" />
     <ClInclude Include="aol\data_components\managers.h" />
     <ClInclude Include="aol\data_components\profiles.h" />
-    <ClInclude Include="aol\internal\algorithm-find-impl.h" />
-    <ClInclude Include="aol\internal\algorithm-sort-impl.h" />
-    <ClInclude Include="aol\internal\algorithm.h" />
-    <ClInclude Include="aol\internal\allocators.h" />
-    <ClInclude Include="aol\internal\config.h" />
-    <ClInclude Include="aol\internal\containers-array-impl.h" />
-    <ClInclude Include="aol\internal\containers-base-impl.h" />
-    <ClInclude Include="aol\internal\containers-cyclic-buffer-impl.h" />
-    <ClInclude Include="aol\internal\containers-ordered-map-impl.h" />
-    <ClInclude Include="aol\internal\containers-partitions-impl.h" />
-    <ClInclude Include="aol\internal\containers-subrange-impl.h" />
-    <ClInclude Include="aol\internal\containers-vector-impl.h" />
-    <ClInclude Include="aol\internal\containers.h" />
-    <ClInclude Include="aol\internal\dynamic_types.h" />
-    <ClInclude Include="aol\internal\exceptions.h" />
-    <ClInclude Include="aol\internal\hashes.h" />
-    <ClInclude Include="aol\internal\random-algorithms-impl.h" />
-    <ClInclude Include="aol\internal\random-rng-rolls-impl.h" />
-    <ClInclude Include="aol\internal\logging.h" />
-    <ClInclude Include="aol\internal\macros.h" />
-    <ClInclude Include="aol\internal\math.h" />
-    <ClInclude Include="aol\internal\random-generators-impl.h" />
-    <ClInclude Include="aol\internal\random-rng-pool-impl.h" />
-    <ClInclude Include="aol\internal\random.h" />
-    <ClInclude Include="aol\internal\strings.h" />
-    <ClInclude Include="aol\internal\traits.h" />
-    <ClInclude Include="aol\internal\typedefs.h" />
-    <ClInclude Include="aol\internal\types.h" />
-    <ClInclude Include="aol\serialization\serialize-containers-impl.h" />
-    <ClInclude Include="aol\serialization\serialize-data-components-impl.h" />
-    <ClInclude Include="aol\serialization\serialize.h" />
+    <ClInclude Include="aol\dynamic_types.h" />
+    <ClInclude Include="aol\exceptions.h" />
+    <ClInclude Include="aol\hashes.h" />
+    <ClInclude Include="aol\hash_map.h" />
+    <ClInclude Include="aol\hash_set.h" />
+    <ClInclude Include="aol\insert_ordered_map.h" />
+    <ClInclude Include="aol\insert_ordered_set.h" />
+    <ClInclude Include="aol\internal\containers\cyclic-buffer.h" />
+    <ClInclude Include="aol\internal\containers\key-ordered-map.h" />
+    <ClInclude Include="aol\internal\containers\partitions.h" />
+    <ClInclude Include="aol\internal\containers\subrange.h" />
+    <ClInclude Include="aol\internal\macros\functions.h" />
+    <ClInclude Include="aol\internal\serialization\containers.h" />
+    <ClInclude Include="aol\internal\serialization\data-components.h" />
+    <ClInclude Include="aol\key_ordered_map.h" />
+    <ClInclude Include="aol\key_ordered_set.h" />
+    <ClInclude Include="aol\partitions.h" />
+    <ClInclude Include="aol\serialization.h" />
+    <ClInclude Include="aol\subrange.h" />
+    <ClInclude Include="aol\utilities.h" />
+    <ClInclude Include="aol\vector.h" />
+    <ClInclude Include="aol\internal\algorithms\find.h" />
+    <ClInclude Include="aol\internal\algorithms\sort.h" />
+    <ClInclude Include="aol\internal\allocators\general.h" />
+    <ClInclude Include="aol\internal\allocators\pool.h" />
+    <ClInclude Include="aol\internal\allocators\strings.h" />
+    <ClInclude Include="aol\internal\exceptions\base.h" />
+    <ClInclude Include="aol\internal\exceptions\runtime.h" />
+    <ClInclude Include="aol\internal\macros\attributes.h" />
+    <ClInclude Include="aol\internal\macros\defines.h" />
+    <ClInclude Include="aol\internal\randoms\algorithms.h" />
+    <ClInclude Include="aol\internal\randoms\generators.h" />
+    <ClInclude Include="aol\internal\randoms\pool.h" />
+    <ClInclude Include="aol\internal\randoms\rolls.h" />
+    <ClInclude Include="aol\logging.h" />
+    <ClInclude Include="aol\macros.h" />
+    <ClInclude Include="aol\mathematics.h" />
+    <ClInclude Include="aol\randoms.h" />
+    <ClInclude Include="aol\strings.h" />
     <ClInclude Include="aol\third-party\fmt\args.h" />
     <ClInclude Include="aol\third-party\fmt\base.h" />
     <ClInclude Include="aol\third-party\fmt\chrono.h" />
@@ -283,6 +295,8 @@
     <ClInclude Include="aol\third-party\spdlog\tweakme.h" />
     <ClInclude Include="aol\third-party\spdlog\version.h" />
     <ClInclude Include="aol\third-party\stb\stb_sprintf.h" />
+    <ClInclude Include="aol\traits.h" />
+    <ClInclude Include="aol\types.h" />
     <ClInclude Include="third-party\absl\container\btree_map.h" />
     <ClInclude Include="third-party\absl\container\btree_set.h" />
     <ClInclude Include="third-party\boost\container\map.hpp" />
@@ -424,10 +438,10 @@
     <ClInclude Include="third-party\unordered_dense\unordered_dense.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="aol\aol.cpp" />
+    <None Include="third-party\cereal\external\rapidxml\manual.html" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="third-party\cereal\external\rapidxml\manual.html" />
+    <ClCompile Include="..\src\aol\aol.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

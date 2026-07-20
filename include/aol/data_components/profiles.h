@@ -8,16 +8,17 @@
 #ifndef AOL_DATA_COMPONENTS_PROFILES_H
 #define AOL_DATA_COMPONENTS_PROFILES_H
 
-#include "aol/internal/config.h"
-#include "aol/internal/macros.h"
 
-#include "aol/internal/types.h"
-#include "aol/internal/strings.h"
+#include "aol/configs.h"
+#include "aol/macros.h"
+#include "aol/traits.h"
+#include "aol/types.h"
+#include "aol/strings.h"
 
 #include "type_safe/strong_typedef.hpp"
 
-#include <optional>
 #include <limits>
+
 
 namespace AoL
 {

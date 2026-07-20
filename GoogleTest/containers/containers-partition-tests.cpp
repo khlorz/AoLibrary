@@ -4,6 +4,9 @@
 
 #include "pch.h"
 
+#include "aol/partitions.h"
+#include "aol/utilities.h"
+
 namespace
 {
 

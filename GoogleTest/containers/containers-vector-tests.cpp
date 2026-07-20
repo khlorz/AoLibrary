@@ -2,7 +2,10 @@
 * Vector container tests
 ********************************************************************/
 
-#include "pch.h"
+include "pch.h"
+
+#include "aol/vector.h"
+#include "aol/utilities.h"
 
 namespace
 {

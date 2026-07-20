@@ -2,7 +2,12 @@
 * Array container tests
 ********************************************************************/
 
+
 #include "pch.h"
+
+#include "aol/array.h"
+#include "aol/utilities.h"
+
 
 namespace
 {

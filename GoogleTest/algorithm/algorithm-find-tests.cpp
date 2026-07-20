@@ -2,7 +2,11 @@
 * Find algorithm tests: FindBrute, FindLowerBound (general, branchless, default)
 ********************************************************************/
 
+
 #include "pch.h"
+
+#include "aol/algorithms.h"
+
 
 namespace
 {

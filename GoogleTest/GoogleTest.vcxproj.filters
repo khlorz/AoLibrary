@@ -38,9 +38,6 @@
     <ClCompile Include="containers\containers-cyclicbuffer-tests.cpp">
       <Filter>containers</Filter>
     </ClCompile>
-    <ClCompile Include="containers\containers-query-tests.cpp">
-      <Filter>containers</Filter>
-    </ClCompile>
     <ClCompile Include="containers\containers-flatkeyordermap-tests.cpp">
       <Filter>containers</Filter>
     </ClCompile>

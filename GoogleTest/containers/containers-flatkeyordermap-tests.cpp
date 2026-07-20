@@ -2,7 +2,12 @@
 * FlatKeyOrderMap tests: all container operations
 ********************************************************************/
 
+
 #include "pch.h"
+
+#include "aol/key_ordered_map.h"
+#include "aol/utilities.h"
+
 
 namespace
 {

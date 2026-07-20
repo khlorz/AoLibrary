@@ -4,6 +4,8 @@
 
 #include "pch.h"
 
+#include "aol/subrange.h"
+
 namespace
 {
 
