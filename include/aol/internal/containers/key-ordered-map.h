@@ -70,8 +70,8 @@ struct PairLessComparator
 * @tparam K key type
 * @tparam V value type
 * @tparam P pair type
+* @tparam C comparator type
 * @tparam A allocator type
-* @tparam C map container type
 */
 template<typename K, typename V, typename P, typename C, typename A>
 struct KeyOrderMapEx
