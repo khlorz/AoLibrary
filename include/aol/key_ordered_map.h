@@ -85,7 +85,7 @@ using KeyOrderMap
 #elif defined(AOL_CONFIG_FLAG_USE_ABSEIL_KEYORDERED_MAP)
 = absl::btree_map<K, V, std::less<K>, A>;
 #else
-= Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
+= Internal::KeyOrderMapEx<K, V, P, Internal::KeyOrderMapExComparator<P>, A>;
 #endif
 
 /**
@@ -150,7 +150,7 @@ template<
 	typename P = FlatKeyOrderMapPair<K, V>,
 	typename A = DefaultAllocator<P>
 >
-using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
+using FlatKeyOrderMap = Internal::KeyOrderMapEx<K, V, P, Internal::KeyOrderMapExComparator<P>, A>;
 
 /**
 * @details FlatKeyOrderMap but specialized for pool allocators
@@ -170,7 +170,7 @@ template<
 	typename P = Internal::KeyValuePairEx<K, V>,
 	typename A = DefaultPoolAllocator<P>
 >
-using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, Internal::PairLessComparator<P>, A>;
+using FlatKeyOrderMapPool = Internal::KeyOrderMapEx<K, V, P, Internal::KeyOrderMapExComparator<P>, A>;
 
 } // AoL namespace
 

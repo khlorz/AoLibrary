@@ -45,12 +45,12 @@ struct KeyValuePairEx
 };
 
 template<typename P>
-struct PairLessComparator
+struct KeyOrderMapExComparator
 {
 	using pair_type = P;
 
 	template<typename T>
-	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, AoL::Traits::ConstRefOrCopyType<T> rhs) noexcept
+	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, const T& rhs) noexcept
 	{
 		return lhs.first < rhs;
 	}
@@ -195,15 +195,15 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
-		if (p_ret >= container_obj.data() + container_obj.size())
+		auto it = this->find(key_val);
+		if (it >= container_obj.end())
 		{
 			container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
 		}
 		else
 		{
-			assert(p_ret->first != key_val && "Item already exists!");
-			container_obj.insert(container_obj.begin() + (p_ret - container_obj.data()), value_type{ std::forward<InKey>(key), std::forward<InValue>(value) });
+			assert(it->first != key_val && "Item already exists!");
+			container_obj.insert(it, value_type{ std::forward<InKey>(key), std::forward<InValue>(value) });
 		}
 	}
 
@@ -212,15 +212,15 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
-		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
+		auto find_it = this->find(key_val);
+		if (find_it < container_obj.end() && find_it->first == key_val)
 		{
-			return p_ret->second;
+			return find_it->second;
 		}
 		else
 		{
-			auto it = container_obj.insert(container_obj.begin() + (p_ret - container_obj.data()), value_type{ std::forward<InKey>(key), mapped_type{} });
-			return it->second;
+			auto insert_it = container_obj.insert(find_it, value_type{ std::forward<InKey>(key), mapped_type{} });
+			return insert_it->second;
 		}
 	}
 
@@ -229,11 +229,11 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
-		value_type* p_ret = this->find(std::forward<InKey>(key));
-		assert(p_ret != nullptr && "Invalid key!");
-		return p_ret->second;
+		auto it = this->find(std::forward<InKey>(key));
+		assert(it < container_obj.end() && it->first == key && "Invalid key!");
+		return it->second;
 #else
-		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
+		return this->find(std::forward<InKey>(key))->second;
 #endif // !NDEBUG
 	}
 
@@ -242,11 +242,11 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
-		const value_type* p_ret = this->find(std::forward<InKey>(key));
-		assert(p_ret != nullptr && "Invalid key!");
-		return p_ret->second;
+		auto it = this->find(std::forward<InKey>(key));
+		assert(it < container_obj.end() && it->first == key && "Invalid key!");
+		return it->second;
 #else
-		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
+		return this->find(std::forward<InKey>(key))->second;
 #endif // !NDEBUG
 	}
 
@@ -254,55 +254,40 @@ public:
 	mapped_type* at_ptr(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		value_type* p_ret = this->find(std::forward<InKey>(key));
-		return p_ret != nullptr ? &p_ret->second : nullptr;
+		auto it = this->find(std::forward<InKey>(key));
+		return it < container_obj.end() && it->first == key ? &it->second : nullptr;
 	}
 
 	template<typename InKey>
 	const mapped_type* at_ptr(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		const value_type* p_ret = this->find(std::forward<InKey>(key));
-		return p_ret != nullptr ? &p_ret->second : nullptr;
+		auto it = this->find(std::forward<InKey>(key));
+		return it < container_obj.end() && it->first == key ? &it->second : nullptr;
 	}
 
 	template<typename InKey>
-	constexpr value_type* find(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+	constexpr auto find(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
-		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
-		{
-			return p_ret;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val, less_than_comp);
 	}
 
 	template<typename InKey>
-	constexpr const value_type* find(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+	constexpr auto find(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
-		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
-		{
-			return p_ret;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val, less_than_comp);
 	}
 
 	template<typename InKey>
 	constexpr bool contains(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		return this->find(std::forward<InKey>(key)) != nullptr;
+		auto it = this->find(std::forward<InKey>(key));
+		return it < container_obj.end() && it->first == key;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr void clear() noexcept

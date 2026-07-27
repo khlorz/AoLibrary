@@ -77,6 +77,7 @@ TEST_F(FlatKeyOrderMapBasicTest, ConstructionFromIterators)
     EXPECT_EQ(map.begin()->first, 1);
     EXPECT_EQ((map.begin() + 1)->first, 2);
     EXPECT_EQ((map.begin() + 2)->first, 3);
+    EXPECT_EQ(map.find(4), map.end());
 }
 
 // ===================================================================
@@ -289,7 +290,7 @@ TEST_F(FlatKeyOrderMapAccessTest, ConstOperatorBracketAccess)
     map.insert(5, "five");
 
     const TestMap& const_map = map;
-    EXPECT_EQ(const_map[5], "five");
+    EXPECT_EQ(const_map.at_ref(5), "five");
 }
 
 TEST_F(FlatKeyOrderMapAccessTest, AtRefAccess)
@@ -342,7 +343,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindExistingKey)
     map.insert(10, "ten");
 
     auto ptr = map.find(5);
-    EXPECT_NE(ptr, nullptr);
+    EXPECT_NE(ptr, map.end());
     EXPECT_EQ(ptr->first, 5);
     EXPECT_EQ(ptr->second, "five");
 }
@@ -353,7 +354,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindNonExistentKey)
     map.insert(5, "five");
 
     auto ptr = map.find(999);
-    EXPECT_EQ(ptr, nullptr);
+    EXPECT_EQ(ptr, map.end());
 }
 
 TEST_F(FlatKeyOrderMapFindTest, FindEmptyMap)
@@ -361,7 +362,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindEmptyMap)
     TestMap map;
     auto ptr = map.find(5);
 
-    EXPECT_EQ(ptr, nullptr);
+    EXPECT_EQ(ptr, map.end());
 }
 
 TEST_F(FlatKeyOrderMapFindTest, FindConstMap)
@@ -372,7 +373,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindConstMap)
     const TestMap& const_map = map;
     auto ptr = const_map.find(7);
 
-    EXPECT_NE(ptr, nullptr);
+    EXPECT_NE(ptr, const_map.end());
     EXPECT_EQ(ptr->first, 7);
 }
 
@@ -388,7 +389,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindMultipleElements)
     for (int i : {1, 25, 50, 75, 100})
     {
         auto ptr = map.find(i);
-        EXPECT_NE(ptr, nullptr);
+        EXPECT_NE(ptr, map.end());
         EXPECT_EQ(ptr->first, i);
     }
 }
@@ -748,7 +749,7 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, LargeMapPerformance)
     for (int i : {0, 2500, 5000, 7500, 9999})
     {
         auto ptr = map.find(i);
-        EXPECT_NE(ptr, nullptr);
+        EXPECT_NE(ptr, map.end());
         EXPECT_EQ(ptr->first, i);
     }
 }
@@ -815,7 +816,7 @@ TEST_F(FlatKeyOrderMapPerformanceTest, LookupInLargeMapVsFill)
     for (int i : {0, size / 2, size - 1})
     {
         auto ptr = map.find(i);
-        EXPECT_NE(ptr, nullptr);
+        EXPECT_NE(ptr, map.end());
         EXPECT_EQ(ptr->second, i * 2);
     }
 }
