@@ -253,6 +253,7 @@ public:
 	template<typename InKey>
 	mapped_type* at_ptr(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		value_type* p_ret = this->find(std::forward<InKey>(key));
 		return p_ret != nullptr ? &p_ret->second : nullptr;
 	}
@@ -260,6 +261,7 @@ public:
 	template<typename InKey>
 	const mapped_type* at_ptr(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const value_type* p_ret = this->find(std::forward<InKey>(key));
 		return p_ret != nullptr ? &p_ret->second : nullptr;
 	}
@@ -299,91 +301,109 @@ public:
 	template<typename InKey>
 	constexpr bool contains(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return this->find(std::forward<InKey>(key)) != nullptr;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr void clear() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.clear();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr P* data() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.data();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const P* data() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.data();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.empty();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.size();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.begin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator begin() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.cbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cbegin() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.cbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.end();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator end() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.cend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cend() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.cend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rbegin() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.rbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rbegin() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.crbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crbegin() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.crbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr reverse_iterator rend() noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.rend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator rend() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.crend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_reverse_iterator crend() const noexcept
 	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		return container_obj.crend();
 	}
 };
