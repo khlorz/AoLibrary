@@ -211,32 +211,6 @@ public:
 	constexpr mapped_type& operator[](InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#if AOL_DEBUG_ON
-		value_type* p_ret = this->find(std::forward<InKey>(key));
-		assert(p_ret != nullptr && "Invalid key!");
-		return p_ret->second;
-#else
-		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
-#endif // !NDEBUG
-	}
-
-	template<typename InKey>
-	constexpr const mapped_type& operator[](InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
-	{
-		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-#if AOL_DEBUG_ON
-		const value_type* p_ret = this->find(std::forward<InKey>(key));
-		assert(p_ret != nullptr && "Invalid key!");
-		return p_ret->second;
-#else
-		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
-#endif // !NDEBUG
-	}
-
-	template<typename InKey>
-	mapped_type& at_ref(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
-	{
-		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
 		value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
 		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
@@ -251,20 +225,29 @@ public:
 	}
 
 	template<typename InKey>
+	mapped_type& at_ref(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+	{
+		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
+#if AOL_DEBUG_ON
+		value_type* p_ret = this->find(std::forward<InKey>(key));
+		assert(p_ret != nullptr && "Invalid key!");
+		return p_ret->second;
+#else
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
+#endif // !NDEBUG
+	}
+
+	template<typename InKey>
 	const mapped_type& at_ref(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		const auto& key_val = std::forward<InKey>(key);
-		const value_type* p_ret = AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), key_val, less_than_comp);
-		if (p_ret < container_obj.data() + container_obj.size() && p_ret->first == key_val)
-		{
-			return p_ret->second;
-		}
-		else
-		{
-			auto it = container_obj.insert(container_obj.begin() + (p_ret - container_obj.data()), value_type{ std::forward<InKey>(key), mapped_type{} });
-			return it->second;
-		}
+#if AOL_DEBUG_ON
+		const value_type* p_ret = this->find(std::forward<InKey>(key));
+		assert(p_ret != nullptr && "Invalid key!");
+		return p_ret->second;
+#else
+		return AoL::FindLowerBound(container_obj.data(), container_obj.data() + container_obj.size(), std::forward<InKey>(key), less_than_comp)->second;
+#endif // !NDEBUG
 	}
 
 	template<typename InKey>
