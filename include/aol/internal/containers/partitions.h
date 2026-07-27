@@ -860,16 +860,8 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	*/
 	constexpr void push_back(value_type&& value) noexcept
 	{
-		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.full())
-		{
-			container_obj.push_back(std::move(value));
-			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
-		}
-		else
-		{
-			back_parti.push_back(std::move(value));
-		}
+		container_obj.push_back(std::move(value));
+		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
 	}
 
 	/*
@@ -883,16 +875,8 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	*/
 	constexpr void push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
-		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.full())
-		{
-			container_obj.push_back(value);
-			back_parti.update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
-		}
-		else
-		{
-			back_parti.push_back(value);
-		}
+		container_obj.push_back(value);
+		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
 	}
 
 	/*
@@ -908,17 +892,9 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	template<typename... Args>
 	constexpr value_type& emplace_back(Args&&... args) noexcept
 	{
-		sub_partition_type& back_parti = sub_partitions.back();
-		if (back_parti.full())
-		{
-			value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
-			sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
-			return ret;
-		}
-		else
-		{
-			return *back_parti.emplace_back(std::forward<Args>(args)...);
-		}
+		value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
+		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
+		return ret;
 	}
 
 	constexpr PartitionVectorEx& assign(const container_type& new_vector) noexcept
