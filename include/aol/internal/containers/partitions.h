@@ -859,6 +859,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	* @param value the value to be pushed
 	*/
 	constexpr void push_back(value_type&& value) noexcept
+		requires !std::is_same_v<Traits::ConstRefOrCopyType<value_type>, value_type>
 	{
 		container_obj.push_back(std::move(value));
 		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
