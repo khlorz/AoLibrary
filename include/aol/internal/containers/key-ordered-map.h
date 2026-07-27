@@ -93,7 +93,7 @@ public:
 private:
 	using less_than_comp_type = C;
 
-	less_than_comp_type less_than_comp;
+	AOL_ATTRIB_NO_UNQ_ADDRESS less_than_comp_type less_than_comp;
 
 public:
 	container_type container_obj;
