@@ -394,7 +394,7 @@ struct CyclicBufferBase
     *
     * - Asserts if idx is greater than or equal item to count of the vector
     */
-    AOL_ATTRIB_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& operator[](size_t idx) const noexcept
     {
         assert(idx < item_count && "Invalid operation! Input idx out of range!");
         return container_obj[(head + idx) & mask];
