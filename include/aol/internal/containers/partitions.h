@@ -188,6 +188,7 @@ public:
 	* @returns true if successful, otherwise false
 	*/
 	constexpr bool push_back(value_type&& value) noexcept
+		requires !std::is_same_v<Traits::ConstRefOrCopyType<value_type>, value_type>
 	{
 		// We no-op if the partition is already full
 		// It'll be up to the user what to do if that happens
