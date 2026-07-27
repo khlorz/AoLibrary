@@ -220,8 +220,8 @@ public:
 #endif // !NDEBUG
 	}
 
-	template<typename InKey, typename R = Traits::ConstRefOrCopyType<mapped_type>>
-	constexpr R operator[](InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+	template<typename InKey>
+	constexpr const mapped_type& operator[](InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
@@ -250,8 +250,8 @@ public:
 		}
 	}
 
-	template<typename InKey, typename R = Traits::ConstRefOrCopyType<mapped_type>>
-	R at_ref(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+	template<typename InKey>
+	const mapped_type& at_ref(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
