@@ -605,12 +605,12 @@ public:
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
 	{
-		return (*static_cast<D*>(this)->container_obj)[idx];
+		return static_cast<D*>(this)->container_obj[idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
 	{
-		return (*static_cast<const D*>(this)->container_obj)[idx];
+		return static_cast<const D*>(this)->container_obj[idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
