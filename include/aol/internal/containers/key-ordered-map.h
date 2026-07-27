@@ -50,7 +50,7 @@ struct PairLessComparator
 	using pair_type = P;
 
 	template<typename T>
-	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, const T& rhs) noexcept
+	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, AoL::Traits::ConstRefOrCopyType<T> rhs) noexcept
 	{
 		return lhs.first < rhs;
 	}
