@@ -203,7 +203,7 @@ public:
 		else
 		{
 			assert(it->first != key_val && "Item already exists!");
-			container_obj.insert(it, value_type{ std::forward<InKey>(key), std::forward<InValue>(value) });
+			container_obj.emplace(it, std::forward<InKey>(key), std::forward<InValue>(value));
 		}
 	}
 
@@ -211,7 +211,7 @@ public:
 	constexpr mapped_type& operator[](InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		const auto& key_val = std::forward<InKey>(key);
+		const InKey& key_val = key;
 		auto find_it = this->find(key_val);
 		if (find_it < container_obj.end() && find_it->first == key_val)
 		{
@@ -219,7 +219,7 @@ public:
 		}
 		else
 		{
-			auto insert_it = container_obj.insert(find_it, value_type{ std::forward<InKey>(key), mapped_type{} });
+			auto insert_it = container_obj.emplace(find_it, std::forward<InKey>(key), mapped_type{});
 			return insert_it->second;
 		}
 	}
