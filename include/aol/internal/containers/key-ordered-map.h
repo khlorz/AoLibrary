@@ -176,7 +176,8 @@ public:
 	}
 
 	template<typename InKey, typename InValue>
-	constexpr void build_add(InKey&& key, InValue&& value) noexcept requires std::is_convertible_v<InKey, key_type>&& std::is_convertible_v<InValue, mapped_type>
+		requires std::is_convertible_v<InKey, key_type> && std::is_convertible_v<InValue, mapped_type>
+	constexpr void build_add(InKey&& key, InValue&& value) noexcept
 	{
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
 #if AOL_DEBUG_ON
@@ -197,7 +198,8 @@ public:
 	}
 
 	template<typename InKey, typename InValue>
-	constexpr void insert(InKey&& key, InValue&& value) noexcept requires std::is_convertible_v<InKey, key_type>&& std::is_convertible_v<InValue, mapped_type>
+		requires std::is_convertible_v<InKey, key_type> && std::is_convertible_v<InValue, mapped_type>
+	constexpr void insert(InKey&& key, InValue&& value) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
@@ -214,7 +216,8 @@ public:
 	}
 
 	template<typename InKey>
-	constexpr mapped_type& operator[](InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	constexpr mapped_type& operator[](InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
@@ -231,7 +234,8 @@ public:
 	}
 
 	template<typename InKey>
-	mapped_type& at_ref(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	mapped_type& at_ref(InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
@@ -244,7 +248,8 @@ public:
 	}
 
 	template<typename InKey>
-	const mapped_type& at_ref(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	const mapped_type& at_ref(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
@@ -257,7 +262,8 @@ public:
 	}
 
 	template<typename InKey>
-	mapped_type* at_ptr(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	mapped_type* at_ptr(InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		auto it = this->find(std::forward<InKey>(key));
@@ -265,7 +271,8 @@ public:
 	}
 
 	template<typename InKey>
-	const mapped_type* at_ptr(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	const mapped_type* at_ptr(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		auto it = this->find(std::forward<InKey>(key));
@@ -273,7 +280,8 @@ public:
 	}
 
 	template<typename InKey>
-	constexpr auto find(InKey&& key) noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	constexpr auto find(InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
@@ -281,7 +289,8 @@ public:
 	}
 
 	template<typename InKey>
-	constexpr auto find(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	constexpr auto find(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
@@ -289,7 +298,8 @@ public:
 	}
 
 	template<typename InKey>
-	constexpr bool contains(InKey&& key) const noexcept requires std::is_convertible_v<InKey, key_type>
+		requires std::is_convertible_v<InKey, key_type>
+	constexpr bool contains(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		auto it = this->find(std::forward<InKey>(key));
