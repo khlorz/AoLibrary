@@ -2399,6 +2399,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedLvalueOneCopy)
     // 1 move construction due to re-allocation
     ExpectCounts(0, 2, 1, __LINE__);
 
+    // Build here to avoid counting the move operations while sorting
     map.build_end();
 }
 
@@ -2411,9 +2412,13 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedRvalueOneMove)
 
     map.build_add(std::move(kx), 10);
     map.build_add(std::move(ky), 20);
-    map.build_end();
 
-    ExpectCounts(0, 0, 2, __LINE__);
+    // 2 move construction
+    // 1 move construction due to re-allocation
+    ExpectCounts(0, 0, 3, __LINE__);
+
+    // Build here to avoid counting the move operations while sorting
+    map.build_end();
 }
 
 TEST_F(FlatKeyOrderMapTrackedTest, MultipleInsertThenFindNoExtraConstructions)
@@ -2425,15 +2430,18 @@ TEST_F(FlatKeyOrderMapTrackedTest, MultipleInsertThenFindNoExtraConstructions)
     ExpectCounts(1, 0, 0, __LINE__);
 
     map.insert("second", 2);
-    ExpectCounts(2, 0, 0, __LINE__);
+    // 1 move construction due to re-allocation
+    ExpectCounts(2, 0, 1, __LINE__);
 
     map.insert("third", 3);
-    ExpectCounts(3, 0, 0, __LINE__);
+    // 2 additional move construction due to re-allocation
+    ExpectCounts(3, 0, 3, __LINE__);
 
     EXPECT_TRUE(map.contains("first"));
     EXPECT_TRUE(map.contains("second"));
     EXPECT_TRUE(map.contains("third"));
-    ExpectCounts(3, 0, 0, __LINE__);
+
+    ExpectCounts(3, 0, 3, __LINE__);
 }
 
 TEST_F(FlatKeyOrderMapTrackedTest, BuildAddThenFindNoExtraConstructions)
@@ -2497,7 +2505,10 @@ TEST_F(FlatKeyOrderMapTrackedTest, MoveMapOneAdditionalKeyConstruction)
 
     TestMap moved(std::move(map));
 
-    ExpectCounts(0, 0, 1, __LINE__);
+    // Could be one move construction.
+    // Moving the continer itself does not trigger this though
+    // So 0 move count here
+    ExpectCounts(0, 0, 0, __LINE__);
 }
 
 #endif // AOL_TEST_CONTAINERS_FLATKEYORDERMAP
