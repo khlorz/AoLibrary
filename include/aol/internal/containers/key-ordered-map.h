@@ -42,6 +42,12 @@ struct KeyValuePairEx
 	{
 		return this->first == other.first;
 	}
+
+	template<typename T>
+	constexpr auto operator == (const T& other_val) const noexcept
+	{
+		return this->first == other_val;
+	}
 };
 
 template<typename P>
@@ -175,7 +181,7 @@ public:
 		assert(build_flag && "Building haven't started yet! Call build_start() first!");
 #if AOL_DEBUG_ON
 		const InKey& ref_key = key;
-		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), value_type{.first = key, .second = value});
+		auto it = AoL::FindBrute(container_obj.begin(), container_obj.end(), key);
 		assert(it == container_obj.end() && "Key already exists!");
 #endif
 		container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));

@@ -472,4 +472,4 @@ TEST_F(AlgorithmEdgeCasesTest, MixedPositiveNegativeZero)
     EXPECT_EQ(vec[6], 100);
 }
 
-#endif // AOL_TEST_ALGORITHM_SORT
+#endif // AOL_TEST_ALGORITHMS_SORT
