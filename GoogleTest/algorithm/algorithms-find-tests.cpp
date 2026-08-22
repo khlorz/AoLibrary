@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_ALGORITHMS_FIND
 
 #include "aol/algorithms.h"
 
@@ -440,3 +442,5 @@ TEST_F(AlgorithmEdgeCasesTest, FindWithAllIdenticalElements)
 
     EXPECT_EQ(it, vec.begin());
 }
+
+#endif // AOL_TEST_ALGORITHM_FIND

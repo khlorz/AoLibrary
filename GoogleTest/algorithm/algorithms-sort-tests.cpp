@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_ALGORITHMS_SORT
 
 #include "aol/algorithms.h"
 
@@ -469,3 +471,5 @@ TEST_F(AlgorithmEdgeCasesTest, MixedPositiveNegativeZero)
     EXPECT_EQ(vec[0], -100);
     EXPECT_EQ(vec[6], 100);
 }
+
+#endif // AOL_TEST_ALGORITHM_SORT

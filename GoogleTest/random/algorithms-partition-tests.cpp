@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ALGORITHMS_PARTITION
 
 #include "aol/randoms.h"
 
@@ -390,3 +392,5 @@ TEST(StableRandomPartition, WorksWithForwardIteratorList)
 	std::sort(orig.begin(), orig.end());
 	EXPECT_EQ(combined, orig);
 }
+
+#endif // AOL_TEST_RANDOM_ALGORITHMS_PARTITION

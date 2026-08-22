@@ -2,7 +2,10 @@
 * RollIndex tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_ROLLINDEX
 
 #include "aol/randoms.h"
 
@@ -59,3 +62,5 @@ TEST(RollIndex_NoPool, RuntimeMaxSizeProducesValuesInZeroToMaxSizeInclusive)
 		EXPECT_TRUE(b);
 	}
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_ROLLINDEX

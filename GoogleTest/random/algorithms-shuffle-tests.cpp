@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ALGORITHMS_SHUFFLE
 
 #include "aol/randoms.h"
 
@@ -358,3 +360,5 @@ TEST(PartialShuffle, RemainingElementsAreComplementOfFirstK)
 		EXPECT_EQ(combined, base);
 	}
 }
+
+#endif // AOL_TEST_RANDOM_ALGORITHMS_SHUFFLE

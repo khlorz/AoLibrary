@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_CYCLICBUFFER
 
 #include "aol/cyclic_buffer.h"
 #include "aol/utilities.h"
@@ -309,3 +311,5 @@ TEST_F(CyclicBufferDynamicTest, IncreaseThenDecreaseCapacity)
     EXPECT_EQ(buf.size(), 4);
     EXPECT_EQ(buf[0], 1);
 }
+
+#endif // AOL_TEST_CONTAINERS_CYCLICBUFFER

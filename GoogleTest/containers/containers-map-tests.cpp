@@ -2,7 +2,10 @@
 * Map container tests: KeyOrderMap, HashMap, InsertOrderMap
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_MAP
 
 #include "aol/key_ordered_map.h"
 #include "aol/insert_ordered_map.h"
@@ -345,4 +348,6 @@ TEST_F(InsertOrderMapTest, ForwardIteration)
     EXPECT_EQ(keys[1], 1);
     EXPECT_EQ(keys[2], 2);
 }
+
+#endif // AOL_TEST_CONTAINERS_MAP
 

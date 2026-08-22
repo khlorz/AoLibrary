@@ -2,7 +2,10 @@
 * Partition container tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_PARTITION
 
 #include "aol/partitions.h"
 #include "aol/utilities.h"
@@ -273,3 +276,5 @@ TEST_F(PartitionArrayTest, ForwardIteration)
 
     EXPECT_EQ(sum, 6);
 }
+
+#endif // AOL_TEST_CONTAINERS_PARTITION

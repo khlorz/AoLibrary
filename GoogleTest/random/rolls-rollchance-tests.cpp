@@ -2,7 +2,10 @@
 * RollChance + FlipCoin tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_ROLLCHANCE
 
 #include "aol/randoms.h"
 
@@ -129,3 +132,5 @@ TEST(FlipCoin, NoArgConvenienceOverloadRunsAndIsRoughlyUniform)
 	double ratio = static_cast<double>(heads) / many_trials;
 	EXPECT_NEAR(ratio, 0.5, 0.02);
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_ROLLCHANCE

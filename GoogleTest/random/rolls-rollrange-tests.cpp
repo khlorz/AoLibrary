@@ -2,7 +2,10 @@
 * RollRange + RollRangeSlow tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_ROLLRANGE
 
 #include "aol/randoms.h"
 
@@ -481,3 +484,5 @@ TEST(RollElement_NoPool, ForwardIteratorListWorks)
 		EXPECT_LE(val, 50);
 	}
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_ROLLRANGE
