@@ -38,27 +38,23 @@ struct KeyValuePairEx
 		return this->first <=> other.first;
 	}
 
-	constexpr auto operator == (const KeyValuePairEx& other) const noexcept
+	constexpr bool operator == (const KeyValuePairEx& other) const noexcept
 	{
 		return this->first == other.first;
 	}
 
 	template<typename T>
-	constexpr auto operator == (const T& other_val) const noexcept
+		requires requires (const K& k, const T& t) { k <=> t; }
+	constexpr auto operator <=> (const T& key) const noexcept
 	{
-		return this->first == other_val;
+		return this->first <=> key;
 	}
-};
-
-template<typename P>
-struct KeyOrderMapExComparator
-{
-	using pair_type = P;
 
 	template<typename T>
-	constexpr bool operator () (AoL::Traits::ConstRefOrCopyType<P> lhs, const T& rhs) noexcept
+		requires requires (const K& k, const T& t) { k == t; }
+	constexpr bool operator == (const T& key) const noexcept
 	{
-		return lhs.first < rhs;
+		return this->first == key;
 	}
 };
 
@@ -76,13 +72,11 @@ struct KeyOrderMapExComparator
 * @tparam K key type
 * @tparam V value type
 * @tparam P pair type
-* @tparam C comparator type
 * @tparam A allocator type
 */
-template<typename K, typename V, typename P, typename C, typename A>
+template<typename K, typename V, typename P, typename A>
 struct KeyOrderMapEx
 {
-public:
 	using container_type = AoL::Vector<P, A>;
 
 	using value_type = P;
@@ -96,20 +90,13 @@ public:
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-private:
-	using less_than_comp_type = C;
-
-	AOL_ATTRIB_NO_UNQ_ADDRESS less_than_comp_type less_than_comp;
-
-public:
 	container_type container_obj;
 #if AOL_DEBUG_ON
 	bool build_flag;
 #endif
 
 	KeyOrderMapEx() noexcept :
-		container_obj{ },
-		less_than_comp{ }
+		container_obj{ }
 #if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
@@ -285,7 +272,7 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val, less_than_comp);
+		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
 	template<typename InKey>
@@ -294,7 +281,7 @@ public:
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const auto& key_val = std::forward<InKey>(key);
-		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val, less_than_comp);
+		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
 	template<typename InKey>
