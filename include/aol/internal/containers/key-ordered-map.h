@@ -226,7 +226,8 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
-		auto it = this->find(std::forward<InKey>(key));
+		const InKey& key_val = key;
+		auto it = this->find(key_val);
 		assert(it < container_obj.end() && it->first == key && "Invalid key!");
 		return it->second;
 #else
@@ -240,8 +241,9 @@ struct KeyOrderMapEx
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
-		auto it = this->find(std::forward<InKey>(key));
-		assert(it < container_obj.end() && it->first == key && "Invalid key!");
+		const InKey& key_val = key;
+		auto it = this->find(key_val);
+		assert(it < container_obj.end() && it->first == key_val && "Invalid key!");
 		return it->second;
 #else
 		return this->find(std::forward<InKey>(key))->second;
@@ -253,8 +255,9 @@ struct KeyOrderMapEx
 	mapped_type* at_ptr(InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		auto it = this->find(std::forward<InKey>(key));
-		return it < container_obj.end() && it->first == key ? &it->second : nullptr;
+		const InKey& key_val = key;
+		auto it = this->find(key_val);
+		return it < container_obj.end() && it->first == key_val ? &it->second : nullptr;
 	}
 
 	template<typename InKey>
@@ -262,8 +265,9 @@ struct KeyOrderMapEx
 	const mapped_type* at_ptr(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		auto it = this->find(std::forward<InKey>(key));
-		return it < container_obj.end() && it->first == key ? &it->second : nullptr;
+		const InKey& key_val = key;
+		auto it = this->find(key_val);
+		return it < container_obj.end() && it->first == key_val ? &it->second : nullptr;
 	}
 
 	template<typename InKey>
@@ -271,7 +275,7 @@ struct KeyOrderMapEx
 	constexpr auto find(InKey&& key) noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		const auto& key_val = std::forward<InKey>(key);
+		const InKey& key_val = key;
 		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
@@ -280,7 +284,7 @@ struct KeyOrderMapEx
 	constexpr auto find(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		const auto& key_val = std::forward<InKey>(key);
+		const InKey& key_val = key;
 		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
@@ -289,8 +293,9 @@ struct KeyOrderMapEx
 	constexpr bool contains(InKey&& key) const noexcept
 	{
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
-		auto it = this->find(std::forward<InKey>(key));
-		return it < container_obj.end() && it->first == key;
+		const InKey& key_val = key;
+		auto it = this->find(key_val);
+		return it < container_obj.end() && it->first == key_val;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr void clear() noexcept
