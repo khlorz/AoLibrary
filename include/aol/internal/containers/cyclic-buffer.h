@@ -646,26 +646,28 @@ private:
     template<typename U>
     constexpr void push_back_impl(U&& new_item) noexcept
     {
-        if (container_obj.size() == mask + 1)
-        {
-            container_obj[(head + item_count) & mask] = std::forward<U>(new_item);
-        }
-        else
+        const SizeT slot = (head + item_count) & mask;
+        if (slot == container_obj.size()) // slot past the physical end: grow storage
         {
             container_obj.push_back(std::forward<U>(new_item));
+        }
+        else // in-range slot: overwrite stale element (incl. oldest when full)
+        {
+            container_obj[slot] = std::forward<U>(new_item);
         }
     }
 
     template<typename... Args>
     constexpr void emplace_back_impl(Args&&... args) noexcept
     {
-        if (container_obj.size() == mask + 1)
+        const SizeT slot = (head + item_count) & mask;
+        if (slot == container_obj.size()) // slot past the physical end: grow storage
         {
-            container_obj[(head + item_count) & mask] = T(std::forward<Args>(args)...);
+            container_obj.emplace_back(T(std::forward<Args>(args)...));
         }
-        else
+        else // in-range slot: overwrite stale element (incl. oldest when full)
         {
-            container_obj.emplace_back(std::forward<Args>(args)...);
+            container_obj[slot] = T(std::forward<Args>(args)...);
         }
     }
 
