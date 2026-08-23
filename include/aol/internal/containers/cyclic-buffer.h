@@ -193,8 +193,6 @@ template<
 >
 struct CyclicBufferBase
 {
-    static_assert(S == 0 || std::has_single_bit(S), "Fixed size must be a power of two!");
-
     using container_type = std::conditional_t<S == 0, AoL::Vector<T, A>, AoL::Array<T, S>>;
 
     using value_type = container_type::value_type;
@@ -531,7 +529,7 @@ private:
     friend Base;
 
 public:
-    static_assert(S > 0, "Size must be greater than 0!");
+    static_assert(std::has_single_bit(S) && S > 1, "Size must be a power of two!");
 
     using Base::Base;
     using Base::container_obj;
@@ -585,7 +583,7 @@ public:
     explicit CyclicBufferDynamic(SizeT item_limit) noexcept :
         Base{ }
     {
-        assert(std::has_single_bit(item_limit) && "Invalid limit! Must be power of 2!");
+        assert(std::has_single_bit(item_limit) && (item_limit > 1) && "Invalid limit! Must be power of 2!");
 
         mask = item_limit - 1;
         container_obj.reserve(item_limit);

@@ -457,20 +457,6 @@ TEST(CyclicBufferFixedExTest, DefaultInitialState)
     EXPECT_NE(buf.data(), nullptr);
 }
 
-TEST(CyclicBufferFixedExTest, CapacityOneOverwritesEveryPush)
-{
-    AoL::CyclicBufferF<int, 1> buf;
-
-    for (int v = 1; v <= 5; ++v)
-    {
-        buf.push_back(v);
-        EXPECT_EQ(buf.size(), (AoL::SizeT)1);
-        EXPECT_EQ(buf.front(), v);
-        EXPECT_EQ(buf.back(), v);
-        EXPECT_TRUE(buf.full());
-    }
-}
-
 TEST(CyclicBufferFixedExTest, CapacityTwoWrapCycle)
 {
     AoL::CyclicBufferF<int, 2> buf;
@@ -1173,19 +1159,6 @@ TEST(CyclicBufferDynamicExTest, GrowthPhaseCapacityTransitions)
         EXPECT_EQ(buf.size(), (AoL::SizeT)(k < 8 ? k : 8));
         EXPECT_EQ(buf.capacity(), (AoL::SizeT)(k < 8 ? k : 8));
         ExpectMatchesDeque(buf, ref);
-    }
-}
-
-TEST(CyclicBufferDynamicExTest, LimitOneOverwritesEveryPush)
-{
-    AoL::CyclicBufferD<int> buf(1);
-
-    for (int v = 1; v <= 4; ++v)
-    {
-        buf.push_back(v);
-        EXPECT_EQ(buf.size(), (AoL::SizeT)1);
-        EXPECT_EQ(buf.capacity(), (AoL::SizeT)1);
-        EXPECT_EQ(buf.front(), v);
     }
 }
 
