@@ -12,7 +12,8 @@
 #include "aol/vector.h"
 #include "aol/array.h"
 
-#include <bit>
+#include <bit> // std::has_single_bit
+#include <memory> // std::addressof
 
 
 namespace AoL::Internal
