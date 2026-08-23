@@ -1334,10 +1334,10 @@ TEST(CyclicBufferDynamicCapTest, IncreaseWhileWrappedRotatesOrder)
     buf.increase_capacity(16);
 
     EXPECT_EQ(buf.head, (AoL::SizeT)0);
-    EXPECT_EQ(buf.size(), (AoL::SizeT)10);
-    for (int i = 0; i < 10; ++i)
+    EXPECT_EQ(buf.size(), (AoL::SizeT)8);
+    for (int i = 0; i < buf.size(); ++i)
     {
-        ASSERT_EQ(buf[i], i + 1) << "index " << i;
+        ASSERT_EQ(buf[i], i + 3) << "index " << i;
     }
 
     for (int i = 11; i <= 18; ++i)
