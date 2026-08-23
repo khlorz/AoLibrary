@@ -12,6 +12,8 @@
 #include "aol/vector.h"
 #include "aol/algorithms.h"
 
+#include <memory> // std::addressof
+
 
 namespace AoL::Internal
 {
@@ -262,7 +264,7 @@ struct KeyOrderMapEx
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
-		return it < container_obj.end() && it->first == key_val ? &it->second : nullptr;
+		return it < container_obj.end() && it->first == key_val ? std::addressof(it->second) : nullptr;
 	}
 
 	template<typename InKey>
@@ -273,7 +275,7 @@ struct KeyOrderMapEx
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
-		return it < container_obj.end() && it->first == key_val ? &it->second : nullptr;
+		return it < container_obj.end() && it->first == key_val ? std::addressof(it->second) : nullptr;
 	}
 
 	template<typename InKey>
