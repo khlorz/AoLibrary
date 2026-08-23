@@ -1454,36 +1454,37 @@ TEST(CyclicBufferDynamicCapTest, DecreaseToMinimumOneRetainsEarliest)
 TEST(CyclicBufferDynamicCapTest, IncreaseDecreaseRoundTripWrapped)
 {
     AoL::CyclicBufferD<int> buf(4);
+    int initial_number = 1;
+    int number = initial_number;
 
-    for (int i = 1; i <= 6; ++i)
-    {
-        buf.push_back(i);
-    }
-    ASSERT_EQ(buf.head, (AoL::SizeT)2);
+    auto populate_buffer = [&buf, &number](int start, int extra_element = 0){
+        int count = static_cast<int>(buf.capacity()) + extra_element;
+        for (int i = start; i < count; ++i)
+        {
+            buf.push_back(number++);
+        }
+    };
+
+    auto check_buffer = [&buf, &number, initial_number](int extra_elements = 0) {
+        for (auto i = initial_number + extra_elements; auto v : buf)
+        {
+            ASSERT_EQ(v, i++);
+        }
+    };
+
+    populate_buffer(buf.size(), 2);
+    check_buffer(2);
 
     buf.increase_capacity(8);
-    ASSERT_EQ(buf.head, (AoL::SizeT)0);
-    for (int i = 0; i < 6; ++i)
-    {
-        ASSERT_EQ(buf[i], i + 3);
-    }
+    check_buffer(2);
 
-    for (int i = 7; i <= 10; ++i)
-    {
-        buf.push_back(i);
-    }
+    populate_buffer(buf.size(), 0);
     ASSERT_TRUE(buf.full());
-    for (int i = 0; i < 8; ++i)
-    {
-        ASSERT_EQ(buf[i], i + 3);
-    }
+    check_buffer(2);
 
     buf.decrease_capacity(4);
     EXPECT_EQ(buf.size(), (AoL::SizeT)4);
-    for (int i = 0; i < 4; ++i)
-    {
-        EXPECT_EQ(buf[i], i + 3);
-    }
+    check_buffer(2);
 }
 
 // ===================================================================
