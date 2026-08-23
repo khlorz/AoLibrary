@@ -265,7 +265,10 @@ struct CyclicBufferBase
     */
     AOL_ATTRIB_NO_DISCARD constexpr auto capacity() const noexcept
     {
-        return container_obj.size();
+        // mask is the bit masking value of the cyclic buffer
+        // Adding one gives the actual capacity
+        // Usable for both Fixed and Dynamic CyclicBuffer
+        return mask + 1;
     }
 
     /**
