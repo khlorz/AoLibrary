@@ -884,7 +884,8 @@ TEST(CyclicBufferFixedIterTest, IteratorArithmeticExhaustive)
     EXPECT_TRUE(it3 == it3b);
 
     EXPECT_EQ(*(it3 - 2), 20);
-    EXPECT_EQ(it3[-1], 20);
+    EXPECT_EQ(it3[-1], 30);
+    EXPECT_EQ(it3[-1], 30);
     EXPECT_EQ(it[5], 60);
     EXPECT_EQ(it3 - it, 3);
     EXPECT_EQ(it - it3, -3);
