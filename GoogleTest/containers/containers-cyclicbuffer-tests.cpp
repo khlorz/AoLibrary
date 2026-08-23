@@ -1354,18 +1354,24 @@ TEST(CyclicBufferDynamicCapTest, IncreaseWhileWrappedRotatesOrder)
 TEST(CyclicBufferDynamicCapTest, ChainedIncreasesWrappedBetween)
 {
     AoL::CyclicBufferD<int> buf(2);
+    int number = 1;
 
-    buf.push_back(1);
-    buf.push_back(2);
-    buf.push_back(3);
+    auto populate_buffer = [&buf, &number](int start, int extra_element = 0){
+        int count = static_cast<int>(buf.capacity()) + extra_element;
+        for (int i = start; i < count; ++i)
+        {
+            buf.push_back(number++);
+        }
+    };
+
+    populate_buffer(buf.size(), 1);
     ASSERT_EQ(buf.front(), 2);
 
-    buf.increase_capacity(4);
+    buf.increase_capacity(buf.capacity() * 2);
     ASSERT_EQ(buf[0], 2);
     ASSERT_EQ(buf[1], 3);
 
-    buf.push_back(4);
-    buf.push_back(5);
+    populate_buffer(buf.size(), 0);
     ASSERT_EQ(buf.front(), 2);
     ASSERT_EQ(buf.back(), 5);
 
@@ -1375,10 +1381,7 @@ TEST(CyclicBufferDynamicCapTest, ChainedIncreasesWrappedBetween)
         ASSERT_EQ(buf[i], 2 + i);
     }
 
-    for (int i = 6; i <= 16; ++i)
-    {
-        buf.push_back(i);
-    }
+    populate_buffer(buf.size(), 0);
     EXPECT_TRUE(buf.full());
     for (int i = 0; i < 16; ++i)
     {
