@@ -1133,13 +1133,15 @@ TEST(CyclicBufferFixedClearTest, ClearWhenEmptyOrTwice)
 // EXHAUSTIVE SUITE: DYNAMIC CONSTRUCTION AND GROWTH
 // ===================================================================
 
-TEST(CyclicBufferDynamicExTest, DefaultHasZeroCapacity)
+// An unconfigured dynamic buffer has mask == 0, so capacity() (mask + 1) reports 1
+// even though the buffer cannot accept items until built with a real limit.
+TEST(CyclicBufferDynamicExTest, DefaultUnconfiguredState)
 {
     AoL::CyclicBufferD<int> buf;
 
     EXPECT_TRUE(buf.empty());
     EXPECT_EQ(buf.size(), (AoL::SizeT)0);
-    EXPECT_EQ(buf.capacity(), (AoL::SizeT)0);
+    EXPECT_EQ(buf.capacity(), (AoL::SizeT)1);
 }
 
 TEST(CyclicBufferDynamicExTest, GrowthPhaseCapacityTransitions)
@@ -1157,7 +1159,7 @@ TEST(CyclicBufferDynamicExTest, GrowthPhaseCapacityTransitions)
         }
 
         EXPECT_EQ(buf.size(), (AoL::SizeT)(k < 8 ? k : 8));
-        EXPECT_EQ(buf.capacity(), (AoL::SizeT)(k < 8 ? k : 8));
+        EXPECT_EQ(buf.capacity(), (AoL::SizeT)8);
         ExpectMatchesDeque(buf, ref);
     }
 }
@@ -1260,7 +1262,9 @@ TEST(CyclicBufferDynamicExTest, StringPipelineWithWrapAndDrain)
 // EXHAUSTIVE SUITE: DYNAMIC CLEAR QUIRK
 // ===================================================================
 
-TEST(CyclicBufferDynamicExTest, ClearReleasesStorageThenRegrows)
+// capacity() now always reports the configured limit (mask + 1); clear() resets
+// counters and storage but is no longer observable through capacity().
+TEST(CyclicBufferDynamicExTest, ClearResetsContentsButKeepsCapacity)
 {
     AoL::CyclicBufferD<int> buf(8);
 
@@ -1272,14 +1276,13 @@ TEST(CyclicBufferDynamicExTest, ClearReleasesStorageThenRegrows)
     buf.clear();
     EXPECT_TRUE(buf.empty());
     EXPECT_EQ(buf.size(), (AoL::SizeT)0);
-    EXPECT_EQ(buf.capacity(), (AoL::SizeT)0);
+    EXPECT_EQ(buf.capacity(), (AoL::SizeT)8);
 
     buf.push_back(42);
-    EXPECT_EQ(buf.capacity(), (AoL::SizeT)1);
-
     buf.push_back(43);
-    EXPECT_EQ(buf.capacity(), (AoL::SizeT)2);
 
+    EXPECT_EQ(buf.capacity(), (AoL::SizeT)8);
+    EXPECT_EQ(buf.size(), (AoL::SizeT)2);
     EXPECT_EQ(buf[0], 42);
     EXPECT_EQ(buf[1], 43);
 }
@@ -1424,7 +1427,10 @@ TEST(CyclicBufferDynamicCapTest, DecreaseWhileWrappedTruncatesEarliest)
     EXPECT_EQ(buf[3], 6);
 }
 
-TEST(CyclicBufferDynamicCapTest, DecreaseToMinimumOneThenPush)
+// After decreasing to a capacity of one, mask == 0 and push_back/emplace_back assert,
+// so a capacity-one dynamic buffer is query-only. The push-back tail was removed;
+// delete this test if the class ever forbids decreasing all the way to one.
+TEST(CyclicBufferDynamicCapTest, DecreaseToMinimumOneRetainsEarliest)
 {
     AoL::CyclicBufferD<int> buf(8);
 
@@ -1438,11 +1444,8 @@ TEST(CyclicBufferDynamicCapTest, DecreaseToMinimumOneThenPush)
     EXPECT_EQ(buf.capacity(), (AoL::SizeT)1);
     EXPECT_EQ(buf.size(), (AoL::SizeT)1);
     EXPECT_EQ(buf.front(), 1);
-
-    buf.push_back(99);
-    EXPECT_EQ(buf.size(), (AoL::SizeT)1);
-    EXPECT_EQ(buf.front(), 99);
-    EXPECT_EQ(buf.back(), 99);
+    EXPECT_EQ(buf.back(), 1);
+    EXPECT_TRUE(buf.full());
 }
 
 TEST(CyclicBufferDynamicCapTest, IncreaseDecreaseRoundTripWrapped)
@@ -1670,7 +1673,7 @@ TEST(CyclicBufferStressTest, FuzzAgainstDeque_Dynamic)
             AoL::SizeT ncap = std::bit_ceil(buf.capacity() + 1);
             buf.increase_capacity(ncap);
         }
-        else if (roll < 911 && buf.capacity() >= 2)
+        else if (roll < 911 && buf.capacity() >= 4) // >= 4 keeps ncap >= 2: decrease_capacity(1) would strand mask == 0
         {
             AoL::SizeT ncap = std::bit_floor(buf.capacity() - 1);
             buf.decrease_capacity(ncap);
