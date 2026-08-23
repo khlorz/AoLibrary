@@ -428,7 +428,7 @@ struct CyclicBufferBase
     *
     * - The same as data[0]
     */
-    AOL_ATTRIB_NO_DISCARD constexpr T& front() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& front() const noexcept
     {
         assert(item_count > 0);
         return container_obj[head];
@@ -439,7 +439,7 @@ struct CyclicBufferBase
     *
     * - The same as data[item_count - 1]
     */
-    AOL_ATTRIB_NO_DISCARD constexpr T& back() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& back() const noexcept
     {
         assert(item_count > 0);
         return container_obj[(head + item_count - 1) & mask];
@@ -462,7 +462,7 @@ struct CyclicBufferBase
 
     AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
     {
-        return iterator(this, 0);
+        return const_iterator(this, 0);
     }
 
     AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
@@ -477,7 +477,7 @@ struct CyclicBufferBase
 
     AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
     {
-        return iterator(this, item_count);
+        return const_iterator(this, item_count);
     }
 
     AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
