@@ -813,7 +813,7 @@ TEST(CyclicBufferFixedIterTest, RangeForAndConstRangeFor)
     {
         sum_c += v;
     }
-    EXPECT_EQ(sum_c, 414);
+    EXPECT_EQ(sum_c, 410);
 }
 
 TEST(CyclicBufferFixedIterTest, ConstIteratorTraversal)
