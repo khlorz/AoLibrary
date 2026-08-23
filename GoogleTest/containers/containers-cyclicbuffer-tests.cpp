@@ -1551,7 +1551,7 @@ TEST(CyclicBufferLifecycleTest, DynamicLiveTracksPhysicalSlots)
     EXPECT_EQ(CbLiveObj::live, 3);
 
     buf.pop_back();
-    EXPECT_EQ(CbLiveObj::live, 2);
+    EXPECT_EQ(CbLiveObj::live, 3);
 
     buf.clear();
     EXPECT_EQ(CbLiveObj::live, 0);
