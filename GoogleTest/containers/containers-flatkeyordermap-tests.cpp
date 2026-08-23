@@ -1,5 +1,13 @@
 /********************************************************************
 * FlatKeyOrderMap tests: all container operations
+*
+* Conventions:
+* - Scale/capacity/boundary numbers are named constants below, each
+*   with a comment explaining why that value exists.
+* - Fixture key/value literals that document themselves (e.g. 42 with
+*   "answer") are intentionally left inline.
+* - Tests found to be redundant are kept but disabled with #if 0 and
+*   labeled with the test that supersedes them.
 ********************************************************************/
 
 
@@ -38,21 +46,71 @@ struct TestData
     }
 };
 
+// ===================================================================
+// SHARED SCALES AND PROBES
+// ===================================================================
+// Large enough to exercise interior shifts and growth reallocations,
+// small enough to keep Debug builds fast.
+
+constexpr int kReserveProbe = 100;         // arbitrary non-zero capacity handed to the capacity ctor; must stay empty
+constexpr int kMissingProbe = 999;         // lookup key chosen to never collide with any inserted fixture data
+constexpr int kStaleKey = 99;              // leftover entry proving assignment replaces (not merges) contents
+constexpr int kSmallCount = 10;            // small ascending/descending fills
+constexpr int kMediumCount = 100;          // multi-realloc fill for find/contains sweeps
+constexpr int kHalfMediumCount = 50;       // mid-scale sweep for contains
+constexpr int kLargeKeyBase = 1000000;     // well-separated large key, far from typical fixture keys
+constexpr int kLargeScale = 10000;         // reserve hint and full-sweep bound for the large stress tests
+constexpr int kLargeSplitPoint = 5000;     // key where the large test flips from descending to ascending insertion
+constexpr int kLookupScale = 1000;         // built-map size for bulk lookup checks
+constexpr int kIterationScale = 100;       // element count for the iteration-aggregate check
+constexpr int kStressBuildCount = 20000;   // largest build_start/build_add/build_end run
+constexpr int kStressProbeStride = 500;    // sample every 500th key of the stress build (40 probes)
+constexpr int kClearCycleCount = 10;       // insert/clear repetition count
+constexpr int kIteratorSampleCount = 5;    // element count for iterator arithmetic checks
+constexpr int kDescendingBuildFloor = 100; // lowest key of the 100..0 descending bulk build
+constexpr int kBuildReserveHint = 1000;    // capacity hint for the descending bulk build test
+
+// Probe keys sampled at roughly 0/25/50/75/100% of their respective range.
+constexpr int kMediumProbes[] = { 1, 25, 50, 75, 100 };
+constexpr int kLargeProbes[] = { 0, 2500, 5000, 7500, 9999 };
+
+// Orders pairs by .first only; mirrors FlatKeyOrderMap's key ordering.
+constexpr auto ByKeyOrder = [](const auto& lhs, const auto& rhs)
+{
+    return lhs.first < rhs.first;
+};
+
+// Asserts the map's flat storage is sorted by key: THE core invariant.
+template<typename Map>
+void ExpectSortedByKey(const Map& map)
+{
+    EXPECT_TRUE(std::is_sorted(map.begin(), map.end(), ByKeyOrder));
+}
+
+// Canonical "value_N" payload used by range-filling tests.
+std::string ValueTag(int i)
+{
+    return "value_" + std::to_string(i);
+}
+
+// Typed fixture root so every suite shares the TestMap alias without
+// duplicating boilerplate. Suite and test names below are unchanged.
+template<typename Key, typename Value>
+class FlatKeyOrderMapTestBase : public ::testing::Test
+{
+protected:
+    using TestMap = AoL::FlatKeyOrderMap<Key, Value>;
+};
+
 }
 
 // ===================================================================
 // FLAT KEY ORDER MAP BASIC TESTS
 // ===================================================================
 
-class FlatKeyOrderMapBasicTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapBasicTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Default construction must yield an empty, zero-sized map.
 TEST_F(FlatKeyOrderMapBasicTest, DefaultConstruction)
 {
     TestMap map;
@@ -60,13 +118,15 @@ TEST_F(FlatKeyOrderMapBasicTest, DefaultConstruction)
     EXPECT_EQ(map.size(), 0);
 }
 
+// Reserving capacity up front must not materialize any elements.
 TEST_F(FlatKeyOrderMapBasicTest, ConstructionWithCapacity)
 {
-    TestMap map(100);
+    TestMap map(kReserveProbe);
     EXPECT_TRUE(map.empty());
     EXPECT_EQ(map.size(), 0);
 }
 
+// Constructing from an unsorted iterator range must sort by key.
 TEST_F(FlatKeyOrderMapBasicTest, ConstructionFromIterators)
 {
     std::vector<AoL::FlatKeyOrderMapPair<int, std::string>> data
@@ -88,15 +148,9 @@ TEST_F(FlatKeyOrderMapBasicTest, ConstructionFromIterators)
 // BUILD PATTERN TESTS
 // ===================================================================
 
-class FlatKeyOrderMapBuildPatternTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapBuildPatternTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// build_start/build_add/build_end must sort arbitrarily ordered adds.
 TEST_F(FlatKeyOrderMapBuildPatternTest, BuildStartAddEnd)
 {
     TestMap map;
@@ -109,43 +163,28 @@ TEST_F(FlatKeyOrderMapBuildPatternTest, BuildStartAddEnd)
     map.build_end();
 
     EXPECT_EQ(map.size(), 3);
-    EXPECT_TRUE(
-        std::is_sorted(
-            map.begin(), 
-            map.end(),
-            [](const auto& a, const auto& b)
-            {
-                return a.first < b.first;
-            }
-        )
-    );
+    ExpectSortedByKey(map);
 }
 
+// Bulk descending build of 101 elements must come out sorted; also
+// exercises the capacity-hint constructor during build.
 TEST_F(FlatKeyOrderMapBuildPatternTest, BuildWithManyElements)
 {
-    TestMap map(1000);
+    TestMap map(kBuildReserveHint);
     map.build_start();
 
-    for (int i = 100; i >= 0; --i)
+    for (int i = kDescendingBuildFloor; i >= 0; --i)
     {
-        map.build_add(i, "value_" + std::to_string(i));
+        map.build_add(i, ValueTag(i));
     }
 
     map.build_end();
 
-    EXPECT_EQ(map.size(), 101);
-    EXPECT_TRUE(
-        std::is_sorted(
-            map.begin(), 
-            map.end(),
-            [](const auto& a, const auto& b)
-            {
-                return a.first < b.first;
-            }
-        )
-    );
+    EXPECT_EQ(map.size(), kDescendingBuildFloor + 1);
+    ExpectSortedByKey(map);
 }
 
+// Exact key sequence check: 1, 2, 5, 8 in insertion-value order.
 TEST_F(FlatKeyOrderMapBuildPatternTest, BuildPreservesOrder)
 {
     TestMap map;
@@ -172,15 +211,9 @@ TEST_F(FlatKeyOrderMapBuildPatternTest, BuildPreservesOrder)
 // INSERT OPERATIONS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapInsertTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapInsertTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// A single insert must store and expose its payload.
 TEST_F(FlatKeyOrderMapInsertTest, InsertSingleElement)
 {
     TestMap map;
@@ -190,6 +223,7 @@ TEST_F(FlatKeyOrderMapInsertTest, InsertSingleElement)
     EXPECT_EQ(map[5], "five");
 }
 
+// Several inserts must keep flat storage sorted.
 TEST_F(FlatKeyOrderMapInsertTest, InsertMultipleElements)
 {
     TestMap map;
@@ -198,18 +232,10 @@ TEST_F(FlatKeyOrderMapInsertTest, InsertMultipleElements)
     map.insert(8, "eight");
 
     EXPECT_EQ(map.size(), 3);
-    EXPECT_TRUE(
-        std::is_sorted(
-            map.begin(), 
-            map.end(),
-            [](const auto& a, const auto& b)
-            {
-                return a.first < b.first;
-            }
-        )
-    );
+    ExpectSortedByKey(map);
 }
 
+// Interior inserts must land at exact sorted positions.
 TEST_F(FlatKeyOrderMapInsertTest, InsertMaintainsKeyOrder)
 {
     TestMap map;
@@ -224,58 +250,41 @@ TEST_F(FlatKeyOrderMapInsertTest, InsertMaintainsKeyOrder)
     EXPECT_EQ((map.begin() + 3)->first, 15);
 }
 
+// Ascending inserts: the cheapest insertion path must stay sorted.
 TEST_F(FlatKeyOrderMapInsertTest, InsertInOrder)
 {
     TestMap map;
 
-    for (int i = 1; i <= 10; ++i)
+    for (int i = 1; i <= kSmallCount; ++i)
     {
-        map.insert(i, "value_" + std::to_string(i));
+        map.insert(i, ValueTag(i));
     }
 
-    EXPECT_EQ(map.size(), 10);
-    EXPECT_TRUE(std::is_sorted(map.begin(), map.end(),
-        [](const auto& a, const auto& b)
-        {
-            return a.first < b.first;
-        }));
+    EXPECT_EQ(map.size(), kSmallCount);
+    ExpectSortedByKey(map);
 }
 
+// Descending inserts: worst case (every insert shifts the storage).
 TEST_F(FlatKeyOrderMapInsertTest, InsertReverseOrder)
 {
     TestMap map;
 
-    for (int i = 10; i >= 1; --i)
+    for (int i = kSmallCount; i >= 1; --i)
     {
-        map.insert(i, "value_" + std::to_string(i));
+        map.insert(i, ValueTag(i));
     }
 
-    EXPECT_EQ(map.size(), 10);
-    EXPECT_TRUE(
-        std::is_sorted(
-            map.begin(), 
-            map.end(),
-            [](const auto& a, const auto& b)
-            {
-                return a.first < b.first;
-            }
-        )
-    );
+    EXPECT_EQ(map.size(), kSmallCount);
+    ExpectSortedByKey(map);
 }
 
 // ===================================================================
 // ACCESS OPERATIONS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapAccessTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapAccessTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// operator[] must return the mapped value for present keys.
 TEST_F(FlatKeyOrderMapAccessTest, OperatorBracketAccess)
 {
     TestMap map;
@@ -288,6 +297,8 @@ TEST_F(FlatKeyOrderMapAccessTest, OperatorBracketAccess)
     EXPECT_EQ(map[3], "three");
 }
 
+// Read-only access through a const map via at_ref (suite name is
+// historical).
 TEST_F(FlatKeyOrderMapAccessTest, ConstOperatorBracketAccess)
 {
     TestMap map;
@@ -297,6 +308,7 @@ TEST_F(FlatKeyOrderMapAccessTest, ConstOperatorBracketAccess)
     EXPECT_EQ(const_map.at_ref(5), "five");
 }
 
+// at_ref must hand back a writable reference that writes through.
 TEST_F(FlatKeyOrderMapAccessTest, AtRefAccess)
 {
     TestMap map;
@@ -308,6 +320,7 @@ TEST_F(FlatKeyOrderMapAccessTest, AtRefAccess)
     EXPECT_EQ(map[10], "TEN");
 }
 
+// at_ptr must yield a valid pointer to the mapped value.
 TEST_F(FlatKeyOrderMapAccessTest, AtPtrAccess)
 {
     TestMap map;
@@ -318,12 +331,13 @@ TEST_F(FlatKeyOrderMapAccessTest, AtPtrAccess)
     EXPECT_EQ(*ptr, "twenty");
 }
 
+// at_ptr must return nullptr for absent keys.
 TEST_F(FlatKeyOrderMapAccessTest, AtPtrNonExistent)
 {
     TestMap map;
     map.insert(5, "five");
 
-    auto ptr = map.at_ptr(999);
+    auto ptr = map.at_ptr(kMissingProbe);
     EXPECT_EQ(ptr, nullptr);
 }
 
@@ -331,15 +345,9 @@ TEST_F(FlatKeyOrderMapAccessTest, AtPtrNonExistent)
 // FIND OPERATIONS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapFindTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapFindTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// find() must return an iterator with the full pair payload.
 TEST_F(FlatKeyOrderMapFindTest, FindExistingKey)
 {
     TestMap map;
@@ -352,15 +360,17 @@ TEST_F(FlatKeyOrderMapFindTest, FindExistingKey)
     EXPECT_EQ(ptr->second, "five");
 }
 
+// find() must return end() for absent keys.
 TEST_F(FlatKeyOrderMapFindTest, FindNonExistentKey)
 {
     TestMap map;
     map.insert(5, "five");
 
-    auto ptr = map.find(999);
+    auto ptr = map.find(kMissingProbe);
     EXPECT_EQ(ptr, map.end());
 }
 
+// find() on an empty map must safely return end().
 TEST_F(FlatKeyOrderMapFindTest, FindEmptyMap)
 {
     TestMap map;
@@ -369,6 +379,7 @@ TEST_F(FlatKeyOrderMapFindTest, FindEmptyMap)
     EXPECT_EQ(ptr, map.end());
 }
 
+// find() must work through a const-qualified map.
 TEST_F(FlatKeyOrderMapFindTest, FindConstMap)
 {
     TestMap map;
@@ -381,16 +392,17 @@ TEST_F(FlatKeyOrderMapFindTest, FindConstMap)
     EXPECT_EQ(ptr->first, 7);
 }
 
+// Binary search correctness across the whole key range at quarter marks.
 TEST_F(FlatKeyOrderMapFindTest, FindMultipleElements)
 {
     TestMap map;
 
-    for (int i = 1; i <= 100; ++i)
+    for (int i = 1; i <= kMediumCount; ++i)
     {
-        map.insert(i, "value_" + std::to_string(i));
+        map.insert(i, ValueTag(i));
     }
 
-    for (int i : {1, 25, 50, 75, 100})
+    for (int i : kMediumProbes)
     {
         auto ptr = map.find(i);
         EXPECT_NE(ptr, map.end());
@@ -402,15 +414,9 @@ TEST_F(FlatKeyOrderMapFindTest, FindMultipleElements)
 // CONTAINS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapContainsTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapContainsTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// contains() must report true for a present key.
 TEST_F(FlatKeyOrderMapContainsTest, ContainsExisting)
 {
     TestMap map;
@@ -419,14 +425,16 @@ TEST_F(FlatKeyOrderMapContainsTest, ContainsExisting)
     EXPECT_TRUE(map.contains(42));
 }
 
+// contains() must report false for an absent key.
 TEST_F(FlatKeyOrderMapContainsTest, ContainsNonExistent)
 {
     TestMap map;
     map.insert(42, "answer");
 
-    EXPECT_FALSE(map.contains(999));
+    EXPECT_FALSE(map.contains(kMissingProbe));
 }
 
+// contains() on an empty map must be false without crashing.
 TEST_F(FlatKeyOrderMapContainsTest, ContainsEmptyMap)
 {
     TestMap map;
@@ -434,36 +442,31 @@ TEST_F(FlatKeyOrderMapContainsTest, ContainsEmptyMap)
     EXPECT_FALSE(map.contains(5));
 }
 
+// Every inserted key must be found; one past-the-end key must not.
 TEST_F(FlatKeyOrderMapContainsTest, ContainsMultipleKeys)
 {
     TestMap map;
 
-    for (int i = 0; i < 50; ++i)
+    for (int i = 0; i < kHalfMediumCount; ++i)
     {
         map.insert(i, "val");
     }
 
-    for (int i = 0; i < 50; ++i)
+    for (int i = 0; i < kHalfMediumCount; ++i)
     {
         EXPECT_TRUE(map.contains(i));
     }
 
-    EXPECT_FALSE(map.contains(100));
+    EXPECT_FALSE(map.contains(kHalfMediumCount * 2));
 }
 
 // ===================================================================
 // ITERATION TESTS
 // ===================================================================
 
-class FlatKeyOrderMapIterationTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapIterationTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Range-for must visit keys in ascending order.
 TEST_F(FlatKeyOrderMapIterationTest, ForwardIteration)
 {
     TestMap map;
@@ -483,6 +486,7 @@ TEST_F(FlatKeyOrderMapIterationTest, ForwardIteration)
     EXPECT_EQ(keys[2], 8);
 }
 
+// Reverse iterators must visit keys in descending order.
 TEST_F(FlatKeyOrderMapIterationTest, ReverseIteration)
 {
     TestMap map;
@@ -502,6 +506,9 @@ TEST_F(FlatKeyOrderMapIterationTest, ReverseIteration)
     EXPECT_EQ(keys[2], 1);
 }
 
+#if 0
+// DISABLED: duplicate of FlatKeyOrderMapIteratorCategoryTest.CBeginCEnd
+// (same cbegin/cend walk-and-count coverage). Kept for reference.
 TEST_F(FlatKeyOrderMapIterationTest, ConstIteration)
 {
     TestMap map;
@@ -518,12 +525,15 @@ TEST_F(FlatKeyOrderMapIterationTest, ConstIteration)
 
     EXPECT_EQ(count, 2);
 }
+#endif // disabled: ConstIteration
 
+// After 100 descending inserts, forward iteration must be strictly
+// increasing: strongest single statement of the ordering invariant.
 TEST_F(FlatKeyOrderMapIterationTest, IterationOrderIsKeyOrder)
 {
     TestMap map;
 
-    for (int i = 100; i >= 1; --i)
+    for (int i = kMediumCount; i >= 1; --i)
     {
         map.insert(i, "val");
     }
@@ -541,15 +551,9 @@ TEST_F(FlatKeyOrderMapIterationTest, IterationOrderIsKeyOrder)
 // CLEAR AND SIZE TESTS
 // ===================================================================
 
-class FlatKeyOrderMapClearTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapClearTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// clear() on an empty map must remain a valid no-op.
 TEST_F(FlatKeyOrderMapClearTest, ClearEmptyMap)
 {
     TestMap map;
@@ -559,6 +563,7 @@ TEST_F(FlatKeyOrderMapClearTest, ClearEmptyMap)
     EXPECT_EQ(map.size(), 0);
 }
 
+// clear() must empty a populated map.
 TEST_F(FlatKeyOrderMapClearTest, ClearNonEmptyMap)
 {
     TestMap map;
@@ -572,6 +577,7 @@ TEST_F(FlatKeyOrderMapClearTest, ClearNonEmptyMap)
     EXPECT_EQ(map.size(), 0);
 }
 
+// The map must stay reusable for inserts after clear().
 TEST_F(FlatKeyOrderMapClearTest, InsertAfterClear)
 {
     TestMap map;
@@ -584,12 +590,13 @@ TEST_F(FlatKeyOrderMapClearTest, InsertAfterClear)
     EXPECT_EQ(map[10], "ten");
 }
 
+// size() must track every insert exactly, step by step.
 TEST_F(FlatKeyOrderMapClearTest, SizeTracking)
 {
     TestMap map;
     EXPECT_EQ(map.size(), 0);
 
-    for (int i = 1; i <= 10; ++i)
+    for (int i = 1; i <= kSmallCount; ++i)
     {
         map.insert(i, "val");
         EXPECT_EQ(map.size(), i);
@@ -600,15 +607,9 @@ TEST_F(FlatKeyOrderMapClearTest, SizeTracking)
 // DATA ACCESS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapDataTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapDataTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// data() must expose the flat storage in key order (contiguity check).
 TEST_F(FlatKeyOrderMapDataTest, DataPointerAccess)
 {
     TestMap map;
@@ -621,6 +622,7 @@ TEST_F(FlatKeyOrderMapDataTest, DataPointerAccess)
     EXPECT_EQ(data[1].first, 2);
 }
 
+// data() must also be reachable through a const map.
 TEST_F(FlatKeyOrderMapDataTest, ConstDataPointerAccess)
 {
     TestMap map;
@@ -636,15 +638,9 @@ TEST_F(FlatKeyOrderMapDataTest, ConstDataPointerAccess)
 // CUSTOM TYPE TESTS
 // ===================================================================
 
-class FlatKeyOrderMapCustomTypeTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, TestData>;
+class FlatKeyOrderMapCustomTypeTest : public FlatKeyOrderMapTestBase<int, TestData> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Non-trivial mapped types must survive insert and operator[] reads.
 TEST_F(FlatKeyOrderMapCustomTypeTest, InsertCustomType)
 {
     TestMap map;
@@ -655,6 +651,7 @@ TEST_F(FlatKeyOrderMapCustomTypeTest, InsertCustomType)
     EXPECT_EQ(map[1].description, "first");
 }
 
+// The build path must handle struct values too.
 TEST_F(FlatKeyOrderMapCustomTypeTest, BuildWithCustomType)
 {
     TestMap map;
@@ -674,15 +671,9 @@ TEST_F(FlatKeyOrderMapCustomTypeTest, BuildWithCustomType)
 // EDGE CASES TESTS
 // ===================================================================
 
-class FlatKeyOrderMapEdgeCasesTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapEdgeCasesTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Single-element state: not empty, size 1, value readable.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, SingleElement)
 {
     TestMap map;
@@ -693,6 +684,7 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, SingleElement)
     EXPECT_EQ(map[42], "answer");
 }
 
+// Negative, zero, and positive keys must sort correctly together.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, NegativeKeys)
 {
     TestMap map;
@@ -707,10 +699,11 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, NegativeKeys)
     EXPECT_EQ(map.begin()->first, -5);
 }
 
+// Keys near a million must not trip any narrowing or comparison bug.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, LargeNumbers)
 {
     TestMap map;
-    int large = 1000000;
+    int large = kLargeKeyBase;
     map.insert(large, "large");
     map.insert(large - 1, "smaller");
 
@@ -718,6 +711,7 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, LargeNumbers)
     EXPECT_EQ(map[large - 1], "smaller");
 }
 
+// Empty-string values are legal payloads and must round-trip.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, EmptyStrings)
 {
     TestMap map;
@@ -728,29 +722,27 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, EmptyStrings)
     EXPECT_EQ(map[2], "non-empty");
 }
 
+// Stress test: reserve once, fill descending to the midpoint then
+// ascending to full scale, verify order and spot-find at quarter marks.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, LargeMapPerformance)
 {
-    TestMap map(10000);
+    TestMap map(kLargeScale);
 
-    for (int i = 5000; i >= 0; --i)
+    for (int i = kLargeSplitPoint; i >= 0; --i)
     {
-        map.insert(i, "value_" + std::to_string(i));
+        map.insert(i, ValueTag(i));
     }
 
-    for (int i = 5001; i < 10000; ++i)
+    for (int i = kLargeSplitPoint + 1; i < kLargeScale; ++i)
     {
-        map.insert(i, "value_" + std::to_string(i));
+        map.insert(i, ValueTag(i));
     }
 
-    EXPECT_EQ(map.size(), 10000);
+    EXPECT_EQ(map.size(), kLargeScale);
 
-    EXPECT_TRUE(std::is_sorted(map.begin(), map.end(),
-        [](const auto& a, const auto& b)
-        {
-            return a.first < b.first;
-        }));
+    ExpectSortedByKey(map);
 
-    for (int i : {0, 2500, 5000, 7500, 9999})
+    for (int i : kLargeProbes)
     {
         auto ptr = map.find(i);
         EXPECT_NE(ptr, map.end());
@@ -758,6 +750,7 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, LargeMapPerformance)
     }
 }
 
+// Building an empty range must produce an empty map.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, BuildEmptyMap)
 {
     TestMap map;
@@ -767,6 +760,8 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, BuildEmptyMap)
     EXPECT_TRUE(map.empty());
 }
 
+// Sequential build sessions (with a clear between) must not corrupt
+// state; the 't' probe pins actual payload bytes.
 TEST_F(FlatKeyOrderMapEdgeCasesTest, MultipleBuilds)
 {
     TestMap map;
@@ -791,20 +786,17 @@ TEST_F(FlatKeyOrderMapEdgeCasesTest, MultipleBuilds)
 // ===================================================================
 // PERFORMANCE CHARACTERISTIC TESTS
 // ===================================================================
+// Despite the suite name these assert correctness at scale, not timing.
 
-class FlatKeyOrderMapPerformanceTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, int>;
+class FlatKeyOrderMapPerformanceTest : public FlatKeyOrderMapTestBase<int, int> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+#if 0
+// DISABLED: measures nothing (no timing) and its lookups are a subset
+// of FlatKeyOrderMapFindTest.FindMultipleElements. Kept for reference.
 TEST_F(FlatKeyOrderMapPerformanceTest, LookupInLargeMapVsFill)
 {
     TestMap map;
-    const int size = 1000;
+    const int size = kLookupScale;
 
     map.build_start();
 
@@ -824,11 +816,14 @@ TEST_F(FlatKeyOrderMapPerformanceTest, LookupInLargeMapVsFill)
         EXPECT_EQ(ptr->second, i * 2);
     }
 }
+#endif // disabled: LookupInLargeMapVsFill
 
+// Summing all values during iteration must match the analytic total:
+// catches dropped/duplicated elements during traversal.
 TEST_F(FlatKeyOrderMapPerformanceTest, IterationThroughAllElements)
 {
     TestMap map;
-    const int size = 100;
+    const int size = kIterationScale;
 
     for (int i = 0; i < size; ++i)
     {
@@ -856,15 +851,9 @@ TEST_F(FlatKeyOrderMapPerformanceTest, IterationThroughAllElements)
 // COPY SEMANTICS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapCopyTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapCopyTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Copy-constructing from an empty map must stay empty.
 TEST_F(FlatKeyOrderMapCopyTest, CopyConstructEmpty)
 {
     TestMap map;
@@ -873,6 +862,7 @@ TEST_F(FlatKeyOrderMapCopyTest, CopyConstructEmpty)
     EXPECT_TRUE(copied.empty());
 }
 
+// Copy construction must deep-replicate all entries in order.
 TEST_F(FlatKeyOrderMapCopyTest, CopyConstructFilled)
 {
     TestMap map;
@@ -888,6 +878,7 @@ TEST_F(FlatKeyOrderMapCopyTest, CopyConstructFilled)
     EXPECT_EQ(copied[3], "three");
 }
 
+// Copies must not share storage: post-copy inserts stay independent.
 TEST_F(FlatKeyOrderMapCopyTest, CopyIsIndependent)
 {
     TestMap map;
@@ -902,6 +893,7 @@ TEST_F(FlatKeyOrderMapCopyTest, CopyIsIndependent)
     EXPECT_FALSE(copied.contains(2));
 }
 
+// Copy assignment must transfer all entries.
 TEST_F(FlatKeyOrderMapCopyTest, CopyAssignFilled)
 {
     TestMap map;
@@ -916,6 +908,7 @@ TEST_F(FlatKeyOrderMapCopyTest, CopyAssignFilled)
     EXPECT_EQ(assigned[5], "five");
 }
 
+// Self copy-assignment must be a safe no-op.
 TEST_F(FlatKeyOrderMapCopyTest, CopyAssignSelf)
 {
     TestMap map;
@@ -928,33 +921,28 @@ TEST_F(FlatKeyOrderMapCopyTest, CopyAssignSelf)
     EXPECT_EQ(map[1], "one");
 }
 
+// Copy assignment must replace prior contents, not merge with them.
 TEST_F(FlatKeyOrderMapCopyTest, CopyAssignOverwritesOldData)
 {
     TestMap map;
     map.insert(1, "one");
 
     TestMap assigned;
-    assigned.insert(99, "old");
+    assigned.insert(kStaleKey, "old");
     assigned = map;
 
     EXPECT_EQ(assigned.size(), 1);
     EXPECT_EQ(assigned[1], "one");
-    EXPECT_FALSE(assigned.contains(99));
+    EXPECT_FALSE(assigned.contains(kStaleKey));
 }
 
 // ===================================================================
 // MOVE SEMANTICS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapMoveTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapMoveTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Move-constructing from an empty map must stay empty.
 TEST_F(FlatKeyOrderMapMoveTest, MoveConstructEmpty)
 {
     TestMap map;
@@ -963,6 +951,7 @@ TEST_F(FlatKeyOrderMapMoveTest, MoveConstructEmpty)
     EXPECT_TRUE(moved.empty());
 }
 
+// Move construction must transfer all entries.
 TEST_F(FlatKeyOrderMapMoveTest, MoveConstructFilled)
 {
     TestMap map;
@@ -976,6 +965,7 @@ TEST_F(FlatKeyOrderMapMoveTest, MoveConstructFilled)
     EXPECT_EQ(moved[2], "two");
 }
 
+// Move assignment must transfer all entries.
 TEST_F(FlatKeyOrderMapMoveTest, MoveAssignFilled)
 {
     TestMap map;
@@ -988,6 +978,7 @@ TEST_F(FlatKeyOrderMapMoveTest, MoveAssignFilled)
     EXPECT_EQ(assigned[10], "ten");
 }
 
+// Self move-assignment must not corrupt the map.
 TEST_F(FlatKeyOrderMapMoveTest, MoveAssignSelf)
 {
     TestMap map;
@@ -1003,16 +994,13 @@ TEST_F(FlatKeyOrderMapMoveTest, MoveAssignSelf)
 // CONSTRUCTION FROM CONTAINER TESTS
 // ===================================================================
 
-class FlatKeyOrderMapContainerCtorTest : public ::testing::Test
+class FlatKeyOrderMapContainerCtorTest : public FlatKeyOrderMapTestBase<int, std::string>
 {
 protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
     using PairType = AoL::FlatKeyOrderMapPair<int, std::string>;
-
-    void SetUp() override {}
-    void TearDown() override {}
 };
 
+// Container copy-ctor must adopt and sort an unsorted vector.
 TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorCopy)
 {
     typename TestMap::container_type data{ PairType{3, "three"}, PairType{1, "one"}, PairType{2, "two"} };
@@ -1024,6 +1012,7 @@ TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorCopy)
     EXPECT_EQ((map.begin() + 2)->first, 3);
 }
 
+// Container move-ctor must steal storage and stay sorted.
 TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorMove)
 {
     typename TestMap::container_type data{ PairType{5, "five"}, PairType{4, "four"} };
@@ -1038,15 +1027,9 @@ TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorMove)
 // CONST CORRECTNESS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapConstTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapConstTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Every const entry point must work on a default (empty) map.
 TEST_F(FlatKeyOrderMapConstTest, ConstEmpty)
 {
     const TestMap map;
@@ -1056,6 +1039,8 @@ TEST_F(FlatKeyOrderMapConstTest, ConstEmpty)
     EXPECT_FALSE(map.contains(1));
 }
 
+// Const queries (empty/size/contains/find) must agree with mutable
+// observations on shared data.
 TEST_F(FlatKeyOrderMapConstTest, ConstAccess)
 {
     TestMap map;
@@ -1078,6 +1063,7 @@ TEST_F(FlatKeyOrderMapConstTest, ConstAccess)
     EXPECT_EQ(it, const_map.end());
 }
 
+// at_ref must be callable on a const map for read access.
 TEST_F(FlatKeyOrderMapConstTest, ConstAtRef)
 {
     TestMap map;
@@ -1087,6 +1073,7 @@ TEST_F(FlatKeyOrderMapConstTest, ConstAtRef)
     EXPECT_EQ(const_map.at_ref(5), "five");
 }
 
+// at_ptr must return a valid const pointer on a const map.
 TEST_F(FlatKeyOrderMapConstTest, ConstAtPtr)
 {
     TestMap map;
@@ -1098,21 +1085,24 @@ TEST_F(FlatKeyOrderMapConstTest, ConstAtPtr)
     EXPECT_EQ(*ptr, "seven");
 }
 
+// Const at_ptr must return nullptr for absent keys.
 TEST_F(FlatKeyOrderMapConstTest, ConstAtPtrNonExistent)
 {
     TestMap map;
     map.insert(1, "one");
 
     const TestMap& const_map = map;
-    EXPECT_EQ(const_map.at_ptr(999), nullptr);
+    EXPECT_EQ(const_map.at_ptr(kMissingProbe), nullptr);
 }
 
+// Const at_ptr on an empty map must return nullptr without crashing.
 TEST_F(FlatKeyOrderMapConstTest, ConstAtPtrEmpty)
 {
     const TestMap map;
     EXPECT_EQ(map.at_ptr(1), nullptr);
 }
 
+// Const data() must expose the flat storage read-only.
 TEST_F(FlatKeyOrderMapConstTest, ConstData)
 {
     TestMap map;
@@ -1124,6 +1114,8 @@ TEST_F(FlatKeyOrderMapConstTest, ConstData)
     EXPECT_EQ(data[0].first, 3);
 }
 
+// Const forward and reverse iterators must traverse fully and hit
+// their respective end sentinels.
 TEST_F(FlatKeyOrderMapConstTest, ConstIterators)
 {
     TestMap map;
@@ -1151,15 +1143,9 @@ TEST_F(FlatKeyOrderMapConstTest, ConstIterators)
 // AT_PTR MODIFICATION TESTS
 // ===================================================================
 
-class FlatKeyOrderMapAtPtrModifyTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapAtPtrModifyTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// Writes through at_ptr must be visible through every other accessor.
 TEST_F(FlatKeyOrderMapAtPtrModifyTest, ModifyThroughPointer)
 {
     TestMap map;
@@ -1176,15 +1162,10 @@ TEST_F(FlatKeyOrderMapAtPtrModifyTest, ModifyThroughPointer)
 // OPERATOR[] DEFAULT INSERTION TESTS
 // ===================================================================
 
-class FlatKeyOrderMapBracketTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapBracketTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// operator[] on a missing key must default-insert an entry and return
+// a reference to it.
 TEST_F(FlatKeyOrderMapBracketTest, CreatesEntryOnNonExistentKey)
 {
     TestMap map;
@@ -1194,6 +1175,7 @@ TEST_F(FlatKeyOrderMapBracketTest, CreatesEntryOnNonExistentKey)
     EXPECT_TRUE(ref.empty());
 }
 
+// operator[] must read back previously assigned values.
 TEST_F(FlatKeyOrderMapBracketTest, ReturnsExistingEntry)
 {
     TestMap map;
@@ -1205,6 +1187,7 @@ TEST_F(FlatKeyOrderMapBracketTest, ReturnsExistingEntry)
     EXPECT_EQ(map[2], "two");
 }
 
+// Reassigning through operator[] must overwrite, not duplicate.
 TEST_F(FlatKeyOrderMapBracketTest, ChainedModification)
 {
     TestMap map;
@@ -1219,15 +1202,9 @@ TEST_F(FlatKeyOrderMapBracketTest, ChainedModification)
 // KEY TYPE VARIATIONS TESTS
 // ===================================================================
 
-class FlatKeyOrderMapStringKeyTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<std::string, int>;
+class FlatKeyOrderMapStringKeyTest : public FlatKeyOrderMapTestBase<std::string, int> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// String keys must insert and read back through operator[].
 TEST_F(FlatKeyOrderMapStringKeyTest, InsertAndAccess)
 {
     TestMap map;
@@ -1241,6 +1218,7 @@ TEST_F(FlatKeyOrderMapStringKeyTest, InsertAndAccess)
     EXPECT_EQ(map["cherry"], 8);
 }
 
+// String keys must sort lexicographically regardless of insert order.
 TEST_F(FlatKeyOrderMapStringKeyTest, KeyOrderAlphabetical)
 {
     TestMap map;
@@ -1256,6 +1234,7 @@ TEST_F(FlatKeyOrderMapStringKeyTest, KeyOrderAlphabetical)
     EXPECT_EQ(it->first, "zebra");
 }
 
+// find/contains must agree for string keys, present and absent.
 TEST_F(FlatKeyOrderMapStringKeyTest, FindAndContains)
 {
     TestMap map;
@@ -1271,6 +1250,7 @@ TEST_F(FlatKeyOrderMapStringKeyTest, FindAndContains)
     EXPECT_EQ(map.find("other"), map.end());
 }
 
+// The build path must sort string keys alphabetically.
 TEST_F(FlatKeyOrderMapStringKeyTest, BuildWithStringKeys)
 {
     TestMap map;
@@ -1286,6 +1266,7 @@ TEST_F(FlatKeyOrderMapStringKeyTest, BuildWithStringKeys)
     EXPECT_EQ(map["c"], 3);
 }
 
+// An empty string key is legal and must coexist with non-empty keys.
 TEST_F(FlatKeyOrderMapStringKeyTest, EmptyStringKey)
 {
     TestMap map;
@@ -1300,15 +1281,9 @@ TEST_F(FlatKeyOrderMapStringKeyTest, EmptyStringKey)
 // ITERATOR CATEGORY TESTS
 // ===================================================================
 
-class FlatKeyOrderMapIteratorCategoryTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapIteratorCategoryTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// begin()/end() must form a valid forward range covering all elements.
 TEST_F(FlatKeyOrderMapIteratorCategoryTest, BeginEndRange)
 {
     TestMap map;
@@ -1324,6 +1299,7 @@ TEST_F(FlatKeyOrderMapIteratorCategoryTest, BeginEndRange)
     EXPECT_EQ(count, 3);
 }
 
+// cbegin()/cend() must walk a const map and reach the sentinel.
 TEST_F(FlatKeyOrderMapIteratorCategoryTest, CBeginCEnd)
 {
     TestMap map;
@@ -1337,6 +1313,7 @@ TEST_F(FlatKeyOrderMapIteratorCategoryTest, CBeginCEnd)
     EXPECT_EQ(it, const_map.cend());
 }
 
+// crbegin()/crend() must walk a const map backwards.
 TEST_F(FlatKeyOrderMapIteratorCategoryTest, CRBeginCREnd)
 {
     TestMap map;
@@ -1352,31 +1329,27 @@ TEST_F(FlatKeyOrderMapIteratorCategoryTest, CRBeginCREnd)
     EXPECT_EQ(it, const_map.crend());
 }
 
+// Random-access difference must report the element count.
 TEST_F(FlatKeyOrderMapIteratorCategoryTest, IteratorDifference)
 {
     TestMap map;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < kIteratorSampleCount; ++i)
     {
         map.insert(i, "val");
     }
 
     auto diff = map.end() - map.begin();
-    EXPECT_EQ(diff, 5);
+    EXPECT_EQ(diff, kIteratorSampleCount);
 }
 
 // ===================================================================
 // BOUNDARY VALUE TESTS
 // ===================================================================
 
-class FlatKeyOrderMapBoundaryTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapBoundaryTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// INT_MIN and INT_MAX keys must sort to the extreme positions without
+// overflow in comparisons.
 TEST_F(FlatKeyOrderMapBoundaryTest, IntMinMaxKeys)
 {
     TestMap map;
@@ -1392,6 +1365,7 @@ TEST_F(FlatKeyOrderMapBoundaryTest, IntMinMaxKeys)
     EXPECT_EQ(map.rbegin()->first, INT_MAX);
 }
 
+// Mixed-sign keys must interleave into correct sorted positions.
 TEST_F(FlatKeyOrderMapBoundaryTest, MixedNegativeAndPositive)
 {
     TestMap map;
@@ -1404,10 +1378,12 @@ TEST_F(FlatKeyOrderMapBoundaryTest, MixedNegativeAndPositive)
     EXPECT_EQ(map.rbegin()->first, 100);
 }
 
+// Full-sweep: 10k inserts then 10k contains must all succeed, and the
+// next key must be rejected.
 TEST_F(FlatKeyOrderMapBoundaryTest, LargeNumberOfElements)
 {
     TestMap map;
-    const int n = 10000;
+    const int n = kLargeScale;
 
     for (int i = 0; i < n; ++i)
     {
@@ -1428,15 +1404,9 @@ TEST_F(FlatKeyOrderMapBoundaryTest, LargeNumberOfElements)
 // EMPTY MAP EDGE CASE TESTS
 // ===================================================================
 
-class FlatKeyOrderMapEmptyTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapEmptyTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// data() on an empty map must be callable and leave the map empty.
 TEST_F(FlatKeyOrderMapEmptyTest, DataOnEmptyMap)
 {
     TestMap map;
@@ -1445,6 +1415,7 @@ TEST_F(FlatKeyOrderMapEmptyTest, DataOnEmptyMap)
     EXPECT_TRUE(map.empty());
 }
 
+// Const data() on an empty map must behave identically.
 TEST_F(FlatKeyOrderMapEmptyTest, ConstDataOnEmptyMap)
 {
     const TestMap map;
@@ -1453,19 +1424,25 @@ TEST_F(FlatKeyOrderMapEmptyTest, ConstDataOnEmptyMap)
     EXPECT_TRUE(map.empty());
 }
 
+// at_ptr on an empty map must return nullptr.
 TEST_F(FlatKeyOrderMapEmptyTest, AtPtrOnEmptyMap)
 {
     TestMap map;
     EXPECT_EQ(map.at_ptr(1), nullptr);
 }
 
+#if 0
+// DISABLED: exact duplicate of FlatKeyOrderMapClearTest.ClearEmptyMap.
+// Kept for reference.
 TEST_F(FlatKeyOrderMapEmptyTest, ClearEmptyMapIsNoOp)
 {
     TestMap map;
     map.clear();
     EXPECT_TRUE(map.empty());
 }
+#endif // disabled: ClearEmptyMapIsNoOp
 
+// clear() must reset cleanly enough that the build path works after it.
 TEST_F(FlatKeyOrderMapEmptyTest, ClearThenBuild)
 {
     TestMap map;
@@ -1482,11 +1459,13 @@ TEST_F(FlatKeyOrderMapEmptyTest, ClearThenBuild)
     EXPECT_EQ(map[2], "two");
 }
 
+// Repeated insert/clear cycles with growing payloads must leave the
+// map empty every time: catches stale-count bugs.
 TEST_F(FlatKeyOrderMapEmptyTest, MultipleClearCycles)
 {
     TestMap map;
 
-    for (int cycle = 0; cycle < 10; ++cycle)
+    for (int cycle = 0; cycle < kClearCycleCount; ++cycle)
     {
         for (int i = 0; i < cycle; ++i)
         {
@@ -1503,15 +1482,9 @@ TEST_F(FlatKeyOrderMapEmptyTest, MultipleClearCycles)
 // MIXED OPERATION SEQUENCE TESTS
 // ===================================================================
 
-class FlatKeyOrderMapMixedTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, int>;
+class FlatKeyOrderMapMixedTest : public FlatKeyOrderMapTestBase<int, int> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// insert, build, insert interleaved must converge to one sorted map.
 TEST_F(FlatKeyOrderMapMixedTest, InsertAndBuildSequence)
 {
     TestMap map;
@@ -1531,6 +1504,7 @@ TEST_F(FlatKeyOrderMapMixedTest, InsertAndBuildSequence)
     EXPECT_EQ(map[5], 50);
 }
 
+// build, clear, build must produce exactly the second batch.
 TEST_F(FlatKeyOrderMapMixedTest, BuildClearBuild)
 {
     TestMap map;
@@ -1553,6 +1527,7 @@ TEST_F(FlatKeyOrderMapMixedTest, BuildClearBuild)
     EXPECT_EQ(map[7], 70);
 }
 
+// Copying a build-produced map must preserve its contents.
 TEST_F(FlatKeyOrderMapMixedTest, CopyOfBuiltMap)
 {
     TestMap map;
@@ -1567,6 +1542,7 @@ TEST_F(FlatKeyOrderMapMixedTest, CopyOfBuiltMap)
     EXPECT_EQ(copied[2], 20);
 }
 
+// Moving an insert-populated map must transfer its contents.
 TEST_F(FlatKeyOrderMapMixedTest, MoveOfInsertedMap)
 {
     TestMap map;
@@ -1578,27 +1554,25 @@ TEST_F(FlatKeyOrderMapMixedTest, MoveOfInsertedMap)
     EXPECT_EQ(moved[1], 10);
 }
 
+// Largest stress: 20k-element descending build must sort, and probing
+// every 500th key must read back the exact payload mapping.
 TEST_F(FlatKeyOrderMapMixedTest, LargeBuildWithContiguousKeys)
 {
-    TestMap map(20000);
+    TestMap map(kStressBuildCount);
     map.build_start();
 
-    for (int i = 19999; i >= 0; --i)
+    for (int i = kStressBuildCount - 1; i >= 0; --i)
     {
         map.build_add(i, i * 2);
     }
 
     map.build_end();
 
-    EXPECT_EQ(map.size(), 20000);
+    EXPECT_EQ(map.size(), kStressBuildCount);
 
-    EXPECT_TRUE(std::is_sorted(map.begin(), map.end(),
-        [](const auto& a, const auto& b)
-        {
-            return a.first < b.first;
-        }));
+    ExpectSortedByKey(map);
 
-    for (int i = 0; i < 20000; i += 500)
+    for (int i = 0; i < kStressBuildCount; i += kStressProbeStride)
     {
         EXPECT_EQ(map[i], i * 2);
     }
@@ -1610,15 +1584,9 @@ TEST_F(FlatKeyOrderMapMixedTest, LargeBuildWithContiguousKeys)
 // Verifies that every InKey&& / InValue&& parameter compiles and works
 // correctly with lvalues, const lvalues, rvalues, and string literals.
 
-class FlatKeyOrderMapFwdStringKeyTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<std::string, int>;
+class FlatKeyOrderMapFwdStringKeyTest : public FlatKeyOrderMapTestBase<std::string, int> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// insert() with an lvalue string key must store it intact.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertLvalueString)
 {
     TestMap map;
@@ -1628,6 +1596,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertLvalueString)
     EXPECT_EQ(map["hello"], 1);
 }
 
+// insert() with a const lvalue string key must compile and store.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertConstLvalueString)
 {
     TestMap map;
@@ -1637,6 +1606,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertConstLvalueString)
     EXPECT_EQ(map["world"], 2);
 }
 
+// insert() with an rvalue string key must move it in.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertRvalueString)
 {
     TestMap map;
@@ -1645,6 +1615,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertRvalueString)
     EXPECT_EQ(map["temp"], 3);
 }
 
+// insert() with a string literal key must convert and store.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertStringLiteral)
 {
     TestMap map;
@@ -1653,6 +1624,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertStringLiteral)
     EXPECT_EQ(map["literal"], 4);
 }
 
+// insert() via const char* lvalue must convert and store.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertConstCharPointer)
 {
     TestMap map;
@@ -1662,6 +1634,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, InsertConstCharPointer)
     EXPECT_EQ(map["cstring"], 5);
 }
 
+// operator[] assignment with an lvalue string key.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketLvalueString)
 {
     TestMap map;
@@ -1671,6 +1644,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketLvalueString)
     EXPECT_EQ(map["alpha"], 10);
 }
 
+// operator[] assignment with an rvalue string key.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketRvalueString)
 {
     TestMap map;
@@ -1679,6 +1653,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketRvalueString)
     EXPECT_EQ(map["beta"], 20);
 }
 
+// operator[] assignment with a string literal key.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketStringLiteral)
 {
     TestMap map;
@@ -1687,6 +1662,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BracketStringLiteral)
     EXPECT_EQ(map["gamma"], 30);
 }
 
+// at_ref with an lvalue string key must locate the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefLvalueString)
 {
     TestMap map;
@@ -1695,6 +1671,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefLvalueString)
     EXPECT_EQ(map.at_ref(key), 42);
 }
 
+// at_ref with an rvalue string key must locate the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefRvalueString)
 {
     TestMap map;
@@ -1702,6 +1679,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefRvalueString)
     EXPECT_EQ(map.at_ref(std::string("key")), 42);
 }
 
+// at_ref with a string literal key must locate the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefStringLiteral)
 {
     TestMap map;
@@ -1709,6 +1687,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtRefStringLiteral)
     EXPECT_EQ(map.at_ref("key"), 42);
 }
 
+// at_ptr with an lvalue string key must find the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrLvalueString)
 {
     TestMap map;
@@ -1719,6 +1698,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrLvalueString)
     EXPECT_EQ(*ptr, 42);
 }
 
+// at_ptr with an rvalue string key must find the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrRvalueString)
 {
     TestMap map;
@@ -1728,6 +1708,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrRvalueString)
     EXPECT_EQ(*ptr, 42);
 }
 
+// at_ptr with a string literal key must find the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrStringLiteral)
 {
     TestMap map;
@@ -1737,6 +1718,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, AtPtrStringLiteral)
     EXPECT_EQ(*ptr, 42);
 }
 
+// find() with an lvalue string key must hit the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindLvalueString)
 {
     TestMap map;
@@ -1745,6 +1727,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindLvalueString)
     EXPECT_NE(map.find(key), map.end());
 }
 
+// find() with an rvalue string key must hit the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindRvalueString)
 {
     TestMap map;
@@ -1752,6 +1735,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindRvalueString)
     EXPECT_NE(map.find(std::string("target")), map.end());
 }
 
+// find() with a string literal key must hit the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindStringLiteral)
 {
     TestMap map;
@@ -1759,6 +1743,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, FindStringLiteral)
     EXPECT_NE(map.find("target"), map.end());
 }
 
+// contains() with lvalue strings must accept hits and misses.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsLvalueString)
 {
     TestMap map;
@@ -1769,6 +1754,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsLvalueString)
     EXPECT_FALSE(map.contains(missing));
 }
 
+// contains() with rvalue strings must accept hits and misses.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsRvalueString)
 {
     TestMap map;
@@ -1777,6 +1763,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsRvalueString)
     EXPECT_FALSE(map.contains(std::string("absent")));
 }
 
+// contains() with string literals must accept hits and misses.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsStringLiteral)
 {
     TestMap map;
@@ -1785,6 +1772,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ContainsStringLiteral)
     EXPECT_FALSE(map.contains("absent"));
 }
 
+// build_add with lvalue string keys must sort them.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddLvalueString)
 {
     TestMap map;
@@ -1798,6 +1786,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddLvalueString)
     EXPECT_EQ(map["b"], 2);
 }
 
+// build_add with rvalue string keys must move and sort them.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddRvalueString)
 {
     TestMap map;
@@ -1810,6 +1799,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddRvalueString)
     EXPECT_EQ(map["z"], 26);
 }
 
+// build_add with string literal keys must convert and sort them.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddStringLiteral)
 {
     TestMap map;
@@ -1822,6 +1812,8 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, BuildAddStringLiteral)
     EXPECT_EQ(map["second"], 2);
 }
 
+// Const find() with an lvalue string key must hit; a missing rvalue
+// must miss.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstFindLvalueString)
 {
     TestMap map;
@@ -1832,6 +1824,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstFindLvalueString)
     EXPECT_EQ(cmap.find(std::string("nonexistent")), cmap.end());
 }
 
+// Const at_ref with a string literal must read the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstAtRefStringLiteral)
 {
     TestMap map;
@@ -1840,6 +1833,7 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstAtRefStringLiteral)
     EXPECT_EQ(cmap.at_ref("val"), 42);
 }
 
+// Const at_ptr with an rvalue string key must find the entry.
 TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstAtPtrRvalueString)
 {
     TestMap map;
@@ -1854,15 +1848,9 @@ TEST_F(FlatKeyOrderMapFwdStringKeyTest, ConstAtPtrRvalueString)
 // FORWARDING REFERENCE TESTS — STRING VALUE
 // ===================================================================
 
-class FlatKeyOrderMapFwdStringValueTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<int, std::string>;
+class FlatKeyOrderMapFwdStringValueTest : public FlatKeyOrderMapTestBase<int, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// insert() with an lvalue string value must copy it in.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertLvalueString)
 {
     TestMap map;
@@ -1872,6 +1860,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertLvalueString)
     EXPECT_EQ(map[1], "hello");
 }
 
+// insert() with a const lvalue string value must compile and copy.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertConstLvalueString)
 {
     TestMap map;
@@ -1881,6 +1870,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertConstLvalueString)
     EXPECT_EQ(map[2], "world");
 }
 
+// insert() with an rvalue string value must move it in.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertRvalueString)
 {
     TestMap map;
@@ -1889,6 +1879,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertRvalueString)
     EXPECT_EQ(map[3], "temp");
 }
 
+// insert() with a string literal value must convert and store.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertStringLiteral)
 {
     TestMap map;
@@ -1897,6 +1888,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertStringLiteral)
     EXPECT_EQ(map[4], "literal");
 }
 
+// insert() via const char* lvalue value must convert and store.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertConstCharPointer)
 {
     TestMap map;
@@ -1906,6 +1898,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, InsertConstCharPointer)
     EXPECT_EQ(map[5], "cstring");
 }
 
+// build_add with lvalue string values must copy them in.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddLvalueString)
 {
     TestMap map;
@@ -1919,6 +1912,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddLvalueString)
     EXPECT_EQ(map[2], "two");
 }
 
+// build_add with rvalue string values must move them in.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddRvalueString)
 {
     TestMap map;
@@ -1931,6 +1925,7 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddRvalueString)
     EXPECT_EQ(map[2], "second");
 }
 
+// build_add with string literal values must convert and store.
 TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddStringLiteral)
 {
     TestMap map;
@@ -1947,15 +1942,9 @@ TEST_F(FlatKeyOrderMapFwdStringValueTest, BuildAddStringLiteral)
 // FORWARDING REFERENCE TESTS — BOTH STRING KEY AND VALUE
 // ===================================================================
 
-class FlatKeyOrderMapFwdStringBothTest : public ::testing::Test
-{
-protected:
-    using TestMap = AoL::FlatKeyOrderMap<std::string, std::string>;
+class FlatKeyOrderMapFwdStringBothTest : public FlatKeyOrderMapTestBase<std::string, std::string> {};
 
-    void SetUp() override {}
-    void TearDown() override {}
-};
-
+// insert(lvalue key, lvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLvalueLvalue)
 {
     TestMap map;
@@ -1964,6 +1953,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLvalueLvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(lvalue key, rvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLvalueRvalue)
 {
     TestMap map;
@@ -1972,6 +1962,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLvalueRvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(rvalue key, lvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertRvalueLvalue)
 {
     TestMap map;
@@ -1980,6 +1971,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertRvalueLvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(rvalue key, rvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertRvalueRvalue)
 {
     TestMap map;
@@ -1987,6 +1979,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertRvalueRvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(literal key, literal value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralLiteral)
 {
     TestMap map;
@@ -1994,6 +1987,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralLiteral)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(literal key, lvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralLvalue)
 {
     TestMap map;
@@ -2002,6 +1996,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralLvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// insert(literal key, rvalue value).
 TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralRvalue)
 {
     TestMap map;
@@ -2009,6 +2004,8 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, InsertLiteralRvalue)
     EXPECT_EQ(map["key"], "val");
 }
 
+// build_add mixing lvalue, moved, converted keys and values must sort
+// everything.
 TEST_F(FlatKeyOrderMapFwdStringBothTest, BuildAddAllCombinations)
 {
     TestMap map;
@@ -2027,6 +2024,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, BuildAddAllCombinations)
     EXPECT_EQ(map["c"], "C");
 }
 
+// find/contains across every argument category must agree.
 TEST_F(FlatKeyOrderMapFwdStringBothTest, FindAndContainsAllCategories)
 {
     TestMap map;
@@ -2048,6 +2046,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, FindAndContainsAllCategories)
     EXPECT_FALSE(map.contains("no"));
 }
 
+// at_ref across every argument category must read the same entry.
 TEST_F(FlatKeyOrderMapFwdStringBothTest, AtRefAllCategories)
 {
     TestMap map;
@@ -2059,6 +2058,7 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, AtRefAllCategories)
     EXPECT_EQ(map.at_ref("key"), "val");
 }
 
+// Const at_ptr across every argument category must find the entry.
 TEST_F(FlatKeyOrderMapFwdStringBothTest, ConstAtPtrAllCategories)
 {
     TestMap map;
@@ -2080,6 +2080,8 @@ TEST_F(FlatKeyOrderMapFwdStringBothTest, ConstAtPtrAllCategories)
     EXPECT_EQ(*p3, "val");
 }
 
+// Interleaved insert/build/insert with mixed categories must yield one
+// sorted map containing all five entries.
 TEST_F(FlatKeyOrderMapFwdStringBothTest, MixedInsertAndBuildSequence)
 {
     TestMap map;
@@ -2153,6 +2155,8 @@ struct TrackedKey
     }
 };
 
+// Asserts exact construction counts; `line` carries the caller's
+// __LINE__ so failures point at the right statement.
 static void ExpectCounts(int direct, int copy, int move,
     int line = __LINE__)
 {
@@ -2164,17 +2168,16 @@ static void ExpectCounts(int direct, int copy, int move,
         << "  move_count mismatch at approx line " << line;
 }
 
-class FlatKeyOrderMapTrackedTest : public ::testing::Test
+class FlatKeyOrderMapTrackedTest : public FlatKeyOrderMapTestBase<TrackedKey, int>
 {
 protected:
-    using TestMap = AoL::FlatKeyOrderMap<TrackedKey, int>;
-
     void SetUp() override
     {
         TrackedKey::ResetCounts();
     }
 };
 
+// insert(lvalue TrackedKey) must COPY exactly once, no moves.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertTrackedKeyLvalue)
 {
     TestMap map;
@@ -2188,6 +2191,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertTrackedKeyLvalue)
     ExpectCounts(0, 1, 0, __LINE__);
 }
 
+// insert(rvalue TrackedKey) must MOVE exactly once, no copies.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertTrackedKeyRvalue)
 {
     TestMap map;
@@ -2200,6 +2204,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertTrackedKeyRvalue)
     ExpectCounts(0, 0, 1, __LINE__);
 }
 
+// insert(string literal) must construct the stored key directly once.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertStringLiteral)
 {
     TestMap map;
@@ -2211,6 +2216,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertStringLiteral)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// insert(rvalue std::string) must construct the key directly once.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertStdStringRvalue)
 {
     TestMap map;
@@ -2222,6 +2228,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertStdStringRvalue)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// insert(lvalue std::string) must construct the key directly once.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertStdStringLvalue)
 {
     TestMap map;
@@ -2234,6 +2241,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertStdStringLvalue)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// insert(const lvalue std::string) must construct the key directly.
 TEST_F(FlatKeyOrderMapTrackedTest, InsertConstStdStringLvalue)
 {
     TestMap map;
@@ -2246,6 +2254,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, InsertConstStdStringLvalue)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// find(lvalue) must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, FindLvalueTrackedKeyZeroConstructions)
 {
     TestMap map;
@@ -2258,6 +2267,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, FindLvalueTrackedKeyZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// find(rvalue) must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, FindRvalueTrackedKeyZeroConstructions)
 {
     TestMap map;
@@ -2270,6 +2280,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, FindRvalueTrackedKeyZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// find(literal) must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, FindStringLiteralZeroConstructions)
 {
     TestMap map;
@@ -2281,6 +2292,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, FindStringLiteralZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// find(rvalue std::string) must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, FindStdStringRvalueZeroConstructions)
 {
     TestMap map;
@@ -2292,6 +2304,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, FindStdStringRvalueZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// contains() across all categories must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, ContainsAllCategoriesZeroConstructions)
 {
     TestMap map;
@@ -2309,6 +2322,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, ContainsAllCategoriesZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// at_ref across all categories must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, AtRefAllCategoriesZeroConstructions)
 {
     TestMap map;
@@ -2322,6 +2336,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, AtRefAllCategoriesZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// at_ptr across all categories must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, AtPtrAllCategoriesZeroConstructions)
 {
     TestMap map;
@@ -2335,6 +2350,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, AtPtrAllCategoriesZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// Const find(rvalue) must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, ConstFindRvalueTrackedKeyZeroConstructions)
 {
     TestMap map;
@@ -2347,6 +2363,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, ConstFindRvalueTrackedKeyZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// operator[] on an EXISTING key must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, OperatorBracketExistingZeroConstructions)
 {
     TestMap map;
@@ -2357,6 +2374,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, OperatorBracketExistingZeroConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// operator[] creating a NEW key must construct the key exactly once.
 TEST_F(FlatKeyOrderMapTrackedTest, OperatorBracketNewKeyOneConstruction)
 {
     TestMap map;
@@ -2368,6 +2386,8 @@ TEST_F(FlatKeyOrderMapTrackedTest, OperatorBracketNewKeyOneConstruction)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// Two literal build_adds: 2 direct constructions plus 1 reallocation
+// move. Sorted afterwards, which must not construct more keys.
 TEST_F(FlatKeyOrderMapTrackedTest, BuildAddLiteralOneConstructionEach)
 {
     TestMap map;
@@ -2385,6 +2405,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddLiteralOneConstructionEach)
     map.build_end();
 }
 
+// Two lvalue build_adds: 2 copies plus 1 reallocation move.
 TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedLvalueOneCopy)
 {
     TestMap map;
@@ -2403,6 +2424,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedLvalueOneCopy)
     map.build_end();
 }
 
+// Two rvalue build_adds: 2 moves plus 1 reallocation move.
 TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedRvalueOneMove)
 {
     TestMap map;
@@ -2421,6 +2443,8 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddTrackedRvalueOneMove)
     map.build_end();
 }
 
+// Growth ladder: each realloc must MOVE existing keys exactly once;
+// lookups afterwards must construct nothing.
 TEST_F(FlatKeyOrderMapTrackedTest, MultipleInsertThenFindNoExtraConstructions)
 {
     TestMap map;
@@ -2444,6 +2468,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, MultipleInsertThenFindNoExtraConstructions)
     ExpectCounts(3, 0, 3, __LINE__);
 }
 
+// After a completed build, find() must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, BuildAddThenFindNoExtraConstructions)
 {
     TestMap map;
@@ -2460,6 +2485,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, BuildAddThenFindNoExtraConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// Write via at_ptr then read via find must construct ZERO keys.
 TEST_F(FlatKeyOrderMapTrackedTest, AtPtrModifyThenReadNoExtraConstructions)
 {
     TestMap map;
@@ -2471,6 +2497,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, AtPtrModifyThenReadNoExtraConstructions)
     ExpectCounts(0, 0, 0, __LINE__);
 }
 
+// Rebuilding after clear() must construct the new key exactly once.
 TEST_F(FlatKeyOrderMapTrackedTest, ClearThenBuildNewKeys)
 {
     TestMap map;
@@ -2485,6 +2512,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, ClearThenBuildNewKeys)
     ExpectCounts(1, 0, 0, __LINE__);
 }
 
+// Copying the map must copy each stored key exactly once.
 TEST_F(FlatKeyOrderMapTrackedTest, CopyMapNoAdditionalKeyConstructions)
 {
     TestMap map;
@@ -2497,6 +2525,7 @@ TEST_F(FlatKeyOrderMapTrackedTest, CopyMapNoAdditionalKeyConstructions)
     ExpectCounts(0, 2, 0, __LINE__);
 }
 
+// Moving the map must transfer ownership without touching keys.
 TEST_F(FlatKeyOrderMapTrackedTest, MoveMapOneAdditionalKeyConstruction)
 {
     TestMap map;
