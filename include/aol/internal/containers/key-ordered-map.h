@@ -185,9 +185,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey, typename InValue>
-		requires std::is_convertible_v<InKey, key_type> && std::is_convertible_v<InValue, mapped_type>
 	constexpr void insert(InKey&& key, InValue&& value) noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type> && std::is_convertible_v<InValue, mapped_type>, "Input key type and value type should be convertible to the map's key and value types!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
@@ -203,9 +204,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	constexpr mapped_type& operator[](InKey&& key) noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto find_it = this->find(key_val);
@@ -221,9 +223,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	mapped_type& at_ref(InKey&& key) noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
 		const InKey& key_val = key;
@@ -236,9 +239,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	const mapped_type& at_ref(InKey&& key) const noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
 		const InKey& key_val = key;
@@ -251,9 +255,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	mapped_type* at_ptr(InKey&& key) noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
@@ -261,9 +266,10 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	const mapped_type* at_ptr(InKey&& key) const noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
@@ -271,27 +277,30 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	constexpr auto find(InKey&& key) noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	constexpr auto find(InKey&& key) const noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		return AoL::FindLowerBound(container_obj.begin(), container_obj.end(), key_val);
 	}
 
 	template<typename InKey>
-		requires std::is_convertible_v<InKey, key_type>
 	constexpr bool contains(InKey&& key) const noexcept
 	{
+		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
+
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
 		auto it = this->find(key_val);
