@@ -13,7 +13,8 @@
 #include "aol/array.h"
 #include "aol/dynamic_types.h"
 
-#include <ranges>
+#include <ranges> // std::ranges::views::reverse
+#include <memory> // std::addressof
 
 
 namespace AoL::Internal
