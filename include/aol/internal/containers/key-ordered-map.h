@@ -156,12 +156,13 @@ struct KeyOrderMapEx
 		Sort(container_obj.begin(), container_obj.end());
 	}
 
-	constexpr void build_start() noexcept
+	constexpr void build_start(SizeT expected = 0) noexcept
 	{
 		assert(!build_flag && "Already building! Call build_end() first!");
 #if AOL_DEBUG_ON
 		build_flag = true;
 #endif
+		container_obj.reserve(container_obj.capacity() + expected);
 	}
 
 	template<typename InKey, typename InValue>
