@@ -126,6 +126,33 @@ TEST_F(FlatKeyOrderMapBasicTest, ConstructionWithCapacity)
     EXPECT_EQ(map.size(), 0);
 }
 
+// A zero capacity hint is a legal no-op reserve; the map must remain
+// fully usable afterwards.
+TEST_F(FlatKeyOrderMapBasicTest, ConstructionWithZeroCapacity)
+{
+    TestMap map(0);
+
+    EXPECT_TRUE(map.empty());
+    EXPECT_EQ(map.size(), 0);
+
+    map.insert(1, "one");
+    EXPECT_EQ(map.size(), 1);
+    EXPECT_EQ(map[1], "one");
+}
+
+// The allocator-only constructor must yield a working empty map.
+TEST_F(FlatKeyOrderMapBasicTest, AllocatorConstructorStartsEmpty)
+{
+    typename TestMap::container_type::allocator_type alloc;
+    TestMap map(alloc);
+
+    EXPECT_TRUE(map.empty());
+    EXPECT_EQ(map.size(), 0);
+
+    map.insert(7, "seven");
+    EXPECT_EQ(map[7], "seven");
+}
+
 // Constructing from an unsorted iterator range must sort by key.
 TEST_F(FlatKeyOrderMapBasicTest, ConstructionFromIterators)
 {
@@ -142,6 +169,26 @@ TEST_F(FlatKeyOrderMapBasicTest, ConstructionFromIterators)
     EXPECT_EQ((map.begin() + 1)->first, 2);
     EXPECT_EQ((map.begin() + 2)->first, 3);
     EXPECT_EQ(map.find(4), map.end());
+}
+
+// ===================================================================
+// TYPE-LEVEL CHECKS
+// ===================================================================
+
+class FlatKeyOrderMapTypeTest : public FlatKeyOrderMapTestBase<int, std::string> {};
+
+// Compile-time contract: exposed type aliases and the flat storage's
+// random-access iterator category. Zero runtime cost; guards API
+// regressions.
+TEST_F(FlatKeyOrderMapTypeTest, TypeAliasesAndRandomAccessIterators)
+{
+    static_assert(std::is_same_v<typename TestMap::key_type, int>);
+    static_assert(std::is_same_v<typename TestMap::mapped_type, std::string>);
+    static_assert(std::is_same_v<typename TestMap::value_type, AoL::FlatKeyOrderMapPair<int, std::string>>);
+    static_assert(std::is_same_v<typename TestMap::iterator::iterator_category, std::random_access_iterator_tag>);
+    static_assert(std::is_same_v<typename TestMap::const_iterator::iterator_category, std::random_access_iterator_tag>);
+
+    SUCCEED();
 }
 
 // ===================================================================
@@ -410,6 +457,35 @@ TEST_F(FlatKeyOrderMapFindTest, FindMultipleElements)
     }
 }
 
+// Raw find() is a LOWER-BOUND query: a miss BETWEEN keys returns a
+// valid iterator to the next-larger key, not end(). Only misses past
+// the largest key yield end(). Callers must therefore re-check
+// it->first -- exactly what contains()/at_ref()/at_ptr() wrap. Pins
+// the contract so accidental stricter/looser semantics get caught.
+TEST_F(FlatKeyOrderMapFindTest, FindInteriorMissReturnsLowerBoundNotEnd)
+{
+    TestMap map;
+    map.insert(5, "five");
+    map.insert(10, "ten");
+
+    // Interior miss: lands on the successor key.
+    auto interior = map.find(7);
+    EXPECT_NE(interior, map.end());
+    EXPECT_EQ(interior->first, 10);
+
+    // Below-all miss: lands on the first element.
+    auto below = map.find(0);
+    EXPECT_NE(below, map.end());
+    EXPECT_EQ(below->first, 5);
+
+    // Exact hits still resolve directly.
+    EXPECT_EQ(map.find(5)->first, 5);
+    EXPECT_EQ(map.find(10)->first, 10);
+
+    // Above-all miss: the only shape that yields end().
+    EXPECT_EQ(map.find(11), map.end());
+}
+
 // ===================================================================
 // CONTAINS TESTS
 // ===================================================================
@@ -504,6 +580,28 @@ TEST_F(FlatKeyOrderMapIterationTest, ReverseIteration)
     EXPECT_EQ(keys[0], 3);
     EXPECT_EQ(keys[1], 2);
     EXPECT_EQ(keys[2], 1);
+}
+
+// Iterating an empty map must be a clean no-op for forward and
+// reverse ranges alike, with begin==end and rbegin==rend.
+TEST_F(FlatKeyOrderMapIterationTest, EmptyMapIterationNoOp)
+{
+    const TestMap map;
+
+    EXPECT_TRUE(map.begin() == map.end());
+    EXPECT_TRUE(map.crbegin() == map.crend());
+
+    int visits = 0;
+    for (const auto& pair : map)
+    {
+        (void)pair;
+        ++visits;
+    }
+    for (auto it = map.rbegin(); it != map.rend(); ++it)
+    {
+        ++visits;
+    }
+    EXPECT_EQ(visits, 0);
 }
 
 #if 0
@@ -965,6 +1063,24 @@ TEST_F(FlatKeyOrderMapMoveTest, MoveConstructFilled)
     EXPECT_EQ(moved[2], "two");
 }
 
+// The moved-from vector-backed source is left empty by the storage
+// steal and must be immediately reusable for fresh inserts.
+TEST_F(FlatKeyOrderMapMoveTest, MoveConstructSourceEmptyAndReusable)
+{
+    TestMap map;
+    map.insert(1, "one");
+    map.insert(2, "two");
+
+    TestMap moved(std::move(map));
+    ASSERT_EQ(moved.size(), 2);
+
+    EXPECT_TRUE(map.empty());
+    map.insert(9, "nine");
+
+    EXPECT_EQ(map.size(), 1);
+    EXPECT_EQ(map[9], "nine");
+}
+
 // Move assignment must transfer all entries.
 TEST_F(FlatKeyOrderMapMoveTest, MoveAssignFilled)
 {
@@ -1021,6 +1137,26 @@ TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorMove)
     EXPECT_EQ(map.size(), 2);
     EXPECT_EQ(map.begin()->first, 4);
     EXPECT_EQ((map.begin() + 1)->first, 5);
+}
+
+// The container ctor does NOT deduplicate: equal keys stay adjacent
+// after sorting and find() resolves to the first of them. Sharp edge
+// worth pinning -- build_add/insert are the deduplicated entry points.
+TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorWithDuplicateKeysKeepsBoth)
+{
+    typename TestMap::container_type data{ PairType{3, "three"}, PairType{1, "one"}, PairType{1, "uno"} };
+    TestMap map(data);
+
+    EXPECT_EQ(map.size(), 3);
+    ExpectSortedByKey(map);
+
+    auto dup = map.find(1);
+    ASSERT_NE(dup, map.end());
+    EXPECT_EQ(dup->first, 1);
+
+    auto last = map.find(3);
+    ASSERT_NE(last, map.end());
+    EXPECT_EQ(last->first, 3);
 }
 
 // ===================================================================
@@ -1114,6 +1250,23 @@ TEST_F(FlatKeyOrderMapConstTest, ConstData)
     EXPECT_EQ(data[0].first, 3);
 }
 
+// Writes through the mutable data() pointer must be visible through
+// every other accessor: data() aliases the same flat storage.
+TEST_F(FlatKeyOrderMapDataTest, WriteThroughDataPointer)
+{
+    TestMap map;
+    map.insert(1, "one");
+    map.insert(2, "two");
+
+    auto* raw = map.data();
+    ASSERT_NE(raw, nullptr);
+    raw[0].second = "ONE";
+    raw[1].second = "TWO";
+
+    EXPECT_EQ(map[1], "ONE");
+    EXPECT_EQ(map[2], "TWO");
+}
+
 // Const forward and reverse iterators must traverse fully and hit
 // their respective end sentinels.
 TEST_F(FlatKeyOrderMapConstTest, ConstIterators)
@@ -1198,6 +1351,22 @@ TEST_F(FlatKeyOrderMapBracketTest, ChainedModification)
     EXPECT_EQ(map[1], "second");
 }
 
+// operator[] default-inserts must land at their SORTED positions no
+// matter the creation order: bracket-building is a legal fill style.
+TEST_F(FlatKeyOrderMapBracketTest, BracketOutOfOrderStaysSorted)
+{
+    TestMap map;
+
+    map[30] = "c";
+    map[10] = "a";
+    map[20] = "b";
+
+    EXPECT_EQ(map.size(), 3);
+    ExpectSortedByKey(map);
+    EXPECT_EQ(map.begin()->first, 10);
+    EXPECT_EQ(map.rbegin()->first, 30);
+}
+
 // ===================================================================
 // KEY TYPE VARIATIONS TESTS
 // ===================================================================
@@ -1277,6 +1446,20 @@ TEST_F(FlatKeyOrderMapStringKeyTest, EmptyStringKey)
     EXPECT_EQ(map["nonempty"], 1);
 }
 
+// Reading a missing string key through operator[] must default-create
+// the entry with mapped_type{} and report the new size.
+TEST_F(FlatKeyOrderMapStringKeyTest, BracketMissingKeyDefaultsToZero)
+{
+    TestMap map;
+    map.insert("exists", 1);
+
+    int& created = map["missing"];
+
+    EXPECT_EQ(created, 0);
+    EXPECT_EQ(map.size(), 2);
+    EXPECT_TRUE(map.contains("missing"));
+}
+
 // ===================================================================
 // ITERATOR CATEGORY TESTS
 // ===================================================================
@@ -1340,6 +1523,22 @@ TEST_F(FlatKeyOrderMapIteratorCategoryTest, IteratorDifference)
 
     auto diff = map.end() - map.begin();
     EXPECT_EQ(diff, kIteratorSampleCount);
+}
+
+// Reverse iterators support the same random-access arithmetic:
+// distance counts all elements and seeks index from the back.
+TEST_F(FlatKeyOrderMapIteratorCategoryTest, ReverseIteratorDistanceAndSeek)
+{
+    TestMap map;
+
+    for (int i = 0; i < kIteratorSampleCount; ++i)
+    {
+        map.insert(i, "val");
+    }
+
+    EXPECT_EQ(std::distance(map.rbegin(), map.rend()), kIteratorSampleCount);
+    EXPECT_EQ(map.rbegin()->first, kIteratorSampleCount - 1);
+    EXPECT_EQ((map.rbegin() + 2)->first, kIteratorSampleCount - 3);
 }
 
 // ===================================================================
