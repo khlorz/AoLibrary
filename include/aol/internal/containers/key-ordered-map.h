@@ -193,7 +193,7 @@ struct KeyOrderMapEx
 
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		if (it >= container_obj.end())
 		{
 			container_obj.emplace_back(std::forward<InKey>(key), std::forward<InValue>(value));
@@ -212,7 +212,7 @@ struct KeyOrderMapEx
 
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		auto find_it = this->find(key_val);
+		auto find_it = this->find_impl(key_val);
 		if (find_it < container_obj.end() && find_it->first == key_val)
 		{
 			return find_it->second;
@@ -232,7 +232,7 @@ struct KeyOrderMapEx
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		assert(it < container_obj.end() && it->first == key && "Invalid key!");
 		return it->second;
 #else
@@ -248,7 +248,7 @@ struct KeyOrderMapEx
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 #if AOL_DEBUG_ON
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		assert(it < container_obj.end() && it->first == key_val && "Invalid key!");
 		return it->second;
 #else
@@ -263,7 +263,7 @@ struct KeyOrderMapEx
 
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		return it < container_obj.end() && it->first == key_val ? std::addressof(it->second) : nullptr;
 	}
 
@@ -274,12 +274,36 @@ struct KeyOrderMapEx
 
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		return it < container_obj.end() && it->first == key_val ? std::addressof(it->second) : nullptr;
 	}
 
 	template<typename InKey>
 	constexpr auto find(InKey&& key) noexcept
+	{
+		const InKey& key_val = key;
+		auto it = this->find_impl(key_val);
+		if (it == this->end())
+		{
+			return this->end();
+		}
+		return it->first == key_val ? it : this->end();
+	}
+
+	template<typename InKey>
+	constexpr auto find(InKey&& key) const noexcept
+	{
+		const InKey& key_val = key;
+		auto it = this->find_impl(key_val);
+		if (it == this->cend())
+		{
+			return this->cend();
+		}
+		return it->first == key_val ? it : this->cend();
+	}
+
+	template<typename InKey>
+	constexpr auto find_impl(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -289,7 +313,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr auto find(InKey&& key) const noexcept
+	constexpr auto find_impl(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -305,7 +329,7 @@ struct KeyOrderMapEx
 
 		assert(!build_flag && "Building haven't finished yet! Call build_end() first!");
 		const InKey& key_val = key;
-		auto it = this->find(key_val);
+		auto it = this->find_impl(key_val);
 		return it < container_obj.end() && it->first == key_val;
 	}
 

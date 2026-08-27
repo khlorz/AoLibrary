@@ -457,33 +457,56 @@ TEST_F(FlatKeyOrderMapFindTest, FindMultipleElements)
     }
 }
 
-// Raw find() is a LOWER-BOUND query: a miss BETWEEN keys returns a
-// valid iterator to the next-larger key, not end(). Only misses past
-// the largest key yield end(). Callers must therefore re-check
-// it->first -- exactly what contains()/at_ref()/at_ptr() wrap. Pins
-// the contract so accidental stricter/looser semantics get caught.
-TEST_F(FlatKeyOrderMapFindTest, FindInteriorMissReturnsLowerBoundNotEnd)
+// find() must return end() for ANY absent key, including interior
+// and below-all misses. The lower-bound behavior now lives in
+// find_impl(), which is the direct FindLowerBound wrapper.
+TEST_F(FlatKeyOrderMapFindTest, FindReturnsEndOnAnyMiss)
 {
     TestMap map;
     map.insert(5, "five");
     map.insert(10, "ten");
 
-    // Interior miss: lands on the successor key.
-    auto interior = map.find(7);
-    EXPECT_NE(interior, map.end());
-    EXPECT_EQ(interior->first, 10);
+    EXPECT_EQ(map.find(7), map.end());  // interior miss
+    EXPECT_EQ(map.find(0), map.end());  // below-all miss
+    EXPECT_EQ(map.find(11), map.end()); // above-all miss
 
-    // Below-all miss: lands on the first element.
-    auto below = map.find(0);
-    EXPECT_NE(below, map.end());
-    EXPECT_EQ(below->first, 5);
-
-    // Exact hits still resolve directly.
+    // Exact hits still resolve.
     EXPECT_EQ(map.find(5)->first, 5);
     EXPECT_EQ(map.find(10)->first, 10);
 
-    // Above-all miss: the only shape that yields end().
-    EXPECT_EQ(map.find(11), map.end());
+    // Const overload agrees.
+    const TestMap& cmap = map;
+    EXPECT_EQ(cmap.find(7), cmap.end());
+    EXPECT_EQ(cmap.find(0), cmap.end());
+    EXPECT_NE(cmap.find(5), cmap.end());
+}
+
+// find_impl() is the lower-bound query: misses between keys return
+// the successor, below-all returns begin(), above-all returns end().
+TEST_F(FlatKeyOrderMapFindTest, FindImplReturnsLowerBoundOnMiss)
+{
+    TestMap map;
+    map.insert(5, "five");
+    map.insert(10, "ten");
+
+    auto interior = map.find_impl(7);
+    EXPECT_NE(interior, map.end());
+    EXPECT_EQ(interior->first, 10);
+
+    auto below = map.find_impl(0);
+    EXPECT_NE(below, map.end());
+    EXPECT_EQ(below->first, 5);
+
+    EXPECT_EQ(map.find_impl(5)->first, 5);
+    EXPECT_EQ(map.find_impl(10)->first, 10);
+    EXPECT_EQ(map.find_impl(11), map.end());
+
+    const TestMap& cmap = map;
+    auto c_interior = cmap.find_impl(7);
+    EXPECT_NE(c_interior, cmap.end());
+    EXPECT_EQ(c_interior->first, 10);
+    EXPECT_EQ(cmap.find_impl(0)->first, 5);
+    EXPECT_EQ(cmap.find_impl(11), cmap.cend());
 }
 
 // ===================================================================
