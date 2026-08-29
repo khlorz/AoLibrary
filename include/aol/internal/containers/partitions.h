@@ -414,6 +414,16 @@ protected:
 		static_assert(std::contiguous_iterator<iterator_type<>>, "Invalid partition container! Only contiguous types allowed!");
 	}
 
+	AOL_ATTRIB_NO_DISCARD constexpr D& derived() noexcept
+	{
+		return *static_cast<D*>(this);
+	}
+
+	AOL_ATTRIB_NO_DISCARD constexpr const D& derived() const noexcept
+	{ 
+		return *static_cast<const D*>(this);
+	}
+
 public:
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
@@ -431,7 +441,7 @@ public:
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
-		return static_cast<const D*>(this)->sub_partitions[partition_idx];
+		return derived().sub_partitions[partition_idx];
 	}
 
 	/*
@@ -445,7 +455,7 @@ public:
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
-		return static_cast<D*>(this)->sub_partitions[partition_idx];
+		return derived().sub_partitions[partition_idx];
 	}
 
 	/*
@@ -458,7 +468,7 @@ public:
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_default_partition() noexcept
 	{
 		assert(this->number_of_partitions() > 0 && "This shouldn't happen but somehow it did. You done messed up.");
-		return static_cast<D*>(this)->sub_partitions.back();
+		return derived().sub_partitions.back();
 	}
 
 	/*
@@ -472,7 +482,7 @@ public:
 	AOL_ATTRIB_NO_DISCARD constexpr size_type size_of_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition index! Reminder: Partition numbering is 0-based indexing!");
-		return static_cast<const D*>(this)->sub_partitions[partition_idx].size();
+		return derived().sub_partitions[partition_idx].size();
 	}
 
 	/*
@@ -483,7 +493,7 @@ public:
 	*/
 	AOL_ATTRIB_NO_DISCARD constexpr size_type number_of_partitions() const noexcept
 	{
-		return static_cast<const D*>(this)->sub_partitions.size();
+		return derived().sub_partitions.size();
 	}
 
 	/*
@@ -508,8 +518,8 @@ public:
 		// The old back partition will become the newly created partition
 		// The newly emplace_back-ed sub_partition will become the default partition
 		// We update the new partition current_size if start_empty is false
-		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
-		auto& container_obj = static_cast<D*>(this)->container_obj;
+		auto& sub_partitions = derived().sub_partitions;
+		auto& container_obj = derived().container_obj;
 		using sub_partition_type = std::decay_t<decltype(sub_partitions)>::value_type;
 
 		auto& old_back_parti = sub_partitions.back();
@@ -551,7 +561,7 @@ public:
 	template<typename F> requires std::predicate<F&, value_type<>&>
 	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type<>&>)
 	{
-		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
+		auto& sub_partitions = derived().sub_partitions;
 		auto& back_partition = sub_partitions.back();
 		auto default_partition_begin =
 			is_stable ?
@@ -573,7 +583,7 @@ public:
 	*/
 	constexpr void erase_partition(size_type idx) noexcept
 	{
-		auto& sub_partitions = static_cast<D*>(this)->sub_partitions;
+		auto& sub_partitions = derived().sub_partitions;
 
 		assert(idx < sub_partitions.size() && "Invalid index value! Cannot remove beyond the sub partition size!");
 		assert(idx != sub_partitions.size() - 1 && "Invalid index value! Cannot remove the default partition!");
@@ -587,102 +597,102 @@ public:
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.front();
+		return derived().container_obj.front();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.front();
+		return derived().container_obj.front();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.back();
+		return derived().container_obj.back();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.back();
+		return derived().container_obj.back();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
 	{
-		return static_cast<D*>(this)->container_obj[idx];
+		return derived().container_obj[idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj[idx];
+		return derived().container_obj[idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr size_type size() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.size();
+		return derived().container_obj.size();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr bool empty() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.empty();
+		return derived().container_obj.empty();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto begin() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.begin();
+		return derived().container_obj.begin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.cbegin();
+		return derived().container_obj.cbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.cbegin();
+		return derived().container_obj.cbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto end() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.end();
+		return derived().container_obj.end();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.cend();
+		return derived().container_obj.cend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.cend();
+		return derived().container_obj.cend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.rbegin();
+		return derived().container_obj.rbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto rbegin() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.crbegin();
+		return derived().container_obj.crbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto crbegin() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.crbegin();
+		return derived().container_obj.crbegin();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto rend() noexcept
 	{
-		return static_cast<D*>(this)->container_obj.rend();
+		return derived().container_obj.rend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto rend() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.crend();
+		return derived().container_obj.crend();
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr auto crend() const noexcept
 	{
-		return static_cast<const D*>(this)->container_obj.crend();
+		return derived().container_obj.crend();
 	}
 };
 
