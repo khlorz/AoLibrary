@@ -438,7 +438,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Reference to the partition
 	*/
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const auto& get_partition(size_type partition_idx) const noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return derived().sub_partitions[partition_idx];
@@ -452,7 +452,7 @@ public:
 	* @param partition_idx index of the partition
 	* @returns Reference to the partition
 	*/
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_partition(size_type partition_idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto& get_partition(size_type partition_idx) noexcept
 	{
 		assert(partition_idx < this->number_of_partitions() && "Invalid partition number! Partition number is greater than the number of current partition present.");
 		return derived().sub_partitions[partition_idx];
@@ -465,7 +465,7 @@ public:
 	* 
 	* @returns Reference to the default partition
 	*/
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) get_default_partition() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto& get_default_partition() noexcept
 	{
 		assert(this->number_of_partitions() > 0 && "This shouldn't happen but somehow it did. You done messed up.");
 		return derived().sub_partitions.back();
@@ -513,7 +513,7 @@ public:
 	* @param start_empty condition to retain any elements or not from the default partition
 	* @returns Reference to the newly created partition
 	*/
-	constexpr decltype(auto) create_partition(size_type partition_size, bool start_empty = true) noexcept 
+	constexpr auto& create_partition(size_type partition_size, bool start_empty = true) noexcept 
 	{
 		// The old back partition will become the newly created partition
 		// The newly emplace_back-ed sub_partition will become the default partition
@@ -559,7 +559,7 @@ public:
 	* @returns Reference to the newly created partition
 	*/
 	template<typename F> requires std::predicate<F&, value_type<>&>
-	constexpr decltype(auto) create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type<>&>)
+	constexpr auto& create_partition(F&& partition_predicate, bool is_stable = true) noexcept(std::is_nothrow_invocable_v<F&, value_type<>&>)
 	{
 		auto& sub_partitions = derived().sub_partitions;
 		auto& back_partition = sub_partitions.back();
@@ -595,32 +595,32 @@ public:
 		sub_partitions.erase(sub_partitions.begin() + idx);
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto& front() noexcept
 	{
 		return derived().container_obj.front();
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) front() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const auto& front() const noexcept
 	{
 		return derived().container_obj.front();
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto& back() noexcept
 	{
 		return derived().container_obj.back();
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) back() const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const auto& back() const noexcept
 	{
 		return derived().container_obj.back();
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto& operator[] (size_type idx) noexcept
 	{
 		return derived().container_obj[idx];
 	}
 
-	AOL_ATTRIB_NO_DISCARD constexpr decltype(auto) operator[] (size_type idx) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const auto& operator[] (size_type idx) const noexcept
 	{
 		return derived().container_obj[idx];
 	}
