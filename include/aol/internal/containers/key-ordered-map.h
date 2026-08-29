@@ -92,6 +92,12 @@ struct KeyOrderMapEx
 	using reverse_iterator = typename container_type::reverse_iterator;
 	using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
+	static_assert(requires(P p){ p.first; p.second; }, "P type must have a member named \"first\" and \"second\" where \"first\" is the key and \"second\" is the value");
+	static_assert(requires(const P& a, const P& b){ {a == b} -> std::convertible_to<bool>; {a <=> b} -> std::convertible_to<std::strong_ordering>; },"P must provide == and <=> (compared by key only) for sort/stable_sort/unique dedup");
+	static_assert(std::same_as<typename P::first_type, K>, "P::first_type must match K");
+	static_assert(std::same_as<typename P::second_type, V>, "P::second_type must match V");
+	static_assert(std::totally_ordered<K>, "Key K must be totally ordered");
+
 	container_type container_obj;
 #if AOL_DEBUG_ON
 	bool build_flag;
