@@ -171,7 +171,10 @@ struct KeyOrderMapEx
 #if AOL_DEBUG_ON
 		build_flag = true;
 #endif
-		container_obj.reserve(container_obj.capacity() + expected);
+		if (expected > 0)
+		{
+			container_obj.reserve(container_obj.size() + expected);
+		}
 	}
 
 	template<typename InKey, typename InValue>
