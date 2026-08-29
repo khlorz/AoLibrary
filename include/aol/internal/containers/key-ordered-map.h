@@ -133,16 +133,18 @@ struct KeyOrderMapEx
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj.begin(), container_obj.end());
+		std::stable_sort(container_obj.begin(), container_obj.end());
+		container_obj.erase(std::unique(container_obj.begin(), container_obj.end()), container_obj.end());
 	}
 
 	explicit KeyOrderMapEx(container_type&& other_data) noexcept :
-		container_obj{ other_data }
+		container_obj{ std::move(other_data) }
 #if AOL_DEBUG_ON
 		, build_flag{ false }
 #endif
 	{
-		Sort(container_obj.begin(), container_obj.end());
+		std::stable_sort(container_obj.begin(), container_obj.end());
+		container_obj.erase(std::unique(container_obj.begin(), container_obj.end()), container_obj.end());
 	}
 
 	template<typename It>
@@ -153,7 +155,8 @@ struct KeyOrderMapEx
 #endif
 	{
 		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<It>::iterator_category>, "Invalid iterator type!");
-		Sort(container_obj.begin(), container_obj.end());
+		std::stable_sort(container_obj.begin(), container_obj.end());
+		container_obj.erase(std::unique(container_obj.begin(), container_obj.end()), container_obj.end());
 	}
 
 	constexpr void build_start(SizeT expected = 0) noexcept

@@ -254,6 +254,32 @@ TEST_F(FlatKeyOrderMapBuildPatternTest, BuildPreservesOrder)
     EXPECT_EQ(it->first, 8);
 }
 
+// build_start(expected) must pre-reserve size+expected and still sort.
+TEST_F(FlatKeyOrderMapBuildPatternTest, BuildStartWithExpectedReserve)
+{
+    TestMap map;
+    map.build_start(kSmallCount);
+    for (int i = kSmallCount; i >= 1; --i) map.build_add(i, ValueTag(i));
+    map.build_end();
+    EXPECT_EQ(map.size(), kSmallCount);
+    ExpectSortedByKey(map);
+}
+
+// build_start on a non-empty map appends and sorts the merged set;
+// existing keys stay and new keys interleave.
+TEST_F(FlatKeyOrderMapBuildPatternTest, BuildStartAppendsToExisting)
+{
+    TestMap map;
+    map.insert(10, "ten");
+    map.build_start(2);
+    map.build_add(5, "five");
+    map.build_add(15, "fifteen");
+    map.build_end();
+    EXPECT_EQ(map.size(), 3);
+    EXPECT_EQ(map.begin()->first, 5);
+    EXPECT_EQ(map[10], "ten");
+}
+
 // ===================================================================
 // INSERT OPERATIONS TESTS
 // ===================================================================
@@ -1162,24 +1188,48 @@ TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorMove)
     EXPECT_EQ((map.begin() + 1)->first, 5);
 }
 
-// The container ctor does NOT deduplicate: equal keys stay adjacent
-// after sorting and find() resolves to the first of them. Sharp edge
-// worth pinning -- build_add/insert are the deduplicated entry points.
-TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorWithDuplicateKeysKeepsBoth)
+// Container ctors now deduplicate: stable_sort + unique keeps the
+// first occurrence of each key (insertion order among equals) and
+// drops the rest. This matches the build path's "remove newest" rule.
+TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorWithDuplicateKeysDeduplicatesKeepsFirst)
 {
     typename TestMap::container_type data{ PairType{3, "three"}, PairType{1, "one"}, PairType{1, "uno"} };
     TestMap map(data);
 
-    EXPECT_EQ(map.size(), 3);
+    EXPECT_EQ(map.size(), 2);
     ExpectSortedByKey(map);
+    EXPECT_EQ(map[1], "one"); // first wins, "uno" dropped
 
     auto dup = map.find(1);
     ASSERT_NE(dup, map.end());
-    EXPECT_EQ(dup->first, 1);
+    EXPECT_EQ(dup->second, "one");
 
     auto last = map.find(3);
     ASSERT_NE(last, map.end());
     EXPECT_EQ(last->first, 3);
+    EXPECT_EQ(map.find(1)->first, 1);
+}
+
+// Rvalue container ctor must move and deduplicate identically.
+TEST_F(FlatKeyOrderMapContainerCtorTest, FromVectorMoveWithDuplicatesDeduplicates)
+{
+    typename TestMap::container_type data{ PairType{2, "two"}, PairType{1, "one"}, PairType{2, "TWO"} };
+    TestMap map(std::move(data));
+
+    EXPECT_EQ(map.size(), 2);
+    EXPECT_EQ(map[1], "one");
+    EXPECT_EQ(map[2], "two"); // first "two" kept
+}
+
+// Iterator-range ctor deduplicates the same way.
+TEST_F(FlatKeyOrderMapContainerCtorTest, FromIteratorsWithDuplicatesDeduplicates)
+{
+    std::vector<PairType> data{ PairType{2, "b"}, PairType{1, "a"}, PairType{2, "B"} };
+    TestMap map(data.begin(), data.end());
+
+    EXPECT_EQ(map.size(), 2);
+    EXPECT_EQ(map[1], "a");
+    EXPECT_EQ(map[2], "b");
 }
 
 // ===================================================================
