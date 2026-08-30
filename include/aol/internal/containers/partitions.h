@@ -38,19 +38,16 @@ struct SubPartitionEx<C>
 {
 public:
 	using main_partition_type = C;
-	
-	template<typename Ct = typename main_partition_type::container_type>
-	using main_partition_container = Ct;
-
-	using value_type = main_partition_container<>::value_type;
+	using storage_type = typename main_partition_type::container_type;
+	using value_type = typename storage_type::value_type;
 
 	using size_type = SizeT;
 	using difference_type = PtrDiff;
 
-	using iterator = typename main_partition_container<>::iterator;
-	using const_iterator = typename main_partition_container<>::const_iterator;
-	using reverse_iterator = typename main_partition_container<>::reverse_iterator;
-	using const_reverse_iterator = typename main_partition_container<>::const_reverse_iterator;
+	using iterator = typename storage_type::iterator;
+	using const_iterator = typename storage_type::const_iterator;
+	using reverse_iterator = typename storage_type::reverse_iterator;
+	using const_reverse_iterator = typename storage_type::const_reverse_iterator;
 
 private:
 	template<typename>
@@ -62,13 +59,13 @@ private:
 	template<typename, AoL::SizeT>
 	friend struct PartitionArrayEx;
 
-	main_partition_container<>* main_partition;
+	storage_type* parent_storage;
 	size_type begin_offset;
 	size_type end_offset;
 	size_type current_size;
 
-	constexpr SubPartitionEx(main_partition_container<>& main_partition_container_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
-		main_partition(std::addressof(main_partition_container_ref)),
+	constexpr SubPartitionEx(storage_type& parent_storage_ref, size_type begin_off, size_type end_off, Optional<size_type> starting_size = std::nullopt) :
+		parent_storage(std::addressof(parent_storage_ref)),
 		begin_offset(begin_off),
 		end_offset(end_off),
 		current_size(starting_size ? *starting_size : end_off - begin_off)
@@ -176,7 +173,7 @@ public:
 			return false;
 		}
 
-		(*main_partition)[begin_offset + current_size++] = value;
+		(*parent_storage)[begin_offset + current_size++] = value;
 		return true;
 	}
 
@@ -198,7 +195,7 @@ public:
 			return false;
 		}
 
-		(*main_partition)[begin_offset + current_size++] = std::move(value);
+		(*parent_storage)[begin_offset + current_size++] = std::move(value);
 		return true;
 	}
 
@@ -220,7 +217,7 @@ public:
 			return nullptr;
 		}
 
-		(*main_partition)[begin_offset + current_size++] = value_type(std::forward<Args>(args)...);
+		(*parent_storage)[begin_offset + current_size++] = value_type(std::forward<Args>(args)...);
 		return std::addressof(this->back());
 	}
 
@@ -228,14 +225,14 @@ public:
 	{
 		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
-		return (*main_partition)[begin_offset + idx];
+		return (*parent_storage)[begin_offset + idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const value_type& operator[] (size_type idx) const noexcept
 	{
 		assert(!this->empty() && "Invalid operation! Accessing an empty partition!");
 		assert(idx < current_size && "Invalid index! Accessing beyond allowable size!");
-		return (*main_partition)[begin_offset + idx];
+		return (*parent_storage)[begin_offset + idx];
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr value_type& front() noexcept
@@ -280,17 +277,17 @@ public:
 
 	AOL_ATTRIB_NO_DISCARD constexpr iterator begin() noexcept
 	{
-		return main_partition->begin() + begin_offset;
+		return parent_storage->begin() + begin_offset;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator begin() const noexcept
 	{
-		return main_partition->cbegin() + begin_offset;
+		return parent_storage->cbegin() + begin_offset;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr const_iterator cbegin() const noexcept
 	{
-		return main_partition->cbegin() + begin_offset;
+		return parent_storage->cbegin() + begin_offset;
 	}
 
 	AOL_ATTRIB_NO_DISCARD constexpr iterator end() noexcept
@@ -738,7 +735,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 	}
 
@@ -749,7 +746,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 	}
 
@@ -760,7 +757,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		for (auto& other_sub_partition : other.sub_partitions)
 		{
 			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
-			new_sp.main_partition = std::addressof(container_obj);
+			new_sp.parent_storage = std::addressof(container_obj);
 		}
 
 		return *this;
@@ -773,7 +770,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
@@ -786,7 +783,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
@@ -798,7 +795,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		sub_partitions = std::move(other.sub_partitions);
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 
@@ -961,7 +958,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		}
 		else
 		{
-			size_t new_sp_size = sub_partitions.size();
+				size_t new_sp_size = sub_partitions.size();
 
 			for (size_t i = sub_partitions.size(); i > 0; --i)
 			{
@@ -1050,7 +1047,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 	}
 
@@ -1061,7 +1058,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		for (auto& other_sub_partition : other.sub_partitions)
 		{
 			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
-			new_sp.main_partition = std::addressof(container_obj);
+			new_sp.parent_storage = std::addressof(container_obj);
 		}
 
 		return *this;
@@ -1074,7 +1071,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 	{
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
@@ -1086,7 +1083,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		sub_partitions = std::move(other.sub_partitions);
 		for (auto& sub_partition : sub_partitions)
 		{
-			sub_partition.main_partition = std::addressof(container_obj);
+			sub_partition.parent_storage = std::addressof(container_obj);
 		}
 		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 

@@ -610,7 +610,7 @@ TEST(PartitionVectorExTest, ClearAllLeavesNoDefaultUntilAssign)
 }
 
 // Verifies deep copy: independent storage, windows rebound to the copy's
-// container, layout identical. Importance: dangling main_partition pointers
+// container, layout identical. Importance: dangling parent_storage pointers
 // here would corrupt the source on writes through the copy.
 TEST(PartitionVectorExTest, CopyRebindsWindowsToNewStorage)
 {
