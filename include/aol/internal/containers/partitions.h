@@ -953,7 +953,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		{
 			size_t new_sp_size = sub_partitions.size();
 
-			for (size_t i = sub_partitions.size(); i > 0; --i)
+			for (size_t i = sub_partitions.size() - 1; i > 0; --i)
 			{
 				sub_partition_type& sp = sub_partitions[i];
 				if (sp.begin_offset >= new_size)
