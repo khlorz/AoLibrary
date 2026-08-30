@@ -12,6 +12,7 @@
 #include "aol/vector.h"
 #include "aol/array.h"
 #include "aol/dynamic_types.h"
+#include "aol/algorithms.h"
 
 #include <memory> // std::addressof
 
