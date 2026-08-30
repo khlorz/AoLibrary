@@ -13,7 +13,6 @@
 #include "aol/array.h"
 #include "aol/dynamic_types.h"
 
-#include <ranges> // std::ranges::views::reverse
 #include <memory> // std::addressof
 
 
@@ -963,8 +962,9 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		{
 			size_t new_sp_size = sub_partitions.size();
 
-			for (sub_partition_type& sp : std::views::reverse(sub_partitions))
+			for (size_t i = sub_partitions.size(); i > 0; --i)
 			{
+				sub_partition_type& sp = sub_partitions[i];
 				if (sp.begin_offset >= new_size)
 				{
 					--new_sp_size;
