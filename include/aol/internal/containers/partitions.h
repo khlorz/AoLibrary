@@ -384,7 +384,7 @@ public:
 template<
 	typename D
 >
-struct AOL_EMPTY_BASE_OPTIMIZATION PartitionContiguousBase
+struct PartitionContiguousBase
 {
 protected:
 	// We make the constructor protected so the base won't be constructible outside the derived classes
@@ -693,7 +693,7 @@ template<
 	typename T,
 	typename A
 >
-struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 {
 	using base = PartitionContiguousBase<PartitionVectorEx<T, A>>;
 	using container_type = AoL::Vector<T, A>;
@@ -1010,7 +1010,7 @@ template<
 	typename T,
 	AoL::SizeT S
 >
-struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
+struct AOL_EMPTY_BASE_OPTIMIZATION PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 {
 	using base = PartitionContiguousBase<PartitionArrayEx<T, S>>;
 
