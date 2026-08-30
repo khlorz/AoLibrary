@@ -92,6 +92,31 @@ private:
 	{
 	}
 
+	constexpr void keep_psize(size_type new_end) noexcept
+	{
+		end_offset = new_end;
+	}
+
+	constexpr void clear_psize(size_type new_end) noexcept
+	{
+		end_offset = new_end; current_size = 0;
+	}
+
+	constexpr void fit_psize(size_type new_end) noexcept
+	{
+		end_offset = new_end; current_size = end_offset - begin_offset;
+	}
+
+	constexpr void shift_left_all_offset(size_type n) noexcept
+	{
+		begin_offset -= n; end_offset -= n;
+	}
+
+	constexpr void shift_right_all_offset(size_type n) noexcept
+	{
+		begin_offset += n; end_offset += n;
+	}
+
 public:
 	/*
 	* @details Clears the subpartition
@@ -354,62 +379,6 @@ public:
 	{
 		return const_reverse_iterator(this->cbegin());
 	}
-
-private:
-	enum class size_update_mode
-	{
-		unchanged,
-		empty,
-		update
-	};
-
-	void update_start_offset(size_type new_begin_off, size_update_mode update_type) noexcept
-	{
-		begin_offset = new_begin_off;
-		switch (update_type)
-		{
-		case size_update_mode::empty:
-			current_size = 0;
-			break;
-
-		case size_update_mode::update:
-			current_size = end_offset - begin_offset;
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	void update_end_offset(size_type new_end_off, size_update_mode update_type) noexcept
-	{
-		end_offset = new_end_off;
-		switch (update_type)
-		{
-		case size_update_mode::empty:
-		current_size = 0;
-		break;
-
-		case size_update_mode::update:
-		current_size = end_offset - begin_offset;
-		break;
-
-		default:
-		break;
-		}
-	}
-
-	void shift_left_all_offset(size_type shift_count) noexcept
-	{
-		begin_offset -= shift_count;
-		end_offset -= shift_count;
-	}
-
-	void shift_right_all_offset(size_type shift_count) noexcept
-	{
-		begin_offset += shift_count;
-		end_offset += shift_count;
-	}
 };
 
 template<
@@ -550,11 +519,15 @@ public:
 		bool has_smaller_old_size = old_parti_size <= partition_size;
 		if (start_empty)
 		{
-			old_back_parti.update_end_offset(split_point, sub_partition_type::size_update_mode::empty);
+			old_back_parti.clear_psize(split_point);
+		}
+		else if (has_smaller_old_size)
+		{
+			old_back_parti.keep_psize(split_point);
 		}
 		else
 		{
-			old_back_parti.update_end_offset(split_point, has_smaller_old_size ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update);
+			old_back_parti.fit_psize(split_point);
 		}
 		sub_partitions.emplace_back(sub_partition_type(container_obj, split_point, container_obj.size(), has_smaller_old_size ? 0 : old_parti_size - partition_size));
 		return sub_partitions[sub_partitions.size() - 2];
@@ -891,7 +864,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		requires !std::is_same_v<Traits::ConstRefOrCopyType<value_type>, value_type>
 	{
 		container_obj.push_back(std::move(value));
-		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
+		sub_partitions.back().keep_psize(container_obj.size());
 	}
 
 	/*
@@ -906,7 +879,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	constexpr void push_back(Traits::ConstRefOrCopyType<value_type> value) noexcept
 	{
 		container_obj.push_back(value);
-		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
+		sub_partitions.back().keep_psize(container_obj.size());
 	}
 
 	/*
@@ -923,7 +896,7 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 	constexpr value_type& emplace_back(Args&&... args) noexcept
 	{
 		value_type& ret = container_obj.emplace_back(std::forward<Args>(args)...);
-		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::unchanged);
+		sub_partitions.back().keep_psize(container_obj.size());
 		return ret;
 	}
 
@@ -974,11 +947,11 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 		container_obj.resize(new_size);
 		if (old_size <= new_size)
 		{
-			sub_partitions.back().update_end_offset(new_size, sub_partition_type::size_update_mode::unchanged);
+			sub_partitions.back().keep_psize(new_size);
 		}
 		else
 		{
-				size_t new_sp_size = sub_partitions.size();
+			size_t new_sp_size = sub_partitions.size();
 
 			for (size_t i = sub_partitions.size(); i > 0; --i)
 			{
@@ -990,10 +963,14 @@ struct PartitionVectorEx : PartitionContiguousBase<PartitionVectorEx<T,A>>
 				}
 				if (sp.end_offset >= new_size)
 				{
-					sp.update_end_offset(
-						new_size,
-						sp.current_size < (new_size - sp.begin_offset) ? sub_partition_type::size_update_mode::unchanged : sub_partition_type::size_update_mode::update
-					);
+					if (sp.current_size < (new_size - sp.begin_offset))
+					{
+						sp.keep_psize(new_size);
+					}
+					else
+					{
+						sp.fit_psize(new_size);
+					}
 					break;
 				}
 			}
@@ -1150,7 +1127,7 @@ struct PartitionArrayEx : PartitionContiguousBase<PartitionArrayEx<T, S>>
 		sub_partitions{ sub_partition_type{container_obj, 0, 0} }
 	{
 		std::fill(container_obj.begin(), container_obj.end(), fill_value);
-		sub_partitions.back().update_end_offset(container_obj.size(), sub_partition_type::size_update_mode::update);
+		sub_partitions.back().fit_psize(container_obj.size());
 	}
 
 	template<typename... Args>
