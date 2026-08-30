@@ -20,8 +20,34 @@
 namespace AoL::Internal
 {
 
+/*************************************************
+* FORWARD DECLARATIONS
+*************************************************/
+
+template<typename C>
+struct SubPartitionEx;
+
+template<typename D>
+struct PartitionContiguousBase;
+
+template<typename T, typename A>
+struct PartitionVectorEx;
+
+template<typename T, SizeT S>
+struct PartitionArrayEx;
+
+
+/*************************************************
+* TYPE TAGS
+*************************************************/
+
 struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Contiguous {};
 struct AOL_EMPTY_BASE_OPTIMIZATION PartitionTag_Block {};
+
+
+/*************************************************
+* DEFINITIONS
+*************************************************/
 
 template<
 	typename C
@@ -50,14 +76,8 @@ public:
 	using const_reverse_iterator = typename storage_type::const_reverse_iterator;
 
 private:
-	template<typename>
-	friend struct PartitionContiguousBase;
-
-	template<typename, typename>
-	friend struct PartitionVectorEx;
-
-	template<typename, AoL::SizeT>
-	friend struct PartitionArrayEx;
+	friend C;
+	friend PartitionContiguousBase<C>;
 
 	storage_type* parent_storage;
 	size_type begin_offset;
