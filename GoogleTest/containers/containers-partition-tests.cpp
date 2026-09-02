@@ -171,6 +171,8 @@ struct BigProbe
     }
 };
 
+} // namespace
+
 static_assert(AoL::Traits::IsCheapToCopy<int>, "int must route through the by-value push_back");
 static_assert(!AoL::Traits::IsCheapToCopy<BigProbe>, "BigProbe must enable the rvalue push_back overload");
 
@@ -1020,14 +1022,240 @@ TEST(PartitionFuzzTest, FuzzAgainstDequeModel_Vector)
 TEST(PartitionFuzzTest, FuzzAgainstDequeModel_Array)
 {
     FuzzPA host(0); // all 64 slots visible, zero-filled
-
     RefModel model;
     model.Reset(0, 64, 64);
     model.raw.assign(64, 0);
-
     RunPartitionModelLoop<FuzzPA, false>(host, model, 2000, 0xF00Du);
 }
 
-} // namespace
+// ===================================================================
+// SUITE: ADDITIONAL EXHAUSTIVE - kept existing tests untouched
+// ===================================================================
+
+// Verifies copy self-assignment leaves layout and storage intact
+TEST(PartitionVectorExTest, CopySelfAssignIsNoOp)
+{
+    TestPV pv{ 1, 2, 3, 4 };
+    pv.create_partition(2, false);
+    const auto n_part = pv.number_of_partitions();
+    const auto raw_sz = pv.size();
+    pv = pv;
+    EXPECT_EQ(pv.number_of_partitions(), n_part);
+    EXPECT_EQ(pv.size(), raw_sz);
+    EXPECT_EQ(pv.get_partition(0)[0], 1);
+    EXPECT_EQ(pv.get_partition(1)[0], 3);
+}
+
+// Verifies move self-assignment is safe (no double free)
+TEST(PartitionVectorExTest, MoveSelfAssignIsSafe)
+{
+    TestPV pv{ 5, 6, 7 };
+    pv.create_partition(1, false);
+    pv = std::move(pv);
+    EXPECT_GE(pv.number_of_partitions(), 1u);
+}
+
+// Verifies copy assignment overwrites existing shape entirely
+TEST(PartitionVectorExTest, CopyAssignOverwritesShape)
+{
+    TestPV src{ 10, 20, 30, 40 };
+    src.create_partition(2, false);
+    TestPV dst{ 1, 2 };
+    dst.create_partition(1, false);
+    dst = src;
+    ASSERT_EQ(dst.number_of_partitions(), 2u);
+    EXPECT_EQ(dst.get_partition(0).max_size(), 2u);
+    EXPECT_EQ(dst.get_partition(0)[1], 20);
+}
+
+// Verifies move assignment steals storage and leaves source empty
+TEST(PartitionVectorExTest, MoveAssignStealsAndResetsSource)
+{
+    TestPV src{ 1, 2, 3, 4, 5, 6 };
+    src.create_partition(3, false);
+    TestPV dst;
+    dst = std::move(src);
+    EXPECT_EQ(dst.number_of_partitions(), 2u);
+    EXPECT_EQ(dst.size(), 6u);
+    EXPECT_EQ(src.number_of_partitions(), 1u);
+    EXPECT_TRUE(src.get_default_partition().empty());
+}
+
+// Verifies allocator-extended copy/move ctors rebind windows correctly
+TEST(PartitionVectorExTest, AllocatorCtorRebinds)
+{
+    TestPV src{ 1, 2, 3 };
+    src.create_partition(1, false);
+    typename TestPV::container_type::allocator_type al;
+    TestPV cpy(src, al);
+    EXPECT_EQ(cpy.get_partition(0)[0], 1);
+    cpy.get_partition(0)[0] = 99;
+    EXPECT_EQ(src.get_partition(0)[0], 1);
+    TestPV moved(std::move(src), al);
+    EXPECT_EQ(moved.number_of_partitions(), 2u);
+}
+
+// Verifies clear_all then assign recovers to usable state
+TEST(PartitionVectorExTest, ClearAllThenAssignAndPush)
+{
+    TestPV pv{ 1, 2, 3 };
+    pv.clear_all();
+    EXPECT_EQ(pv.number_of_partitions(), 0u);
+    pv.assign(TestPV::container_type{ 7, 8 });
+    ASSERT_EQ(pv.number_of_partitions(), 1u);
+    EXPECT_EQ(pv.size(), 2u);
+    pv.push_back(9);
+    EXPECT_EQ(pv.size(), 3u);
+    EXPECT_EQ(pv.get_default_partition().max_size(), 3u);
+}
+
+// Verifies erasing the first partition slides later windows left by live size
+TEST(PartitionVectorExTest, EraseFirstPartitionSlides)
+{
+    TestPV pv{ 1, 2, 3, 4, 5, 6 };
+    pv.create_partition(2, false);
+    pv.create_partition(2, false);
+    pv.erase_partition(0);
+    ASSERT_EQ(pv.number_of_partitions(), 2u);
+    // later windows shift left by erased live size (2), so old P1 [3,4] moves to [0,2) -> sees 1,2
+    EXPECT_EQ(pv.get_partition(0)[0], 1);
+    EXPECT_EQ(pv.get_partition(0).max_size(), 2u);
+    EXPECT_EQ(pv.get_partition(1)[0], 3);
+}
+
+// Verifies erasing an empty partition still shifts by 0
+TEST(PartitionVectorExTest, EraseEmptyPartitionIsNoShift)
+{
+    TestPV pv{ 1, 2, 3, 4 };
+    auto& p0 = pv.create_partition(2, false);
+    p0.clear();
+    EXPECT_EQ(p0.size(), 0u);
+    pv.erase_partition(0);
+    ASSERT_EQ(pv.number_of_partitions(), 1u);
+    EXPECT_EQ(pv.get_default_partition().size(), 2u);
+}
+
+// Verifies create with small old window (start_empty true vs false when old size <= n)
+TEST(PartitionVectorExTest, CreateStartEmptyVsRetainWithSmallOld)
+{
+    TestPV pv{ 1, 2, 3, 4 };
+    auto& p0 = pv.create_partition(2, false); // [1,2][3,4]
+    p0.clear(); // P0 size 0, max 2
+    // default is [3,4] max 2, split n=1 -> has_smaller false, but p0 small case is for new partition's fresh_size
+    // To hit has_smaller true, need old default size <= n: make default size 1 then split n=1
+    pv.get_default_partition().pop_back(); // default [3,4] -> [3] size1
+    auto& p1 = pv.create_partition(1, true);
+    EXPECT_TRUE(p1.empty()); // fresh_size 0 because old size 1 <=1
+    TestPV pv2{ 10, 20, 30, 40 };
+    pv2.create_partition(2, false);
+    pv2.get_partition(0).clear();
+    pv2.get_default_partition().pop_back(); // default size 1
+    auto& q1 = pv2.create_partition(1, false);
+    EXPECT_FALSE(q1.empty()); // old kept (has_smaller true -> keep)
+    EXPECT_TRUE(pv2.get_default_partition().empty()); // new fresh 0
+}
+
+// Verifies const SubPartition view matches mutable
+TEST(SubPartitionExTest, ConstViewMatchesMutable)
+{
+    TestPV pv{ 1, 2, 3, 4 };
+    auto& p0 = pv.create_partition(2, false);
+    const auto& cp0 = pv.get_partition(0);
+    EXPECT_EQ(cp0.size(), p0.size());
+    EXPECT_EQ(cp0.max_size(), p0.max_size());
+    EXPECT_EQ(cp0[0], p0[0]);
+    std::deque<int> a(p0.begin(), p0.end());
+    std::deque<int> b(cp0.begin(), cp0.end());
+    EXPECT_EQ(a, b);
+    EXPECT_EQ(cp0.front(), p0.front());
+    EXPECT_EQ(cp0.back(), p0.back());
+}
+
+// Verifies max_size vs size invariants after mixed ops
+TEST(SubPartitionExTest, MaxSizeInvariantHoldsAfterOps)
+{
+    TestPV pv{ 1, 2, 3, 4, 5 };
+    auto& p0 = pv.create_partition(2, false);
+    p0.pop_back();
+    EXPECT_LE(p0.size(), p0.max_size());
+    p0.clear();
+    EXPECT_LE(p0.size(), p0.max_size());
+    EXPECT_EQ(p0.max_size(), 2u);
+    pv.push_back(6);
+    EXPECT_EQ(pv.get_default_partition().max_size(), 4u);
+}
+
+// Verifies string payload survives splits
+TEST(PartitionVectorExTest, StringPayloadSurvivesSplits)
+{
+    AoL::PartitionVector<std::string> pv{ std::string("a"), std::string("b"), std::string("c") };
+    auto& p0 = pv.create_partition(1, false);
+    EXPECT_EQ(p0[0], "a");
+    EXPECT_EQ(pv.get_default_partition()[0], "b");
+    p0.push_back(std::string("x"));
+    EXPECT_EQ(p0[0], "a");
+}
+
+// Verifies PartitionArray copy/move assign parity
+TEST(PartitionArrayExTest, CopyMoveAssignParity)
+{
+    TestPA a;
+    a.get_default_partition().push_back(1);
+    a.get_default_partition().push_back(2);
+    TestPA b;
+    b = a;
+    EXPECT_EQ(b.get_default_partition()[0], 1);
+    b = a;
+    b.get_default_partition()[0] = 99;
+    EXPECT_EQ(a.get_default_partition()[0], 1);
+    TestPA c;
+    c = std::move(b);
+    EXPECT_EQ(c.get_default_partition()[0], 99);
+}
+
+// Verifies array clear via partition clear keeps shape
+TEST(PartitionArrayExTest, ClearPartitionsKeepsShapeArray)
+{
+    TestPA pa;
+    pa.get_default_partition().push_back(5);
+    pa.get_default_partition().clear();
+    EXPECT_EQ(pa.number_of_partitions(), 1u);
+    EXPECT_TRUE(pa.get_default_partition().empty());
+    EXPECT_EQ(pa.size(), 8u);
+}
+
+// Verifies empty range ctor
+TEST(PartitionArrayExTest, IteratorPairCtorEmptyRange)
+{
+    std::vector<int> empty;
+    AoL::PartitionArray<int, 4> pa(empty.begin(), empty.end());
+    EXPECT_TRUE(pa.get_default_partition().empty());
+}
+
+// Verifies partition counts after chained creates
+TEST(PartitionVectorExTest, PartitionCountsAfterChainedCreates)
+{
+    TestPV pv{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    for (int i = 0; i < 4; ++i)
+    {
+        pv.create_partition(2, false);
+    }
+    EXPECT_EQ(pv.number_of_partitions(), 5u);
+    AoL::SizeT tot = 0;
+    for (AoL::SizeT i = 0; i < pv.number_of_partitions(); ++i)
+    {
+        tot += pv.get_partition(i).max_size();
+    }
+    EXPECT_EQ(tot, pv.size());
+}
+
+// Verifies container-level iteration is raw order
+TEST(PartitionVectorExTest, ContainerIterationIsRawOrder)
+{
+    TestPV pv{ 3, 1, 2 };
+    pv.create_partition(1, false);
+    std::vector<int> raw(pv.begin(), pv.end());
+    EXPECT_EQ(raw, (std::vector<int>{ 3, 1, 2 }));
+}
 
 #endif // AOL_TEST_CONTAINERS_PARTITION
