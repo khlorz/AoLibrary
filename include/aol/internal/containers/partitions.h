@@ -1008,6 +1008,32 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionVectorEx : PartitionContiguousBase<P
 		container_obj.clear();
 		sub_partitions.clear();
 	}
+
+	constexpr void swap(PartitionVectorEx& other) noexcept
+	{
+		if (this == &other)
+		{
+			return;
+		}
+
+		using std::swap;
+		swap(container_obj, other.container_obj);
+		swap(sub_partitions, other.sub_partitions);
+
+		for (auto& p : sub_partitions)
+		{
+			p.parent_storage = std::addressof(container_obj);
+		}
+		for (auto& p : other.sub_partitions)
+		{
+			p.parent_storage = std::addressof(other.container_obj);
+		}
+	}
+
+	friend constexpr void swap(PartitionVectorEx& a, PartitionVectorEx& b) noexcept
+	{
+		a.swap(b);
+	}
 };
 
 template<
@@ -1171,6 +1197,32 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionArrayEx : PartitionContiguousBase<Pa
 		);
 
 		return *this;
+	}
+
+	constexpr void swap(PartitionArrayEx& other) noexcept
+	{
+		if (this == &other)
+		{
+			return;
+		}
+
+		using std::swap;
+		swap(container_obj, other.container_obj);
+		swap(sub_partitions, other.sub_partitions);
+
+		for (auto& p : sub_partitions)
+		{
+			p.parent_storage = std::addressof(container_obj);
+		}
+		for (auto& p : other.sub_partitions)
+		{
+			p.parent_storage = std::addressof(other.container_obj);
+		}
+	}
+
+	friend constexpr void swap(PartitionArrayEx& a, PartitionArrayEx& b) noexcept
+	{
+		a.swap(b);
 	}
 };
 
