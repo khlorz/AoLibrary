@@ -745,14 +745,16 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionVectorEx : PartitionContiguousBase<P
 
 	constexpr PartitionVectorEx& operator = (const PartitionVectorEx& other) noexcept
 	{
-		container_obj = other.container_obj;
-		sub_partitions.clear();
-		for (auto& other_sub_partition : other.sub_partitions)
+		if (this != std::addressof(other)) AOL_ATTRIB_BRANCH_LIKELY
 		{
-			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
-			new_sp.parent_storage = std::addressof(container_obj);
+			container_obj = other.container_obj;
+			sub_partitions.clear();
+			for (auto& other_sub_partition : other.sub_partitions)
+			{
+				auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
+				new_sp.parent_storage = std::addressof(container_obj);
+			}
 		}
-
 		return *this;
 	}
 
@@ -784,14 +786,16 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionVectorEx : PartitionContiguousBase<P
 
 	constexpr PartitionVectorEx& operator = (PartitionVectorEx&& other) noexcept
 	{
-		container_obj = std::move(other.container_obj);
-		sub_partitions = std::move(other.sub_partitions);
-		for (auto& sub_partition : sub_partitions)
+		if (this != std::addressof(other)) AOL_ATTRIB_BRANCH_LIKELY
 		{
-			sub_partition.parent_storage = std::addressof(container_obj);
+			container_obj = std::move(other.container_obj);
+			sub_partitions = std::move(other.sub_partitions);
+			for (auto& sub_partition : sub_partitions)
+			{
+				sub_partition.parent_storage = std::addressof(container_obj);
+			}
+			other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 		}
-		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
-
 		return *this;
 	}
 
@@ -1050,14 +1054,16 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionArrayEx : PartitionContiguousBase<Pa
 
 	constexpr PartitionArrayEx& operator = (const PartitionArrayEx& other) noexcept
 	{
-		container_obj = other.container_obj;
-		sub_partitions.clear();
-		for (auto& other_sub_partition : other.sub_partitions)
+		if (this != std::addressof(other)) AOL_ATTRIB_BRANCH_LIKELY
 		{
-			auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
-			new_sp.parent_storage = std::addressof(container_obj);
+			container_obj = other.container_obj;
+			sub_partitions.clear();
+			for (auto& other_sub_partition : other.sub_partitions)
+			{
+				auto& new_sp = sub_partitions.emplace_back(other_sub_partition);
+				new_sp.parent_storage = std::addressof(container_obj);
+			}
 		}
-
 		return *this;
 	}
 
@@ -1076,14 +1082,16 @@ struct AOL_EMPTY_BASE_OPTIMIZATION PartitionArrayEx : PartitionContiguousBase<Pa
 
 	constexpr PartitionArrayEx& operator = (PartitionArrayEx&& other) noexcept
 	{
-		container_obj = std::move(other.container_obj);
-		sub_partitions = std::move(other.sub_partitions);
-		for (auto& sub_partition : sub_partitions)
+		if (this != std::addressof(other))
 		{
-			sub_partition.parent_storage = std::addressof(container_obj);
+			container_obj = std::move(other.container_obj);
+			sub_partitions = std::move(other.sub_partitions);
+			for (auto& sub_partition : sub_partitions)
+			{
+				sub_partition.parent_storage = std::addressof(container_obj);
+			}
+			other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
 		}
-		other.sub_partitions.emplace_back(sub_partition_type{ other.container_obj, 0, 0 }); // valid but empty state
-
 		return *this;
 	}
 
