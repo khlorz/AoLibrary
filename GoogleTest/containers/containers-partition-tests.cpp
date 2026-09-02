@@ -1258,4 +1258,115 @@ TEST(PartitionVectorExTest, ContainerIterationIsRawOrder)
     EXPECT_EQ(raw, (std::vector<int>{ 3, 1, 2 }));
 }
 
+// Verifies swap exchanges storage, windows, and rebinds parent_storage
+TEST(PartitionVectorExTest, SwapExchangesVectorContents)
+{
+    TestPV a{ 1, 2, 3, 4 };
+    a.create_partition(2, false); // a: [1,2][3,4] both full
+    TestPV b{ 10, 20, 30 };
+    b.create_partition(1, false); // b: [10][20,30] both full
+    // make space so push after swap can succeed
+    a.get_partition(0).clear();
+    b.get_partition(0).clear();
+    const auto a_sz = a.get_partition(1).size();
+    const auto b_sz = b.get_partition(1).size();
+    a.swap(b);
+    EXPECT_EQ(a.size(), 3u);
+    EXPECT_EQ(b.size(), 4u);
+    EXPECT_EQ(a.get_partition(1).size(), b_sz);
+    EXPECT_EQ(b.get_partition(1).size(), a_sz);
+    // windows remain usable after rebind
+    EXPECT_TRUE(a.get_partition(0).push_back(99));
+    EXPECT_TRUE(b.get_partition(0).push_back(77));
+    EXPECT_EQ(a.get_partition(0).back(), 99);
+    EXPECT_EQ(b.get_partition(0).back(), 77);
+}
+
+// Verifies self-swap is no-op
+TEST(PartitionVectorExTest, SwapSelfIsNoOp)
+{
+    TestPV pv{ 1, 2, 3 };
+    pv.create_partition(1, false);
+    const auto n = pv.number_of_partitions();
+    const auto sz = pv.size();
+    pv.swap(pv);
+    EXPECT_EQ(pv.number_of_partitions(), n);
+    EXPECT_EQ(pv.size(), sz);
+    EXPECT_EQ(pv.get_partition(0)[0], 1);
+}
+
+// Verifies ADL swap (swap(a,b) and std::swap) delegates to member swap
+TEST(PartitionVectorExTest, SwapViaADL)
+{
+    TestPV a{ 1, 2 };
+    TestPV b{ 10, 20, 30 };
+    swap(a, b);
+    EXPECT_EQ(a.size(), 3u);
+    EXPECT_EQ(b.size(), 2u);
+    std::swap(a, b);
+    EXPECT_EQ(a.size(), 2u);
+    EXPECT_EQ(b.size(), 3u);
+}
+
+// Verifies array swap exchanges fixed storage and windows
+TEST(PartitionArrayExTest, SwapExchangesArrayContents)
+{
+    AoL::PartitionArray<int, 4> a{ 1, 2, 3, 4 };
+    AoL::PartitionArray<int, 4> b{ 5, 6, 7, 8 };
+    a.create_partition(2, false);
+    b.create_partition(1, false);
+    a.swap(b);
+    EXPECT_EQ(a.get_partition(0)[0], 5);
+    EXPECT_EQ(b.get_partition(0)[0], 1);
+    EXPECT_EQ(a.size(), 4u);
+    EXPECT_EQ(b.size(), 4u);
+    swap(a, b);
+    EXPECT_EQ(a.get_partition(0)[0], 1);
+}
+
+// Verifies array self-swap is no-op and windows stay valid
+TEST(PartitionArrayExTest, SwapSelfIsNoOpArray)
+{
+    AoL::PartitionArray<int, 4> a{ 1, 2, 3, 4 };
+    a.create_partition(2, false);
+    const auto n = a.number_of_partitions();
+    a.swap(a);
+    EXPECT_EQ(a.number_of_partitions(), n);
+    EXPECT_EQ(a.get_partition(0)[0], 1);
+    EXPECT_EQ(a.get_partition(1)[0], 3);
+}
+
+// Verifies array ADL swap and std::swap both work
+TEST(PartitionArrayExTest, SwapViaADLArray)
+{
+    AoL::PartitionArray<int, 4> a{ 1, 2, 3, 4 };
+    AoL::PartitionArray<int, 4> b{ 10, 20, 30, 40 };
+    a.create_partition(1, false); // a P0 max1
+    b.create_partition(3, false); // b P0 max3
+    swap(a, b);
+    EXPECT_EQ(a.get_partition(0).max_size(), 3u);
+    EXPECT_EQ(b.get_partition(0).max_size(), 1u);
+    std::swap(a, b);
+    EXPECT_EQ(a.get_partition(0).max_size(), 1u);
+    EXPECT_EQ(b.get_partition(0).max_size(), 3u);
+}
+
+// Verifies array swap with empty vs non-empty preserves invariants
+TEST(PartitionArrayExTest, SwapArrayWithEmptyPartitions)
+{
+    AoL::PartitionArray<int, 4> a{ 1, 2, 3, 4 };
+    AoL::PartitionArray<int, 4> b;
+    // b is default: size 4, one empty partition max 4
+    a.create_partition(2, false);
+    a.get_partition(0).clear();
+    const auto a0_max = a.get_partition(0).max_size();
+    b.swap(a);
+    EXPECT_TRUE(b.get_partition(0).empty());
+    EXPECT_EQ(b.get_partition(0).max_size(), a0_max);
+    EXPECT_EQ(a.get_partition(0).max_size(), 4u);
+    // windows still usable after rebind
+    EXPECT_TRUE(b.get_partition(0).push_back(99));
+    EXPECT_EQ(b.get_partition(0)[0], 99);
+}
+
 #endif // AOL_TEST_CONTAINERS_PARTITION
