@@ -238,7 +238,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	AOL_ATTRIB_NO_DISCARD mapped_type& at_ref(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr mapped_type& at_ref(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -254,7 +254,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	AOL_ATTRIB_NO_DISCARD const mapped_type& at_ref(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const mapped_type& at_ref(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -270,7 +270,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	AOL_ATTRIB_NO_DISCARD mapped_type* at_ptr(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr mapped_type* at_ptr(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -281,7 +281,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	AOL_ATTRIB_NO_DISCARD const mapped_type* at_ptr(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr const mapped_type* at_ptr(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
