@@ -16,6 +16,7 @@
 #include <iterator>     // std::iter_reference_t
 #include <utility>      // std::forward
 #include <functional>   // std::less
+#include <execution>    // std::is_execution_policy
 
 
 namespace AoL
@@ -32,8 +33,8 @@ constexpr auto FindBrute(It it_begin, It it_end, T&& val) noexcept
 
 // Find a value from a container with custom execution
 // - use std::find for custom size container
-template<typename It, typename T, typename E>
-    requires std::is_execution_policy_v<E> && (!std::invocable<T, std::iter_reference_t<It>>)
+template<typename E, typename It, typename T>
+  requires std::is_execution_policy_v<std::remove_cvref_t<E>> && (!std::invocable<std::remove_cvref_t<T>, std::iter_reference_t<It>>)
 constexpr auto FindBrute(E&& e, It it_begin, It it_end, T&& val) noexcept
 {
 	return std::find(std::forward<E>(e), it_begin, it_end, std::forward<T>(val));
@@ -50,8 +51,8 @@ constexpr auto FindBrute(It it_begin, It it_end, P&& predicate) noexcept
 
 // Find a value from a container with custom execution
 // - use std::find_if for custom size container
-template<typename It, typename E, typename P>
-    requires std::is_execution_policy_v<E> && std::invocable<P, std::iter_reference_t<It>>
+template<typename E, typename It, typename P>
+  requires std::is_execution_policy_v<std::remove_cvref_t<E>> && std::invocable<std::remove_cvref_t<P>, std::iter_reference_t<It>>
 constexpr auto FindBrute(E&& e, It it_begin, It it_end, P&& predicate) noexcept
 {
     return std::find_if(std::forward<E>(e), it_begin, it_end, std::forward<P>(predicate));
