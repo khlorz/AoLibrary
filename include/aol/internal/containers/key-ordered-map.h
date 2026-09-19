@@ -219,7 +219,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr mapped_type& operator[](InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr mapped_type& operator[](InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -238,7 +238,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	mapped_type& at_ref(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD mapped_type& at_ref(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -254,7 +254,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	const mapped_type& at_ref(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD const mapped_type& at_ref(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -270,7 +270,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	mapped_type* at_ptr(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD mapped_type* at_ptr(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -281,7 +281,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	const mapped_type* at_ptr(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD const mapped_type* at_ptr(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -292,7 +292,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr auto find(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto find(InKey&& key) noexcept
 	{
 		const InKey& key_val = key;
 		auto it = this->find_impl(key_val);
@@ -304,7 +304,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr auto find(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto find(InKey&& key) const noexcept
 	{
 		const InKey& key_val = key;
 		auto it = this->find_impl(key_val);
@@ -316,7 +316,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr auto find_impl(InKey&& key) noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto find_impl(InKey&& key) noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -326,7 +326,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr auto find_impl(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto find_impl(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
@@ -336,7 +336,7 @@ struct KeyOrderMapEx
 	}
 
 	template<typename InKey>
-	constexpr bool contains(InKey&& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool contains(InKey&& key) const noexcept
 	{
 		static_assert(std::is_convertible_v<InKey, key_type>, "Input key type should be convertible to the map's key type!");
 
