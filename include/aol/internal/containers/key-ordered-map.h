@@ -35,26 +35,26 @@ struct KeyValuePairEx
 	first_type	first;
 	second_type	second;
 
-	constexpr auto operator <=> (const KeyValuePairEx& other) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto operator <=> (const KeyValuePairEx& other) const noexcept
 	{
 		return this->first <=> other.first;
 	}
 
-	constexpr bool operator == (const KeyValuePairEx& other) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool operator == (const KeyValuePairEx& other) const noexcept
 	{
 		return this->first == other.first;
 	}
 
 	template<typename T>
 		requires requires (const K& k, const T& t) { k <=> t; }
-	constexpr auto operator <=> (const T& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr auto operator <=> (const T& key) const noexcept
 	{
 		return this->first <=> key;
 	}
 
 	template<typename T>
 		requires requires (const K& k, const T& t) { k == t; }
-	constexpr bool operator == (const T& key) const noexcept
+	AOL_ATTRIB_NO_DISCARD constexpr bool operator == (const T& key) const noexcept
 	{
 		return this->first == key;
 	}
