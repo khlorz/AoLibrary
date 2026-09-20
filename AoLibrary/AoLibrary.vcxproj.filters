@@ -16,9 +16,6 @@
     <Filter Include="include\third-party\tsl">
       <UniqueIdentifier>{87621557-9426-4663-b369-5c9d501a8c4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\third-party\Google Benchmark">
-      <UniqueIdentifier>{81db1137-0169-4b8f-9f0d-02fd34b84df2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\third-party\cereal">
       <UniqueIdentifier>{bb823569-1242-4706-9567-d54e66c6f047}</UniqueIdentifier>
     </Filter>
@@ -488,12 +485,6 @@
     </ClInclude>
     <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-stats.h">
       <Filter>include\third-party\mimalloc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\aol\third-party\google_benchmark\include\benchmark.h">
-      <Filter>include\third-party\Google Benchmark</Filter>
-    </ClInclude>
-    <ClInclude Include="include\aol\third-party\google_benchmark\include\export.h">
-      <Filter>include\third-party\Google Benchmark</Filter>
     </ClInclude>
     <ClInclude Include="include\aol\third-party\stb\stb_sprintf.h">
       <Filter>include\third-party\stb</Filter>

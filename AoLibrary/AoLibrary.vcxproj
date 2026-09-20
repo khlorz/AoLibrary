@@ -385,8 +385,6 @@
     <ClInclude Include="include\aol\third-party\cereal\types\variant.hpp" />
     <ClInclude Include="include\aol\third-party\cereal\types\vector.hpp" />
     <ClInclude Include="include\aol\third-party\cereal\version.hpp" />
-    <ClInclude Include="include\aol\third-party\google_benchmark\include\benchmark.h" />
-    <ClInclude Include="include\aol\third-party\google_benchmark\include\export.h" />
     <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-new-delete.h" />
     <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-override.h" />
     <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-stats.h" />
