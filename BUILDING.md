@@ -13,7 +13,7 @@ cd AoLibrary
 
 ## Install Third-Party Libraries
 
-Inside the `include/aol/third_party/` folder, clone or download the following:
+Inside the `AoLibrary/include/aol/third-party/` folder, clone or download the following:
 
 ### Google Benchmark
 
@@ -24,7 +24,7 @@ git clone https://github.com/google/benchmark [Your chosen folder]
 
 Copy and paste the `include/benchmark` contents inside `google_benchmark/`
 
-The built static library recommended to put in `include/lib/[Platform]/[Configuration]/` for ease of use
+The built static library recommended to put in `AoLibrary/lib/[Platform]/[Configuration]/` for ease of use
 
 Google benchmark is only needed for the developer that tests and benchmarks the library, otherwise, this library can be skipped
 
@@ -55,7 +55,7 @@ git clone https://github.com/microsoft/mimalloc [Your chosen folder]
 
 Copy and paste the contents of `include` (from mimalloc) to `mimalloc/`
 
-The built static library recommended to put in `include/lib/[Platform]/[Configuration]/` for ease of use
+The built static library recommended to put in `AoLibrary/lib/[Platform]/[Configuration]/` for ease of use
 
 ### tsl (Tessil libraries)
 
