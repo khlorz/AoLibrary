@@ -422,15 +422,15 @@ AoLibrary/lib/*
 
 #AoLibrary third-party files
 
-include/aol/third-party/**
-!include/aol/third-party/**/
-!include/aol/third-party/**/.gitkeep
+AoLibrary/include/aol/third-party/**
+!AoLibrary/include/aol/third-party/**/
+!AoLibrary/include/aol/third-party/**/.gitkeep
 
 #benchmark builds
 [Bb]enchmarking/
 
 #Github files
-.github
+.github/
 
 #OpenCode files
 opencode.*

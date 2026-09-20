@@ -16,9 +16,6 @@
     <Filter Include="include\third-party\tsl">
       <UniqueIdentifier>{87621557-9426-4663-b369-5c9d501a8c4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\third-party\Google Benchmark">
-      <UniqueIdentifier>{81db1137-0169-4b8f-9f0d-02fd34b84df2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\third-party\cereal">
       <UniqueIdentifier>{bb823569-1242-4706-9567-d54e66c6f047}</UniqueIdentifier>
     </Filter>
@@ -72,866 +69,860 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aol\data_components\managers.h">
+    <ClInclude Include="include\aol\data_components\managers.h">
       <Filter>include\data_components</Filter>
     </ClInclude>
-    <ClInclude Include="aol\data_components\profiles.h">
+    <ClInclude Include="include\aol\data_components\profiles.h">
       <Filter>include\data_components</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\absl\container\btree_map.h">
+    <ClInclude Include="include\aol\third-party\absl\container\btree_map.h">
       <Filter>include\third-party\absl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\absl\container\btree_set.h">
+    <ClInclude Include="include\aol\third-party\absl\container\btree_set.h">
       <Filter>include\third-party\absl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\access.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\access.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\archives\adapters.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\archives\adapters.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\archives\binary.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\archives\binary.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\archives\json.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\archives\json.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\archives\portable_binary.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\archives\portable_binary.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\archives\xml.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\archives\xml.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\cereal.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\cereal.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\helpers.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\helpers.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\polymorphic_impl.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\polymorphic_impl.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\polymorphic_impl_fwd.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\polymorphic_impl_fwd.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\static_object.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\static_object.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\traits.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\traits.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\details\util.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\details\util.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\base64.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\external\base64.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\allocators.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\allocators.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\cursorstreamwrapper.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\cursorstreamwrapper.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\document.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\document.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\encodedstream.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\encodedstream.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\encodings.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\encodings.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\error\en.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\error\en.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\error\error.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\error\error.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\filereadstream.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\filereadstream.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\filewritestream.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\filewritestream.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\fwd.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\fwd.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\biginteger.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\biginteger.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\diyfp.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\diyfp.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\dtoa.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\dtoa.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\ieee754.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\ieee754.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\itoa.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\itoa.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\meta.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\meta.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\pow10.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\pow10.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\regex.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\regex.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\stack.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\stack.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strfunc.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\strfunc.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\strtod.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\strtod.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\internal\swap.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\internal\swap.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\istreamwrapper.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\istreamwrapper.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\memorybuffer.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\memorybuffer.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\memorystream.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\memorystream.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\inttypes.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\msinttypes\inttypes.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\msinttypes\stdint.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\msinttypes\stdint.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\ostreamwrapper.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\ostreamwrapper.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\pointer.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\pointer.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\prettywriter.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\prettywriter.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\rapidjson.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\rapidjson.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\reader.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\reader.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\schema.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\schema.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\stream.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\stream.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\stringbuffer.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\stringbuffer.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidjson\writer.h">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidjson\writer.h">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidxml\rapidxml.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_iterators.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidxml\rapidxml_iterators.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_print.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidxml\rapidxml_print.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\external\rapidxml\rapidxml_utils.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\external\rapidxml\rapidxml_utils.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\macros.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\macros.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\specialize.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\specialize.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\array.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\array.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\atomic.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\atomic.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\base_class.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\base_class.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\bitset.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\bitset.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\boost_variant.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\boost_variant.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\chrono.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\chrono.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\common.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\common.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\complex.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\complex.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\concepts\pair_associative_container.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\concepts\pair_associative_container.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\deque.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\deque.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\forward_list.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\forward_list.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\functional.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\functional.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\list.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\list.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\map.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\map.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\memory.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\memory.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\optional.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\optional.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\polymorphic.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\polymorphic.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\queue.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\queue.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\set.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\set.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\stack.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\stack.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\string.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\string.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\tuple.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\tuple.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\unordered_map.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\unordered_map.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\unordered_set.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\unordered_set.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\utility.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\utility.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\valarray.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\valarray.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\variant.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\variant.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\types\vector.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\types\vector.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\cereal\version.hpp">
+    <ClInclude Include="include\aol\third-party\cereal\version.hpp">
       <Filter>include\third-party\cereal</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\boost\container\map.hpp">
+    <ClInclude Include="include\aol\third-party\boost\container\map.hpp">
       <Filter>include\third-party\boost</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\tsl\ordered_hash.h">
+    <ClInclude Include="include\aol\third-party\tsl\ordered_hash.h">
       <Filter>include\third-party\tsl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\tsl\ordered_map.h">
+    <ClInclude Include="include\aol\third-party\tsl\ordered_map.h">
       <Filter>include\third-party\tsl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\tsl\ordered_set.h">
+    <ClInclude Include="include\aol\third-party\tsl\ordered_set.h">
       <Filter>include\third-party\tsl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\arithmetic_policy.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\arithmetic_policy.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\boolean.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\boolean.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\bounded_type.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\bounded_type.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\compact_optional.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\compact_optional.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\config.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\config.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\constrained_type.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\constrained_type.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\deferred_construction.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\deferred_construction.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\aligned_union.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\aligned_union.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\all_of.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\all_of.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\assert.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\assert.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\assign_or_construct.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\assign_or_construct.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\constant_parser.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\constant_parser.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\copy_move_control.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\copy_move_control.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\debug_assert.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\debug_assert.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\force_inline.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\force_inline.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\is_nothrow_swappable.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\is_nothrow_swappable.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\map_invoke.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\map_invoke.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\detail\variant_impl.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\detail\variant_impl.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\downcast.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\downcast.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\flag.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\flag.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\flag_set.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\flag_set.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\floating_point.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\floating_point.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\index.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\index.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\integer.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\integer.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\narrow_cast.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\narrow_cast.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\optional.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\optional.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\optional_ref.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\optional_ref.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\output_parameter.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\output_parameter.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\reference.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\reference.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\strong_typedef.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\strong_typedef.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\tagged_union.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\tagged_union.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\types.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\types.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\variant.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\variant.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\type_safe\visitor.hpp">
+    <ClInclude Include="include\aol\third-party\type_safe\visitor.hpp">
       <Filter>include\third-party\type_safe</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\unordered_dense\stl.h">
+    <ClInclude Include="include\aol\third-party\unordered_dense\stl.h">
       <Filter>include\third-party\ankerl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\unordered_dense\unordered_dense.h">
+    <ClInclude Include="include\aol\third-party\unordered_dense\unordered_dense.h">
       <Filter>include\third-party\ankerl</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\atomic.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\atomic.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\bits.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\bits.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\internal.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\internal.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\prim.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\prim.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\track.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\track.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc\types.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc\types.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc-new-delete.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-new-delete.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc-override.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-override.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\mimalloc\include\mimalloc-stats.h">
+    <ClInclude Include="include\aol\third-party\mimalloc\include\mimalloc-stats.h">
       <Filter>include\third-party\mimalloc</Filter>
     </ClInclude>
-    <ClInclude Include="third-party\google_benchmark\include\benchmark.h">
-      <Filter>include\third-party\Google Benchmark</Filter>
-    </ClInclude>
-    <ClInclude Include="third-party\google_benchmark\include\export.h">
-      <Filter>include\third-party\Google Benchmark</Filter>
-    </ClInclude>
-    <ClInclude Include="aol\third-party\stb\stb_sprintf.h">
+    <ClInclude Include="include\aol\third-party\stb\stb_sprintf.h">
       <Filter>include\third-party\stb</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\args.h">
+    <ClInclude Include="include\aol\third-party\fmt\args.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\base.h">
+    <ClInclude Include="include\aol\third-party\fmt\base.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\chrono.h">
+    <ClInclude Include="include\aol\third-party\fmt\chrono.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\color.h">
+    <ClInclude Include="include\aol\third-party\fmt\color.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\compile.h">
+    <ClInclude Include="include\aol\third-party\fmt\compile.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\core.h">
+    <ClInclude Include="include\aol\third-party\fmt\core.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\format.h">
+    <ClInclude Include="include\aol\third-party\fmt\format.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\format-inl.h">
+    <ClInclude Include="include\aol\third-party\fmt\format-inl.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\os.h">
+    <ClInclude Include="include\aol\third-party\fmt\os.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\ostream.h">
+    <ClInclude Include="include\aol\third-party\fmt\ostream.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\printf.h">
+    <ClInclude Include="include\aol\third-party\fmt\printf.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\ranges.h">
+    <ClInclude Include="include\aol\third-party\fmt\ranges.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\std.h">
+    <ClInclude Include="include\aol\third-party\fmt\std.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\fmt\xchar.h">
+    <ClInclude Include="include\aol\third-party\fmt\xchar.h">
       <Filter>include\third-party\fmt</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\async.h">
+    <ClInclude Include="include\aol\third-party\spdlog\async.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\async_logger-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\async_logger-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\async_logger.h">
+    <ClInclude Include="include\aol\third-party\spdlog\async_logger.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\cfg\argv.h">
+    <ClInclude Include="include\aol\third-party\spdlog\cfg\argv.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\cfg\env.h">
+    <ClInclude Include="include\aol\third-party\spdlog\cfg\env.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\cfg\helpers-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\cfg\helpers-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\cfg\helpers.h">
+    <ClInclude Include="include\aol\third-party\spdlog\cfg\helpers.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\common-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\common-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\common.h">
+    <ClInclude Include="include\aol\third-party\spdlog\common.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\backtracer-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\backtracer-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\backtracer.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\backtracer.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\circular_q.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\circular_q.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\console_globals.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\console_globals.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\file_helper-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\file_helper-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\file_helper.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\file_helper.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\fmt_helper.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\fmt_helper.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\log_msg-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\log_msg-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\log_msg.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\log_msg.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\log_msg_buffer-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\log_msg_buffer-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\log_msg_buffer.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\log_msg_buffer.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\mpmc_blocking_q.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\mpmc_blocking_q.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\null_mutex.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\null_mutex.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\os-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\os-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\os.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\os.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\periodic_worker-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\periodic_worker-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\periodic_worker.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\periodic_worker.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\registry-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\registry-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\registry.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\registry.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\synchronous_factory.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\synchronous_factory.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\tcp_client-windows.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\tcp_client-windows.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\tcp_client.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\tcp_client.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\thread_pool-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\thread_pool-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\thread_pool.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\thread_pool.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\udp_client-windows.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\udp_client-windows.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\udp_client.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\udp_client.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\details\windows_include.h">
+    <ClInclude Include="include\aol\third-party\spdlog\details\windows_include.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\formatter.h">
+    <ClInclude Include="include\aol\third-party\spdlog\formatter.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\fwd.h">
+    <ClInclude Include="include\aol\third-party\spdlog\fwd.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\logger-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\logger-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\logger.h">
+    <ClInclude Include="include\aol\third-party\spdlog\logger.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\mdc.h">
+    <ClInclude Include="include\aol\third-party\spdlog\mdc.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\pattern_formatter-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\pattern_formatter-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\pattern_formatter.h">
+    <ClInclude Include="include\aol\third-party\spdlog\pattern_formatter.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\android_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\android_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\ansicolor_sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\ansicolor_sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\ansicolor_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\ansicolor_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\base_sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\base_sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\base_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\base_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\basic_file_sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\basic_file_sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\basic_file_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\basic_file_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\callback_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\callback_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\daily_file_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\daily_file_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\dist_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\dist_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\dup_filter_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\dup_filter_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\hourly_file_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\hourly_file_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\kafka_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\kafka_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\mongo_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\mongo_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\msvc_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\msvc_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\null_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\null_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\ostream_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\ostream_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\qt_sinks.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\qt_sinks.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\ringbuffer_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\ringbuffer_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\rotating_file_sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\rotating_file_sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\rotating_file_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\rotating_file_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_color_sinks-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\stdout_color_sinks-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_color_sinks.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\stdout_color_sinks.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_sinks-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\stdout_sinks-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\stdout_sinks.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\stdout_sinks.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\syslog_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\syslog_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\systemd_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\systemd_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\tcp_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\tcp_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\udp_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\udp_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\wincolor_sink-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\wincolor_sink-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\wincolor_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\wincolor_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\sinks\win_eventlog_sink.h">
+    <ClInclude Include="include\aol\third-party\spdlog\sinks\win_eventlog_sink.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\spdlog-inl.h">
+    <ClInclude Include="include\aol\third-party\spdlog\spdlog-inl.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\spdlog.h">
+    <ClInclude Include="include\aol\third-party\spdlog\spdlog.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\stopwatch.h">
+    <ClInclude Include="include\aol\third-party\spdlog\stopwatch.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\tweakme.h">
+    <ClInclude Include="include\aol\third-party\spdlog\tweakme.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\third-party\spdlog\version.h">
+    <ClInclude Include="include\aol\third-party\spdlog\version.h">
       <Filter>include\third-party\spdlog</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\macros\attributes.h">
+    <ClInclude Include="include\aol\internal\macros\attributes.h">
       <Filter>include\internal\macros</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\macros\defines.h">
+    <ClInclude Include="include\aol\internal\macros\defines.h">
       <Filter>include\internal\macros</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\algorithms\find.h">
+    <ClInclude Include="include\aol\internal\algorithms\find.h">
       <Filter>include\internal\algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\algorithms\sort.h">
+    <ClInclude Include="include\aol\internal\algorithms\sort.h">
       <Filter>include\internal\algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\allocators\general.h">
+    <ClInclude Include="include\aol\internal\allocators\general.h">
       <Filter>include\internal\allocators</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\allocators\pool.h">
+    <ClInclude Include="include\aol\internal\allocators\pool.h">
       <Filter>include\internal\allocators</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\allocators\strings.h">
+    <ClInclude Include="include\aol\internal\allocators\strings.h">
       <Filter>include\internal\allocators</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\exceptions\base.h">
+    <ClInclude Include="include\aol\internal\exceptions\base.h">
       <Filter>include\internal\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\exceptions\runtime.h">
+    <ClInclude Include="include\aol\internal\exceptions\runtime.h">
       <Filter>include\internal\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\randoms\algorithms.h">
+    <ClInclude Include="include\aol\internal\randoms\algorithms.h">
       <Filter>include\internal\randoms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\randoms\generators.h">
+    <ClInclude Include="include\aol\internal\randoms\generators.h">
       <Filter>include\internal\randoms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\randoms\pool.h">
+    <ClInclude Include="include\aol\internal\randoms\pool.h">
       <Filter>include\internal\randoms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\randoms\rolls.h">
+    <ClInclude Include="include\aol\internal\randoms\rolls.h">
       <Filter>include\internal\randoms</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers\cyclic-buffer.h">
+    <ClInclude Include="include\aol\internal\containers\cyclic-buffer.h">
       <Filter>include\internal\containers</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers\key-ordered-map.h">
+    <ClInclude Include="include\aol\internal\containers\key-ordered-map.h">
       <Filter>include\internal\containers</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers\partitions.h">
+    <ClInclude Include="include\aol\internal\containers\partitions.h">
       <Filter>include\internal\containers</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\containers\subrange.h">
+    <ClInclude Include="include\aol\internal\containers\subrange.h">
       <Filter>include\internal\containers</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\macros\functions.h">
+    <ClInclude Include="include\aol\internal\macros\functions.h">
       <Filter>include\internal\macros</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\serialization\containers.h">
+    <ClInclude Include="include\aol\internal\serialization\containers.h">
       <Filter>include\internal\serialization</Filter>
     </ClInclude>
-    <ClInclude Include="aol\internal\serialization\data-components.h">
+    <ClInclude Include="include\aol\internal\serialization\data-components.h">
       <Filter>include\internal\serialization</Filter>
     </ClInclude>
-    <ClInclude Include="aol\vector.h">
+    <ClInclude Include="include\aol\vector.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\algorithms.h">
+    <ClInclude Include="include\aol\algorithms.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\allocators.h">
+    <ClInclude Include="include\aol\allocators.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\array.h">
+    <ClInclude Include="include\aol\array.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\configs.h">
+    <ClInclude Include="include\aol\configs.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\cyclic_buffer.h">
+    <ClInclude Include="include\aol\cyclic_buffer.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\dynamic_types.h">
+    <ClInclude Include="include\aol\dynamic_types.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\exceptions.h">
+    <ClInclude Include="include\aol\exceptions.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\hash_map.h">
+    <ClInclude Include="include\aol\hash_map.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\hash_set.h">
+    <ClInclude Include="include\aol\hash_set.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\hashes.h">
+    <ClInclude Include="include\aol\hashes.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\insert_ordered_map.h">
+    <ClInclude Include="include\aol\insert_ordered_map.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\insert_ordered_set.h">
+    <ClInclude Include="include\aol\insert_ordered_set.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\key_ordered_map.h">
+    <ClInclude Include="include\aol\key_ordered_map.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\key_ordered_set.h">
+    <ClInclude Include="include\aol\key_ordered_set.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\logging.h">
+    <ClInclude Include="include\aol\logging.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\macros.h">
+    <ClInclude Include="include\aol\macros.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\mathematics.h">
+    <ClInclude Include="include\aol\mathematics.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\partitions.h">
+    <ClInclude Include="include\aol\partitions.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\randoms.h">
+    <ClInclude Include="include\aol\randoms.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\serialization.h">
+    <ClInclude Include="include\aol\serialization.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\strings.h">
+    <ClInclude Include="include\aol\strings.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\subrange.h">
+    <ClInclude Include="include\aol\subrange.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\traits.h">
+    <ClInclude Include="include\aol\traits.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\types.h">
+    <ClInclude Include="include\aol\types.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="aol\utilities.h">
+    <ClInclude Include="include\aol\utilities.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="third-party\cereal\external\rapidxml\manual.html">
+    <None Include="include\aol\third-party\cereal\external\rapidxml\manual.html">
       <Filter>include\third-party\cereal</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\aol\aol.cpp">
+    <ClCompile Include="src\aol\aol.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

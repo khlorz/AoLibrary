@@ -9,7 +9,6 @@ The library has **required dependencies** from several third-party libraries, in
 - Abseil (absl) – Apache 2.0 License
 - Boost – BSL-1.0 license
 - cereal – BSD 3-Clause License
-- Google Benchmark – Apache 2.0 License
 - mimalloc – MIT License
 - tsl – MIT License
 - type_safe – MIT License
