@@ -430,7 +430,7 @@ AoLibrary/include/aol/third-party/**
 [Bb]enchmarking/
 
 #Github files
-.github
+.github/
 
 #OpenCode files
 opencode.*
