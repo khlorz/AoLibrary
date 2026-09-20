@@ -4,6 +4,8 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_ARRAY
 
 #include "aol/array.h"
 #include "aol/utilities.h"
@@ -346,4 +348,6 @@ TEST_F(ArrayNamed4Test, ForwardIteration)
 
     EXPECT_EQ(sum, 10);
 }
+
+#endif // AOL_TEST_CONTAINERS_ARRAY
 

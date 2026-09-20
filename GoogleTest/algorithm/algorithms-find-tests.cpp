@@ -4,9 +4,12 @@
 
 
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_ALGORITHMS_FIND
 
 #include "aol/algorithms.h"
 
+#include <execution>
 
 namespace
 {
@@ -440,3 +443,27 @@ TEST_F(AlgorithmEdgeCasesTest, FindWithAllIdenticalElements)
 
     EXPECT_EQ(it, vec.begin());
 }
+
+TEST_F(AlgorithmEdgeCasesTest, PredicateOverloadResolvesAgainstValueOverloads)
+{
+    IntVector vec{ 1, 5, 3, 9, 2 };
+
+    auto it = AoL::FindBrute(vec.begin(), vec.end(), [](int v) { return v > 5; });
+    EXPECT_EQ(*it, 9);
+
+    auto cit = AoL::FindBrute(vec.begin(), vec.end(), 9);
+    EXPECT_EQ(*cit, 9);
+}
+
+TEST_F(AlgorithmEdgeCasesTest, ExecutionPolicyOverloadsResolveUniquely)
+{
+    IntVector vec{ 1, 5, 3, 9, 2 };
+
+    auto vit = AoL::FindBrute(std::execution::seq, vec.begin(), vec.end(), 9);
+    EXPECT_EQ(*vit, 9);
+
+    auto pit = AoL::FindBrute(std::execution::seq, vec.begin(), vec.end(), [](int v) { return v > 5; });
+    EXPECT_EQ(*pit, 9);
+}
+
+#endif // AOL_TEST_ALGORITHMS_FIND

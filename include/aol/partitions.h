@@ -3,8 +3,8 @@
 ****************************************************************************************
 * - The library's partition
 ***************************************************************************************/
-#ifndef AOL_HEADER_PARTITION_H
-#define AOL_HEADER_PARTITION_H
+#ifndef AOL_HEADER_PARTITIONS_H
+#define AOL_HEADER_PARTITIONS_H
 
 
 #include "configs.h"
@@ -58,4 +58,4 @@ using PartitionArray = Internal::PartitionArrayEx<T, S>;
 } // AoL namespace
 
 
-#endif // AOL_HEADER_PARTITION_H
+#endif // AOL_HEADER_PARTITIONS_H

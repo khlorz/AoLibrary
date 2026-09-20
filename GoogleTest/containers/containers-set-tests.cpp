@@ -2,7 +2,10 @@
 * Set container tests: KeyOrderSet, InsertOrderSet, HashSet
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_SET
 
 #include "aol/key_ordered_set.h"
 #include "aol/insert_ordered_set.h"
@@ -304,3 +307,5 @@ TEST_F(InsertOrderSetTest, ForwardIteration)
 
     EXPECT_EQ(count, 3);
 }
+
+#endif // AOL_TEST_CONTAINERS_SET

@@ -2,7 +2,10 @@
 * RollDice tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_ROLLDICE
 
 #include "aol/randoms.h"
 
@@ -61,3 +64,5 @@ TEST(RollDice_NoPool, RuntimeSidesProducesValuesInOneToMaxSidesInclusive)
 		EXPECT_TRUE(b);
 	}
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_ROLLDICE

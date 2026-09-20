@@ -2,7 +2,10 @@
 * RollWeighted tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_ROLLWEIGHTED
 
 #include "aol/randoms.h"
 
@@ -342,3 +345,5 @@ TEST(RollWeighted_NoPool, EqualWeightsAreUniform)
 	double ratio = static_cast<double>(counts[0]) / many_trials;
 	EXPECT_NEAR(ratio, 0.5, 0.01);
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_ROLLWEIGHTED

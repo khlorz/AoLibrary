@@ -12,7 +12,8 @@
 #include "aol/vector.h"
 #include "aol/array.h"
 
-#include <bit>
+#include <bit> // std::has_single_bit
+#include <memory> // std::addressof
 
 
 namespace AoL::Internal
@@ -192,8 +193,6 @@ template<
 >
 struct CyclicBufferBase
 {
-    static_assert(S == 0 || std::has_single_bit(S), "Fixed size must be a power of two!");
-
     using container_type = std::conditional_t<S == 0, AoL::Vector<T, A>, AoL::Array<T, S>>;
 
     using value_type = container_type::value_type;
@@ -264,7 +263,10 @@ struct CyclicBufferBase
     */
     AOL_ATTRIB_NO_DISCARD constexpr auto capacity() const noexcept
     {
-        return container_obj.size();
+        // mask is the bit masking value of the cyclic buffer
+        // Adding one gives the actual capacity
+        // Usable for both Fixed and Dynamic CyclicBuffer
+        return mask + 1;
     }
 
     /**
@@ -394,7 +396,7 @@ struct CyclicBufferBase
     *
     * - Asserts if idx is greater than or equal item to count of the vector
     */
-    AOL_ATTRIB_NO_DISCARD constexpr Traits::ConstRefOrCopyType<T> operator[](size_t idx) const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& operator[](size_t idx) const noexcept
     {
         assert(idx < item_count && "Invalid operation! Input idx out of range!");
         return container_obj[(head + idx) & mask];
@@ -427,7 +429,7 @@ struct CyclicBufferBase
     *
     * - The same as data[0]
     */
-    AOL_ATTRIB_NO_DISCARD constexpr T& front() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& front() const noexcept
     {
         assert(item_count > 0);
         return container_obj[head];
@@ -438,7 +440,7 @@ struct CyclicBufferBase
     *
     * - The same as data[item_count - 1]
     */
-    AOL_ATTRIB_NO_DISCARD constexpr T& back() const noexcept
+    AOL_ATTRIB_NO_DISCARD constexpr const T& back() const noexcept
     {
         assert(item_count > 0);
         return container_obj[(head + item_count - 1) & mask];
@@ -461,7 +463,7 @@ struct CyclicBufferBase
 
     AOL_ATTRIB_NO_DISCARD constexpr auto begin() const noexcept
     {
-        return iterator(this, 0);
+        return const_iterator(this, 0);
     }
 
     AOL_ATTRIB_NO_DISCARD constexpr auto cbegin() const noexcept
@@ -476,7 +478,7 @@ struct CyclicBufferBase
 
     AOL_ATTRIB_NO_DISCARD constexpr auto end() const noexcept
     {
-        return iterator(this, item_count);
+        return const_iterator(this, item_count);
     }
 
     AOL_ATTRIB_NO_DISCARD constexpr auto cend() const noexcept
@@ -527,7 +529,7 @@ private:
     friend Base;
 
 public:
-    static_assert(S > 0, "Size must be greater than 0!");
+    static_assert(std::has_single_bit(S) && S > 1, "Size must be a power of two!");
 
     using Base::Base;
     using Base::container_obj;
@@ -581,7 +583,7 @@ public:
     explicit CyclicBufferDynamic(SizeT item_limit) noexcept :
         Base{ }
     {
-        assert(std::has_single_bit(item_limit) && "Invalid limit! Must be power of 2!");
+        assert(std::has_single_bit(item_limit) && (item_limit > 1) && "Invalid limit! Must be power of 2!");
 
         mask = item_limit - 1;
         container_obj.reserve(item_limit);
@@ -644,26 +646,28 @@ private:
     template<typename U>
     constexpr void push_back_impl(U&& new_item) noexcept
     {
-        if (container_obj.size() == mask + 1)
-        {
-            container_obj[(head + item_count) & mask] = std::forward<U>(new_item);
-        }
-        else
+        const SizeT slot = (head + item_count) & mask;
+        if (slot == container_obj.size()) // slot past the physical end: grow storage
         {
             container_obj.push_back(std::forward<U>(new_item));
+        }
+        else // in-range slot: overwrite stale element (incl. oldest when full)
+        {
+            container_obj[slot] = std::forward<U>(new_item);
         }
     }
 
     template<typename... Args>
     constexpr void emplace_back_impl(Args&&... args) noexcept
     {
-        if (container_obj.size() == mask + 1)
+        const SizeT slot = (head + item_count) & mask;
+        if (slot == container_obj.size()) // slot past the physical end: grow storage
         {
-            container_obj[(head + item_count) & mask] = T(std::forward<Args>(args)...);
+            container_obj.emplace_back(T(std::forward<Args>(args)...));
         }
-        else
+        else // in-range slot: overwrite stale element (incl. oldest when full)
         {
-            container_obj.emplace_back(std::forward<Args>(args)...);
+            container_obj[slot] = T(std::forward<Args>(args)...);
         }
     }
 

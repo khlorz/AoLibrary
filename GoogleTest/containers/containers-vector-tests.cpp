@@ -2,7 +2,10 @@
 * Vector container tests
 ********************************************************************/
 
-include "pch.h"
+
+#include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_VECTOR
 
 #include "aol/vector.h"
 #include "aol/utilities.h"
@@ -194,3 +197,5 @@ TEST_F(VectorTest, EqualityComparison)
     EXPECT_TRUE(a == b);
     EXPECT_FALSE(a == c);
 }
+
+#endif // AOL_TEST_CONTAINERS_VECTOR

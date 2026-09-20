@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="algorithm\algorithm-find-tests.cpp">
+    <ClCompile Include="algorithm\algorithms-find-tests.cpp">
       <Filter>algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="algorithm\algorithm-sort-tests.cpp">
+    <ClCompile Include="algorithm\algorithms-sort-tests.cpp">
       <Filter>algorithm</Filter>
     </ClCompile>
     <ClCompile Include="random\rolls-rollchance-tests.cpp">
@@ -50,11 +50,11 @@
     <ClCompile Include="random\rolls-rollweighted-tests.cpp">
       <Filter>random</Filter>
     </ClCompile>
-    <ClCompile Include="random\algorithms-shuffle-tests.cpp">
-      <Filter>algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="random\algorithms-partition-tests.cpp">
-      <Filter>algorithm</Filter>
+      <Filter>random</Filter>
+    </ClCompile>
+    <ClCompile Include="random\algorithms-shuffle-tests.cpp">
+      <Filter>random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="config.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

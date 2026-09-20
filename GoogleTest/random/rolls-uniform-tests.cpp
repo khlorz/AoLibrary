@@ -2,7 +2,10 @@
 * RollRange Distribution Uniformity tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_RANDOM_ROLLS_UNIFORM
 
 #include "aol/randoms.h"
 
@@ -89,3 +92,5 @@ TEST(RollRange_Uniformity, FloatUnitInterval)
 		EXPECT_NEAR(static_cast<double>(count) / expected, 1.0, 0.12);
 	}
 }
+
+#endif // AOL_TEST_RANDOM_ROLLS_UNIFORM

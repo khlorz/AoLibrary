@@ -2,7 +2,10 @@
 * Subrange container tests
 ********************************************************************/
 
+
 #include "pch.h"
+#include "config.h"
+#if AOL_TEST_CONTAINERS_SUBRANGE
 
 #include "aol/subrange.h"
 
@@ -72,3 +75,5 @@ TEST_F(SubrangeTest, SubrangeOfSubrange)
 }
 
 } // namespace
+
+#endif // AOL_TEST_CONTAINERS_SUBRANGE
