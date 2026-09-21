@@ -57,7 +57,7 @@
 * - To fix the MSVC's problem with EBO
 * - Always use this on every empty class to keep the EBO working across compilers
 */
-#ifdef _MSC_VER
+#if AOL_COMPILER_MSVC
 #define AOL_EMPTY_BASE_OPTIMIZATION __declspec(empty_bases)
 #else
 #define AOL_EMPTY_BASE_OPTIMIZATION
