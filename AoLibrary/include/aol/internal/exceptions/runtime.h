@@ -22,21 +22,27 @@ namespace AoL
 struct RuntimeException : Internal::BaseException
 {
 private:
-	constexpr static const char* default_message = "Runtime exception occured!";
+	constexpr static const char* default_message = "Runtime exception occurred!";
 
-	static String ExceptionMessage(const char* extra_exception_message) noexcept
+	static String ExceptionMessage(StringView additional_message) noexcept
 	{
 		String message{ default_message };
 		message.append("\n");
-		message.append(extra_exception_message);
+		message.append(additional_message);
 		return message;
 	}
 
 public:
-	using Internal::BaseException::BaseException;
-
 	RuntimeException() noexcept :
 		BaseException{ default_message }
+	{}
+
+	explicit RuntimeException(const String& additional_message) noexcept :
+		BaseException{ this->ExceptionMessage(additional_message) }
+	{}
+
+	explicit RuntimeException(const char* additional_message) noexcept :
+		BaseException{ this->ExceptionMessage(additional_message) }
 	{}
 };
 
