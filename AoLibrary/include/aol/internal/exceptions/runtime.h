@@ -58,7 +58,7 @@ private:
 		"Please check the file path, permissions, and ensure it is accessible.\n"
 		"File in question: ";
 
-	static String ExceptionMessage(const char* filename) noexcept
+	static String ExceptionMessage(StringView filename) noexcept
 	{
 		String message{ error_message };
 		message.append(filename);
@@ -67,14 +67,13 @@ private:
 
 public:
 	FileOpenException(const String& filename) noexcept :
-		RuntimeException{ this->ExceptionMessage(filename.c_str()) }
+		RuntimeException{ ExceptionMessage(filename) }
 	{
 	}
 
 	FileOpenException(const char* filename) noexcept :
-		RuntimeException{ this->ExceptionMessage(filename) }
-	{
-	}
+		RuntimeException{ ExceptionMessage(filename) }
+	{}
 };
 
 }
