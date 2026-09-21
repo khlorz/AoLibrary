@@ -12,12 +12,36 @@
 
 
 /**
+* Compiler detection (0/1, like AOL_DEBUG_ON)
+* - clang-cl defines _MSC_VER too, so __clang__ is checked first
+* - Clang also defines __GNUC__ for compatibility, so GCC excludes it
+*/
+#if defined(__clang__)
+#define AOL_COMPILER_CLANG 1
+#else
+#define AOL_COMPILER_CLANG 0
+#endif
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#define AOL_COMPILER_MSVC 1
+#else
+#define AOL_COMPILER_MSVC 0
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+#define AOL_COMPILER_GCC 1
+#else
+#define AOL_COMPILER_GCC 0
+#endif
+
+
+/**
 * Portable C++ standard version
 * - MSVC defines __cplusplus as 199711L unless /Zc:__cplusplus is set
 * - _MSVC_LANG always reflects the actual standard
 * - GCC/Clang define __cplusplus correctly
 */
-#if defined(_MSC_VER) && !defined(__clang__)
+#if AOL_COMPILER_MSVC
 #define AOL_CXX_STANDARD _MSVC_LANG
 #else
 #define AOL_CXX_STANDARD __cplusplus
