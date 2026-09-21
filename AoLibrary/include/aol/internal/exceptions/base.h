@@ -35,10 +35,11 @@ public:
 #endif
 	{}
 
-	explicit BaseException(String exception_str) noexcept :
 #if AOL_COMPILER_MSVC
+	explicit BaseException(const String& exception_str) noexcept :
 		std::exception{ exception_str.c_str() }
 #else
+	explicit BaseException(String exception_str) noexcept :
 		exception_message{ std::move(exception_str) }
 #endif
 	{}
