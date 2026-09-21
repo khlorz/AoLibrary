@@ -19,19 +19,18 @@
 namespace AoL
 {
 
-/**
-* 'Using' wrapper for std::exception
-*
-* - Use this for cases of exceptions where std::exceptions or its derived types are thrown
-*
-* - Since the library have its exception types, this is basically the handler for exceptions not in its control
-*/
-using STLException = std::exception;
-
 struct RuntimeException : Internal::BaseException
 {
 private:
 	constexpr static const char* default_message = "Runtime exception occured!";
+
+	static String ExceptionMessage(const char* extra_exception_message) noexcept
+	{
+		String message{ default_message };
+		message.append("\n");
+		message.append(extra_exception_message);
+		return message;
+	}
 
 public:
 	using Internal::BaseException::BaseException;
@@ -39,11 +38,6 @@ public:
 	RuntimeException() noexcept :
 		BaseException{ default_message }
 	{}
-
-	const char* What() const noexcept override
-	{
-		return exception_message.c_str();
-	}
 };
 
 struct FileOpenException : RuntimeException
@@ -58,17 +52,22 @@ private:
 		"Please check the file path, permissions, and ensure it is accessible.\n"
 		"File in question: ";
 
+	static String ExceptionMessage(const char* filename) noexcept
+	{
+		String message{ error_message };
+		message.append(filename);
+		return message;
+	}
+
 public:
 	FileOpenException(const String& filename) noexcept :
-		RuntimeException{ error_message }
+		RuntimeException{ this->ExceptionMessage(filename.c_str()) }
 	{
-		exception_message.append(filename);
 	}
 
 	FileOpenException(const char* filename) noexcept :
-		RuntimeException{ error_message }
+		RuntimeException{ this->ExceptionMessage(filename) }
 	{
-		exception_message.append(filename);
 	}
 };
 
