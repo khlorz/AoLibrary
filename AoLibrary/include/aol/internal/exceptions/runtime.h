@@ -43,21 +43,17 @@ struct FileException : RuntimeException
 private:
 	constexpr static const char* default_message = "There was an error processing the file!";
 
-	static String ExceptionMessage(StringView filename) noexcept
-	{
-		String message{ default_message };
-		message.append(filename);
-		return message;
-	}
-
 public:
-	FileException(const String& filename) noexcept :
-		RuntimeException{ ExceptionMessage(filename) }
-	{
-	}
+	FileException() noexcept :
+		RuntimeException{ default_message }
+	{}
 
-	FileException(const char* filename) noexcept :
-		RuntimeException{ ExceptionMessage(filename) }
+	explicit FileException(const String& exception_message) noexcept :
+		RuntimeException{ exception_message }
+	{}
+
+	explicit FileException(const char* exception_message) noexcept :
+		RuntimeException{ exception_message }
 	{}
 };
 
