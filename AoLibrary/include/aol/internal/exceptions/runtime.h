@@ -41,14 +41,7 @@ public:
 struct FileException : RuntimeException
 {
 private:
-	constexpr static const char* default_message =
-		"Failed to open file. Possible reasons include:\n"
-		"  - File does not exist or path is incorrect\n"
-		"  - Insufficient permissions to read the file\n"
-		"  - File is currently locked by another process\n"
-		"  - File system errors or corruption\n"
-		"Please check the file path, permissions, and ensure it is accessible.\n"
-		"File in question: ";
+	constexpr static const char* default_message = "There was an error processing the file!";
 
 	static String ExceptionMessage(StringView filename) noexcept
 	{
