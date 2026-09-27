@@ -41,7 +41,7 @@ public:
 struct FileException : RuntimeException
 {
 private:
-	constexpr static const char* error_message =
+	constexpr static const char* default_message =
 		"Failed to open file. Possible reasons include:\n"
 		"  - File does not exist or path is incorrect\n"
 		"  - Insufficient permissions to read the file\n"
@@ -52,7 +52,7 @@ private:
 
 	static String ExceptionMessage(StringView filename) noexcept
 	{
-		String message{ error_message };
+		String message{ default_message };
 		message.append(filename);
 		return message;
 	}
