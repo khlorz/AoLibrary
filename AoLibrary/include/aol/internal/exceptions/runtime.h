@@ -38,7 +38,7 @@ public:
 	{}
 };
 
-struct FileOpenException : RuntimeException
+struct FileException : RuntimeException
 {
 private:
 	constexpr static const char* error_message =
@@ -58,12 +58,12 @@ private:
 	}
 
 public:
-	FileOpenException(const String& filename) noexcept :
+	FileException(const String& filename) noexcept :
 		RuntimeException{ ExceptionMessage(filename) }
 	{
 	}
 
-	FileOpenException(const char* filename) noexcept :
+	FileException(const char* filename) noexcept :
 		RuntimeException{ ExceptionMessage(filename) }
 	{}
 };
