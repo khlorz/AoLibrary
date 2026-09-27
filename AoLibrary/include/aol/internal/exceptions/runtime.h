@@ -24,25 +24,17 @@ struct RuntimeException : Internal::BaseException
 private:
 	constexpr static const char* default_message = "Runtime exception occurred!";
 
-	static String ExceptionMessage(StringView additional_message) noexcept
-	{
-		String message{ default_message };
-		message.append("\n");
-		message.append(additional_message);
-		return message;
-	}
-
 public:
 	RuntimeException() noexcept :
 		BaseException{ default_message }
 	{}
 
-	explicit RuntimeException(const String& additional_message) noexcept :
-		BaseException{ this->ExceptionMessage(additional_message) }
+	explicit RuntimeException(const String& exception_message) noexcept :
+		BaseException{ exception_message }
 	{}
 
-	explicit RuntimeException(const char* additional_message) noexcept :
-		BaseException{ this->ExceptionMessage(additional_message) }
+	explicit RuntimeException(const char* exception_message) noexcept :
+		BaseException{ exception_message }
 	{}
 };
 
