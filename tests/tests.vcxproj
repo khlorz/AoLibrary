@@ -163,6 +163,9 @@
     <ClCompile Include="containers\containers-partition-tests.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="exceptions\exceptions-base-tests.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="config.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
