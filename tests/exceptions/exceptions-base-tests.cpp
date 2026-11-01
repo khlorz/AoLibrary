@@ -23,33 +23,37 @@ TEST(BaseExceptionTest, DefaultCtorUsesDefaultMessage)
 TEST(BaseExceptionTest, CtorFromLiteralStoresMessage)
 {
     constexpr const char* test_text = "boom";
+    AoL::String exception_string = AoL::Exception::CreateExceptionMessage(test_text, AoL::ExceptionCode_Base);
 
     AoL::Exception e(test_text);
-    EXPECT_STREQ(e.what(), test_text);
+    EXPECT_STREQ(e.what(), exception_string.c_str());
 }
 
 // By-value sink accepts lvalues and rvalues alike.
 TEST(BaseExceptionTest, CtorFromStringLvalueAndRvalue)
 {
     constexpr const char* test_text_1 = "left";
+    AoL::String exception_string_1 = AoL::Exception::CreateExceptionMessage(test_text_1, AoL::ExceptionCode_Base);
     AoL::String lv = test_text_1;
-    EXPECT_STREQ(AoL::Exception(lv).what(), test_text_1);
+    EXPECT_STREQ(AoL::Exception(lv).what(), exception_string_1.c_str());
 
     constexpr const char* test_text_2 = "right";
-    EXPECT_STREQ(AoL::Exception(AoL::String(test_text_2)).what(), test_text_2);
+    AoL::String exception_string_2 = AoL::Exception::CreateExceptionMessage(test_text_2, AoL::ExceptionCode_Base);
+    EXPECT_STREQ(AoL::Exception(AoL::String(test_text_2)).what(), exception_string_2.c_str());
 }
 
 // Portable catch: message survives as const std::exception&.
 TEST(BaseExceptionTest, CaughtAsStdExceptionKeepsMessage)
 {
     constexpr const char* test_text = "caught";
+    AoL::String exception_string = AoL::Exception::CreateExceptionMessage(test_text, AoL::ExceptionCode_Base);
     try
     {
         throw AoL::Exception(test_text);
     }
     catch (const std::exception& e)
     {
-        EXPECT_STREQ(e.what(), test_text);
+        EXPECT_STREQ(e.what(), exception_string.c_str());
     }
 }
 
