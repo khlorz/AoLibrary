@@ -17,6 +17,19 @@
 
 #include <exception>
 
+
+// HELPER MACRO
+// This is for creating a protected constructor for the child class
+#define AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(ClassName, BaseName)		\
+explicit ClassName(const String& exception_message, ExceptionCode code) noexcept :			\
+	BaseName{ exception_message, code }														\
+	{}																						\
+																							\
+explicit ClassName(const char* exception_message, ExceptionCode code) noexcept :			\
+	BaseName{ exception_message, code }														\
+{}
+
+
 namespace AoL
 {
 
@@ -48,18 +61,15 @@ private:
 
 public:
 	Exception() noexcept :
-		exception_code{ ExceptionCode_Unknown },
-		exception_message{ CreateExceptionMessage(default_message, exception_code) }
+		Exception{ default_message, ExceptionCode_Unknown }
 	{}
 
 	explicit Exception(const String& str) noexcept :
-		exception_code{ ExceptionCode_Base },
-		exception_message{ CreateExceptionMessage(str.c_str(), exception_code) }
+		Exception{ str, ExceptionCode_Base }
 	{}
 
 	explicit Exception(const char* str) noexcept :
-		exception_code{ ExceptionCode_Base },
-		exception_message( CreateExceptionMessage(str, exception_code) )
+		Exception{ str, ExceptionCode_Base }
 	{}
 
 protected:

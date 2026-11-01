@@ -19,6 +19,9 @@
 namespace AoL
 {
 
+constexpr ExceptionCode ExceptionCode_Runtime{ 1ULL };
+constexpr ExceptionCode ExceptionCode_FileError{ 101ULL };
+
 struct RuntimeException : Exception
 {
 private:
@@ -26,16 +29,20 @@ private:
 
 public:
 	RuntimeException() noexcept :
-		Exception{ default_message }
+		RuntimeException{ default_message, ExceptionCode_Runtime }
 	{}
 
 	explicit RuntimeException(const String& exception_message) noexcept :
-		Exception{ exception_message }
+		RuntimeException{ exception_message, ExceptionCode_Runtime }
 	{}
 
 	explicit RuntimeException(const char* exception_message) noexcept :
-		Exception{ exception_message }
+		RuntimeException{ exception_message, ExceptionCode_Runtime }
 	{}
+
+protected:
+	AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(RuntimeException, Exception)
+
 };
 
 struct FileException : RuntimeException
@@ -45,16 +52,20 @@ private:
 
 public:
 	FileException() noexcept :
-		RuntimeException{ default_message }
+		FileException{ default_message, ExceptionCode_FileError }
 	{}
 
 	explicit FileException(const String& exception_message) noexcept :
-		RuntimeException{ exception_message }
+		FileException{ exception_message, ExceptionCode_FileError }
 	{}
 
 	explicit FileException(const char* exception_message) noexcept :
-		RuntimeException{ exception_message }
+		FileException{ exception_message, ExceptionCode_FileError }
 	{}
+
+protected:
+	AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(FileException, RuntimeException)
+
 };
 
 }
