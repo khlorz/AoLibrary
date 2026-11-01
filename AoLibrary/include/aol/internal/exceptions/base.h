@@ -18,6 +18,10 @@
 #include <exception>
 
 
+// ------------------------------------------------------------
+// DEFINE / MACROS
+// ------------------------------------------------------------
+
 // HELPER MACRO
 // This is for creating a protected constructor for the child class
 #define AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(ClassName, BaseName)		\
@@ -33,6 +37,12 @@ explicit ClassName(const char* exception_message, ExceptionCode code) noexcept :
 namespace AoL
 {
 
+// ------------------------------------------------------------
+//	ExceptionCode CLASS
+//	- A strong typedef for exception codes
+//	- This way, no exception code can be accidentally written
+// -----------------------------------------------------------
+
 struct AOL_EMPTY_BASE_OPTIMIZATION ExceptionCode : type_safe::strong_typedef<ExceptionCode, AoL::SizeT>,
 	type_safe::strong_typedef_op::integer_arithmetic<ExceptionCode>,
 	type_safe::strong_typedef_op::equality_comparison<ExceptionCode>,
@@ -46,10 +56,17 @@ public:
 	using UType = AoL::SizeT;
 };
 
-// Exception ExceptionCode values
+// ------------------------------------------------------------
+//	ExceptionCode CONSTANTS
+// ------------------------------------------------------------
 
 constexpr ExceptionCode ExceptionCode_Unknown{ 0ULL };
 constexpr ExceptionCode ExceptionCode_Base{ 100ULL };
+
+
+// ------------------------------------------------------------
+//	Exception CLASSES
+// ------------------------------------------------------------
 
 struct Exception : std::exception
 {
@@ -112,6 +129,7 @@ public:
 		return out_str;
 	}
 };
+
 }
 
 #endif // AOL_HEADER_INTERNAL_EXCEPTIONS_BASE_H

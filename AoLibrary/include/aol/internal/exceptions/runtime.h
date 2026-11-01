@@ -19,8 +19,17 @@
 namespace AoL
 {
 
+// ------------------------------------------------------------
+//	ExceptionCode CONSTANTS
+// ------------------------------------------------------------
+
 constexpr ExceptionCode ExceptionCode_Runtime{ 1ULL };
 constexpr ExceptionCode ExceptionCode_FileError{ 101ULL };
+
+
+// ------------------------------------------------------------
+//	Exception CLASSES
+// ------------------------------------------------------------
 
 struct RuntimeException : Exception
 {
