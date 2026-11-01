@@ -19,22 +19,22 @@
 namespace AoL
 {
 
-struct RuntimeException : Internal::BaseException
+struct RuntimeException : Exception
 {
 private:
 	constexpr static const char* default_message = "Runtime exception occurred!";
 
 public:
 	RuntimeException() noexcept :
-		BaseException{ default_message }
+		Exception{ default_message }
 	{}
 
 	explicit RuntimeException(const String& exception_message) noexcept :
-		BaseException{ exception_message }
+		Exception{ exception_message }
 	{}
 
 	explicit RuntimeException(const char* exception_message) noexcept :
-		BaseException{ exception_message }
+		Exception{ exception_message }
 	{}
 };
 

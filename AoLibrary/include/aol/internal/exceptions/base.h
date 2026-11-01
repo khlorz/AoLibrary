@@ -13,60 +13,95 @@
 #include "aol/types.h"
 #include "aol/strings.h"
 
+#include "type_safe/strong_typedef.hpp"
+
 #include <exception>
 
 namespace AoL
 {
 
-namespace Internal
+struct AOL_EMPTY_BASE_OPTIMIZATION ExceptionCode : type_safe::strong_typedef<ExceptionCode, AoL::SizeT>,
+	type_safe::strong_typedef_op::integer_arithmetic<ExceptionCode>,
+	type_safe::strong_typedef_op::equality_comparison<ExceptionCode>,
+	type_safe::strong_typedef_op::relational_comparison<ExceptionCode>
 {
+private:
+	using BaseT = type_safe::strong_typedef<ExceptionCode, AoL::SizeT>;
 
-struct BaseException : std::exception
+public:
+	using BaseT::strong_typedef;
+	using UType = AoL::SizeT;
+};
+
+// Exception ExceptionCode values
+
+constexpr ExceptionCode ExceptionCode_Unknown{ 0ULL };
+constexpr ExceptionCode ExceptionCode_Base{ 100ULL };
+
+struct Exception : std::exception
 {
 private:
 	constexpr static const char* default_message = "Unknown exception thrown!";
 
-public:
-	BaseException() noexcept :
-#if AOL_COMPILER_MSVC
-		std::exception{ default_message }
-#else
-		exception_message{ default_message }
-#endif
-	{}
-
-#if AOL_COMPILER_MSVC
-	explicit BaseException(const String& exception_str) noexcept :
-		std::exception{ exception_str.c_str() }
-#else
-	explicit BaseException(String exception_str) noexcept :
-		exception_message{ std::move(exception_str) }
-#endif
-	{}
-
-	explicit BaseException(const char* exception_str) noexcept :
-#if AOL_COMPILER_MSVC
-		std::exception{ exception_str }
-#else
-		exception_message(exception_str)
-#endif
-	{}
-
-#if AOL_COMPILER_MSVC
-	// MSVC's std::exception already owns a copy of the message:
-	// what() is inherited, no duplicate member needed.
-#else
+	ExceptionCode exception_code;
 	String exception_message;
 
+public:
+	Exception() noexcept :
+		exception_code{ ExceptionCode_Unknown },
+		exception_message{ CreateExceptionMessage(default_message, exception_code) }
+	{}
+
+	explicit Exception(const String& str) noexcept :
+		exception_code{ ExceptionCode_Base },
+		exception_message{ CreateExceptionMessage(str.c_str(), exception_code) }
+	{}
+
+	explicit Exception(const char* str) noexcept :
+		exception_code{ ExceptionCode_Base },
+		exception_message( CreateExceptionMessage(str, exception_code) )
+	{}
+
+protected:
+	explicit Exception(const String& str, ExceptionCode code) noexcept :
+		exception_code{ code },
+		exception_message{ CreateExceptionMessage(str.c_str(), exception_code) }
+	{}
+
+	explicit Exception(const char* str, ExceptionCode code) noexcept :
+		exception_code{ code },
+		exception_message{ CreateExceptionMessage(str, exception_code) }
+	{}
+
+public:
 	const char* what() const noexcept override
 	{
 		return exception_message.c_str();
 	}
-#endif
-};
 
+	ExceptionCode exc_code() const noexcept
+	{
+		return exception_code;
 }
 
+	static String CreateExceptionMessage(const char* str, ExceptionCode code) noexcept
+	{
+		String out_str(
+			std::char_traits<char>::length(str) +
+			std::numeric_limits<ExceptionCode::UType>::digits10 + 
+			std::char_traits<char>::length("Exception caught! Code #: M") +
+			1,
+			'\0'
+		);
+		AoL::StrPrintF(
+			out_str.data(),
+			"Exception caught! Code %zu: %s",
+			code.value_,
+			str
+		);
+		return out_str;
+	}
+};
 }
 
 #endif // AOL_HEADER_INTERNAL_EXCEPTIONS_BASE_H
