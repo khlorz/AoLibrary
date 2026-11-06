@@ -50,6 +50,9 @@
     <ClCompile Include="exceptions\exceptions-base-tests.cpp">
       <Filter>exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="exceptions\exceptions-runtime-tests.cpp">
+      <Filter>exceptions</Filter>
+    </ClCompile>
     <ClCompile Include="random\rolls-rollweighted-tests.cpp">
       <Filter>random</Filter>
     </ClCompile>
