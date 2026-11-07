@@ -8,9 +8,11 @@
 #define AOL_HEADER_TYPES_H
 
 
+#include "aol/internal/macros/defines.h"
+
 #include <cstddef>
 
-#if defined(_MSC_VER)
+#if AOL_COMPILER_MSVC
 #include <__msvc_int128.hpp>
 #endif
 
@@ -27,17 +29,17 @@ using I32	= int;
 using U64	= unsigned long long;
 using I64	= long long;
 using U128
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+#if AOL_COMPILER_CLANG || AOL_COMPILER_GCC
 = unsigned __int128;
-#elif defined(_MSC_VER)
+#elif AOL_COMPILER_MSVC
 = std::_Unsigned128;
 #else
 #error "No unsigned int128 implementation available!"
 #endif
 using I128
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+#if AOL_COMPILER_CLANG || AOL_COMPILER_GCC
 = __int128;
-#elif defined(_MSC_VER)
+#elif AOL_COMPILER_MSVC
 = std::_Signed128;
 #else
 #error "No signed int128 implementation available!"

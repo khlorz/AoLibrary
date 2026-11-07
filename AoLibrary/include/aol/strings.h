@@ -129,7 +129,7 @@ inline constexpr auto StrNoPos = AoL::String::npos;
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 {
-	static_assert(Internal::IsValidFormatArgument<Ts...>, "Invalid format type!");
+	static_assert((Internal::IsValidFormatArgument<Ts> && ...), "Invalid format type!");
 	return stbsp_sprintf(buf, fmt, std::forward<Ts>(ts)...);
 }
 
@@ -156,7 +156,7 @@ constexpr auto StrPrintF(char* buf, const char* fmt, Ts&&... ts) noexcept -> int
 template<typename... Ts>
 constexpr auto StrPrintF(char* buf, SizeT capacity, const char* fmt, Ts&&... ts) noexcept -> int
 {
-	static_assert(Internal::IsValidFormatArgument<Ts...>, "Invalid format type!");
+	static_assert((Internal::IsValidFormatArgument<Ts> && ...), "Invalid format type!");
 	return stbsp_snprintf(buf, capacity, fmt, std::forward<Ts>(ts)...);
 }
 

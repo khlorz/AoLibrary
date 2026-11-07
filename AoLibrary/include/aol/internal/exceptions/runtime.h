@@ -19,57 +19,62 @@
 namespace AoL
 {
 
-/**
-* 'Using' wrapper for std::exception
-*
-* - Use this for cases of exceptions where std::exceptions or its derived types are thrown
-*
-* - Since the library have its exception types, this is basically the handler for exceptions not in its control
-*/
-using STLException = std::exception;
+// ------------------------------------------------------------
+//	ExceptionCode CONSTANTS
+// ------------------------------------------------------------
 
-struct RuntimeException : Internal::BaseException
+constexpr ExceptionCode ExceptionCode_Runtime{ 1ULL };
+constexpr ExceptionCode ExceptionCode_FileError{ 101ULL };
+
+
+// ------------------------------------------------------------
+//	Exception CLASSES
+// ------------------------------------------------------------
+
+struct RuntimeException : Exception
 {
 private:
-	constexpr static const char* default_message = "Runtime exception occured!";
+	constexpr static const char* default_message = "Runtime exception occurred!";
 
 public:
-	using Internal::BaseException::BaseException;
-
 	RuntimeException() noexcept :
-		BaseException{ default_message }
+		RuntimeException{ default_message, ExceptionCode_Runtime }
 	{}
 
-	const char* What() const noexcept override
-	{
-		return exception_message.c_str();
-	}
+	explicit RuntimeException(const String& exception_message) noexcept :
+		RuntimeException{ exception_message, ExceptionCode_Runtime }
+	{}
+
+	explicit RuntimeException(const char* exception_message) noexcept :
+		RuntimeException{ exception_message, ExceptionCode_Runtime }
+	{}
+
+protected:
+	AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(RuntimeException, Exception)
+
 };
 
-struct FileOpenException : RuntimeException
+struct FileException : RuntimeException
 {
 private:
-	constexpr static const char* error_message =
-		"Failed to open file. Possible reasons include:\n"
-		"  - File does not exist or path is incorrect\n"
-		"  - Insufficient permissions to read the file\n"
-		"  - File is currently locked by another process\n"
-		"  - File system errors or corruption\n"
-		"Please check the file path, permissions, and ensure it is accessible.\n"
-		"File in question: ";
+	constexpr static const char* default_message = "There was an error processing the file!";
 
 public:
-	FileOpenException(const String& filename) noexcept :
-		RuntimeException{ error_message }
-	{
-		exception_message.append(filename);
-	}
+	FileException() noexcept :
+		FileException{ default_message, ExceptionCode_FileError }
+	{}
 
-	FileOpenException(const char* filename) noexcept :
-		RuntimeException{ error_message }
-	{
-		exception_message.append(filename);
-	}
+	explicit FileException(const String& exception_message) noexcept :
+		FileException{ exception_message, ExceptionCode_FileError }
+	{}
+
+	explicit FileException(const char* exception_message) noexcept :
+		FileException{ exception_message, ExceptionCode_FileError }
+	{}
+
+protected:
+	AOL_MACRO_EXCEPTION_CREATE_INHERITEE_CONSTRUCTORS(FileException, RuntimeException)
+
 };
 
 }
